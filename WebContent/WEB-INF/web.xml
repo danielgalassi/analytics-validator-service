@@ -6,7 +6,7 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>MyUpload</display-name>
+    <display-name>FileHandler</display-name>
     <servlet-name>FileHandler</servlet-name>
     <servlet-class>services.FileHandler</servlet-class>
   </servlet>

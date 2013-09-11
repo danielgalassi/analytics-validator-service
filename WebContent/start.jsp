@@ -8,9 +8,9 @@
 </head>
 <body>
 
-<form action="upload" method="get" enctype="multipart/form-data">
-<label for="zipFile">Select metadata file (ZIP format): </label>
-<input id="zipFile" type="file" name="zipFile" size="50"/><br/>
+<form action="upload" method="post" enctype="multipart/form-data">
+<label for="zipFile">Select metadata file: </label>
+<input id="metadataFile" type="file" name="metadata" size="50"/><br/>
 <input type="submit" value="Upload"/>
 </form>
 

@@ -22,17 +22,16 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 public class FileHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
-    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
-    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
+	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
+    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
+    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		//System.out.println("Temp Dir is "+ System.getProperty("java.io.tmpdir"));
 		// checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
 			PrintWriter writer = response.getWriter();
-			writer.println("Error: Form must has enctype=multipart/form-data.");
+			writer.println("Error: Form must have enctype=multipart/form-data.");
 			writer.flush();
 			return;
 		}
@@ -75,6 +74,11 @@ public class FileHandler extends HttpServlet {
 				// iterates over form's fields
 				for (FileItem item : formItems) {
 					// processes only fields that are not form fields
+					if (item.isFormField()) {
+		                String fieldname = item.getFieldName();
+		                String fieldvalue = item.getString();
+		                System.out.println("***" + fieldname + "\t" + fieldvalue);
+					}
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;

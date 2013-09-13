@@ -77,11 +77,9 @@ public class FileHandler extends HttpServlet {
 				// iterates over form's fields
 				for (FileItem item : formItems) {
 					// processes only fields that are not form fields
-					if (item.isFormField()) {
-						String fieldname = item.getFieldName();
-						String fieldvalue = item.getString();
-						System.out.println("***" + fieldname + "\t" + fieldvalue);
-					}
+					if (item.isFormField())
+						if (item.getFieldName().equals("fileFormat"))
+							request.setAttribute("fileFormat", item.getString());
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;

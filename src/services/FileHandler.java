@@ -42,6 +42,7 @@ public class FileHandler extends HttpServlet {
 		factory.setSizeThreshold(MEMORY_THRESHOLD);
 		// sets temporary location to store files
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+		System.out.println("Temporary file location: " + System.getProperty("java.io.tmpdir"));
 
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
@@ -54,7 +55,7 @@ public class FileHandler extends HttpServlet {
 		// constructs the directory path to store upload file
 		// this path is relative to application's directory
 		String uploadPath = getServletContext().getRealPath("")
-				+ File.separator + "myUploadDir";
+				+ File.separator + request.getRequestedSessionId();
 
 		// creates the directory if it does not exist
 		File uploadDir = new File(uploadPath);

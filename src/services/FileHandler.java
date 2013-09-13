@@ -23,10 +23,14 @@ public class FileHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
-    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
-    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
+	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
+	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		System.out.println("Temporary file location: " + System.getProperty("java.io.tmpdir"));
+		System.out.println("FileHandler servlet - Session Id: "
+				+ request.getRequestedSessionId());
 
 		// checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
@@ -42,7 +46,6 @@ public class FileHandler extends HttpServlet {
 		factory.setSizeThreshold(MEMORY_THRESHOLD);
 		// sets temporary location to store files
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-		System.out.println("Temporary file location: " + System.getProperty("java.io.tmpdir"));
 
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
@@ -63,9 +66,8 @@ public class FileHandler extends HttpServlet {
 			uploadDir.mkdir();
 			System.out.println("Creating the directory: " + uploadDir.getAbsolutePath());
 		}
-		else {
+		else
 			System.out.println("Directory " + uploadDir.getAbsolutePath() + " already exists!");
-		}
 
 		try {
 			// parses the request's content to extract file data
@@ -76,9 +78,9 @@ public class FileHandler extends HttpServlet {
 				for (FileItem item : formItems) {
 					// processes only fields that are not form fields
 					if (item.isFormField()) {
-		                String fieldname = item.getFieldName();
-		                String fieldvalue = item.getString();
-		                System.out.println("***" + fieldname + "\t" + fieldvalue);
+						String fieldname = item.getFieldName();
+						String fieldvalue = item.getString();
+						System.out.println("***" + fieldname + "\t" + fieldvalue);
 					}
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
@@ -89,7 +91,7 @@ public class FileHandler extends HttpServlet {
 						item.write(storeFile);
 						request.setAttribute("message",
 								"Upload has been done successfully!<br/>" +
-								"File can be found: " + storeFile.getAbsolutePath());
+										"File can be found: " + storeFile.getAbsolutePath());
 					}
 				}
 			}

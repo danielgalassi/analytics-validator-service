@@ -19,21 +19,21 @@ public class ValidatorService extends HttpServlet {
      */
     public ValidatorService() {
         super();
-        // TODO Auto-generated constructor stub
+        System.out.println("Say what???");
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+        System.out.println("GET = " + request.getRequestedSessionId());
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+        System.out.println("POST = " + request.getRequestedSessionId());
 	}
 
 }

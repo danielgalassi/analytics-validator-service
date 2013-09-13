@@ -26,6 +26,19 @@ public class FileHandler extends HttpServlet {
 	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
 	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
 
+	private boolean setupUploadDir(String sUploadPath, String sSessionId) {
+		File uploadDir = new File(sUploadPath); 
+		if (uploadDir.exists()) {
+			System.out.println("Deleting old session's (" + sSessionId + ") directory.");
+			uploadDir.delete();
+		}
+		else {
+			uploadDir.mkdir();
+			System.out.println("Creating the directory for session: " + uploadDir.getAbsolutePath());
+		}
+		return uploadDir.exists();
+	}
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		System.out.println("Temporary file location: " + System.getProperty("java.io.tmpdir"));
@@ -57,29 +70,21 @@ public class FileHandler extends HttpServlet {
 
 		// constructs the directory path to store upload file
 		// this path is relative to application's directory
+		String sSessionId = request.getRequestedSessionId();
 		String uploadPath = getServletContext().getRealPath("")
-				+ File.separator + request.getRequestedSessionId();
-
-		// creates the directory if it does not exist
-		File uploadDir = new File(uploadPath);
-		if (!uploadDir.exists()) {
-			uploadDir.mkdir();
-			System.out.println("Creating the directory: " + uploadDir.getAbsolutePath());
-		}
-		else
-			System.out.println("Directory " + uploadDir.getAbsolutePath() + " already exists!");
+				+ File.separator + sSessionId;
+		setupUploadDir(uploadPath, sSessionId);
 
 		try {
 			// parses the request's content to extract file data
 			List<FileItem> formItems = upload.parseRequest(request);
 
-			if (formItems != null && formItems.size() > 0) {
-				// iterates over form's fields
+			if (formItems != null && formItems.size() > 0)
 				for (FileItem item : formItems) {
-					// processes only fields that are not form fields
 					if (item.isFormField())
 						if (item.getFieldName().equals("fileFormat"))
 							request.setAttribute("fileFormat", item.getString());
+
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;
@@ -92,13 +97,12 @@ public class FileHandler extends HttpServlet {
 										"File can be found: " + storeFile.getAbsolutePath());
 					}
 				}
-			}
 		} catch (Exception ex) {
 			request.setAttribute("message",
 					"There was an error: " + ex.getMessage());
 		}
 		// redirects client to message page
-		getServletContext().getRequestDispatcher("/message.jsp").forward(
-				request, response);
+		//getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
+		getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
 	}
 }

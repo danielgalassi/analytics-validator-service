@@ -14,4 +14,16 @@
     <servlet-name>FileHandler</servlet-name>
     <url-pattern>/upload</url-pattern>
   </servlet-mapping>
+
+  <servlet>
+    <description></description>
+    <display-name>ValidatorService</display-name>
+    <servlet-name>ValidatorService</servlet-name>
+    <servlet-class>services.ValidatorService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ValidatorService</servlet-name>
+    <url-pattern>/validate</url-pattern>
+  </servlet-mapping>
+
 </web-app>

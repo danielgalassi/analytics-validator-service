@@ -17,6 +17,19 @@ public class FileUtils {
 
 	public static byte[] MAGIC = { 'P', 'K', 0x3, 0x4 };
 
+	public static boolean setupWorkDir(String sPath) {
+		File fDir = new File(sPath); 
+		if (fDir.exists()) {
+			System.out.println("Deleting old directory.");
+			fDir.delete();
+		}
+		else {
+			fDir.mkdir();
+			System.out.println("Creating the directory for session: " + fDir.getAbsolutePath());
+		}
+		return fDir.exists();
+	}
+
 	static boolean isZipFileValid(final File file) {
 		ZipFile zipfile = null;
 		try {

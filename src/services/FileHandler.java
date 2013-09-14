@@ -15,6 +15,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import utils.FileUtils;
+
 /**
  * Servlet implementation class FileHandler
  */
@@ -25,19 +27,6 @@ public class FileHandler extends HttpServlet {
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
 	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
 	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
-
-	private boolean setupUploadDir(String sUploadPath, String sSessionId) {
-		File uploadDir = new File(sUploadPath); 
-		if (uploadDir.exists()) {
-			System.out.println("Deleting old session's (" + sSessionId + ") directory.");
-			uploadDir.delete();
-		}
-		else {
-			uploadDir.mkdir();
-			System.out.println("Creating the directory for session: " + uploadDir.getAbsolutePath());
-		}
-		return uploadDir.exists();
-	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -73,7 +62,7 @@ public class FileHandler extends HttpServlet {
 		String sSessionId = request.getRequestedSessionId();
 		String uploadPath = getServletContext().getRealPath("")
 				+ File.separator + sSessionId;
-		setupUploadDir(uploadPath, sSessionId);
+		FileUtils.setupWorkDir(uploadPath);
 
 		try {
 			// parses the request's content to extract file data
@@ -95,6 +84,7 @@ public class FileHandler extends HttpServlet {
 						request.setAttribute("message",
 								"Upload has been done successfully!<br/>" +
 										"File can be found: " + storeFile.getAbsolutePath());
+						System.out.println(storeFile.getAbsolutePath());
 					}
 				}
 		} catch (Exception ex) {

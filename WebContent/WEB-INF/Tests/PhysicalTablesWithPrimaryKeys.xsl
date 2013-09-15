@@ -16,25 +16,21 @@
 					<xsl:variable name="databaseName" select="@name"/>
 <!-- direct path... Database -> Schema -->
 					<xsl:for-each select="../Schema[@parentId=$databaseId]">
-						<ListOfPhysicalTables>
-							<xsl:call-template name="tables">
-								<xsl:with-param name="schemaId" select="@id"/>
-								<xsl:with-param name="schemaName" select="@name"/>
-								<xsl:with-param name="databaseName" select="$databaseName"/>
-							</xsl:call-template>
-						</ListOfPhysicalTables>
+						<xsl:call-template name="tables">
+							<xsl:with-param name="schemaId" select="@id"/>
+							<xsl:with-param name="schemaName" select="@name"/>
+							<xsl:with-param name="databaseName" select="$databaseName"/>
+						</xsl:call-template>
 					</xsl:for-each>
 <!-- indirect path... Database -> Catalog -> Schema -->
 					<xsl:for-each select="../PhysicalCatalog[@parentId=$databaseId]">
 						<xsl:variable name="catalogId" select="@id"/>
 						<xsl:for-each select="../Schema[@parentId=$catalogId]">
-							<ListOfPhysicalTables>
-								<xsl:call-template name="tables">
-									<xsl:with-param name="schemaId" select="@id"/>
-									<xsl:with-param name="schemaName" select="@name"/>
-									<xsl:with-param name="databaseName" select="$databaseName"/>
-								</xsl:call-template>
-							</ListOfPhysicalTables>
+							<xsl:call-template name="tables">
+								<xsl:with-param name="schemaId" select="@id"/>
+								<xsl:with-param name="schemaName" select="@name"/>
+								<xsl:with-param name="databaseName" select="$databaseName"/>
+							</xsl:call-template>
 						</xsl:for-each>
 					</xsl:for-each>
 				</xsl:for-each>
@@ -48,6 +44,7 @@
 		<xsl:param name="schemaName"/>
 		<xsl:for-each select="../PhysicalTable[@parentId=$schemaId]">
 			<xsl:variable name="tableId" select="@id"/>
+			<xsl:variable name="tableRowCount" select="@rowCount"/>
 			<PhysicalTable>
 				<xsl:attribute name="name">
 					<xsl:value-of select="@name"/>
@@ -60,9 +57,10 @@
 				</xsl:attribute>
 				<xsl:attribute name="greatGrandParentObject">Physical Layer</xsl:attribute>
 				<xsl:attribute name="passed">
-					<xsl:if test="count(../PhysicalKey[@parentId=$tableId])=0">No</xsl:if>
-					<xsl:if test="count(../PhysicalKey[@parentId=$tableId])=1">Yes</xsl:if>
-					<xsl:if test="count(../PhysicalKey[@parentId=$tableId])&gt;1">ERR</xsl:if>
+					<xsl:choose>
+						<xsl:when test="count(../PhysicalKey[@parentId=$tableId])=1">Yes</xsl:when>
+						<xsl:otherwise>No</xsl:otherwise>
+					</xsl:choose>
 				</xsl:attribute>
 				<xsl:attribute name="comment"></xsl:attribute>
 			</PhysicalTable>

@@ -5,6 +5,7 @@
 		<Test>
 			<TestHeader>
 				<TestName>PhysicalTableKeys</TestName>
+				<TestDescription></TestDescription>
 				<Object>Physical Table</Object>
 				<ParentObject>Schema</ParentObject>
 				<GrandParentObject>Database</GrandParentObject>
@@ -56,7 +57,7 @@
 					<xsl:value-of select="$databaseName"/>
 				</xsl:attribute>
 				<xsl:attribute name="greatGrandParentObject">Physical Layer</xsl:attribute>
-				<xsl:attribute name="passed">
+				<xsl:attribute name="result">
 					<xsl:choose>
 						<xsl:when test="count(../PhysicalKey[@parentId=$tableId])=1">Yes</xsl:when>
 						<xsl:otherwise>No</xsl:otherwise>

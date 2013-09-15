@@ -59,7 +59,7 @@
 				<xsl:attribute name="greatGrandParentObject">Physical Layer</xsl:attribute>
 				<xsl:attribute name="result">
 					<xsl:choose>
-						<xsl:when test="count(../PhysicalKey[@parentId=$tableId] and ..//PhysicalColumn[@parentId=$tableId and @rowCount=$tableRowCount])=1">Yes</xsl:when>
+						<xsl:when test="count(../PhysicalKey[@parentId=$tableId] and ..//PhysicalColumn[@parentId=$tableId])=1">Yes</xsl:when>
 						<xsl:otherwise>No</xsl:otherwise>
 					</xsl:choose>
 				</xsl:attribute>

@@ -35,14 +35,16 @@ public class ValidatorService extends HttpServlet {
 		String sResultFile = "";
 		InputStream inputsXSLTest = null;
 		Document docXSLTest = null;
+		NodeList nlTestName = null;
 
 		for (String s : getServletContext().getResourcePaths(sTestDir)) {
+
 			inputsXSLTest = getServletContext().getResourceAsStream(s);
 
 			docXSLTest = XMLUtils.InputStream2Document(inputsXSLTest);
-			NodeList xyz = docXSLTest.getElementsByTagName("testName");
-			if (xyz.getLength() == 1)
-				sTestName = xyz.item(0).getTextContent();
+			nlTestName = docXSLTest.getElementsByTagName("testName");
+			if (nlTestName.getLength() == 1)
+				sTestName = nlTestName.item(0).getTextContent();
 
 			try {
 				inputsXSLTest.reset();
@@ -52,7 +54,7 @@ public class ValidatorService extends HttpServlet {
 
 			sResultFile = sResultsDir + File.separator + sTestName + ".xml";
 			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
-			System.out.println("Results posted: " + sResultFile);
+			System.out.println("Results: " + sResultFile);
 		}
 	}
 
@@ -75,6 +77,7 @@ public class ValidatorService extends HttpServlet {
 						sSessionId + File.separator + "results";
 				FileUtils.setupWorkDir(sResultsDir);
 			}
+
 			//now it's time to run all tests.
 			testRunner();
 		}

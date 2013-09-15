@@ -30,9 +30,8 @@ public class FileHandler extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		System.out.println("Temporary file location: " + System.getProperty("java.io.tmpdir"));
-		System.out.println("FileHandler servlet - Session Id: "
-				+ request.getRequestedSessionId());
+		System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
+		System.out.println("Session Id: " + request.getRequestedSessionId());
 
 		// checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {

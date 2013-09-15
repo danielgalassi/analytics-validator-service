@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import utils.FileUtils;
 import utils.XMLUtils;
 
@@ -22,15 +25,34 @@ public class ValidatorService extends HttpServlet {
 	private File fRepository = null;
 	private String sResultsDir = null;
 	private String sServletContextDir = null;
+	private final String sTestDir = "/WEB-INF/Tests";
 
 	/**
 	 * 
 	 */
 	private void testRunner() {
-		for (String s : getServletContext().getResourcePaths("/WEB-INF/Tests")) {
-			System.out.println("Test found: " + s);
-			InputStream xslTest = getServletContext().getResourceAsStream(s);
-			XMLUtils.xsl4Files(fRepository, xslTest, sResultsDir + File.separator + "result101.xml");
+		String sTestName = "";
+		String sResultFile = "";
+		InputStream inputsXSLTest = null;
+		Document docXSLTest = null;
+
+		for (String s : getServletContext().getResourcePaths(sTestDir)) {
+			inputsXSLTest = getServletContext().getResourceAsStream(s);
+
+			docXSLTest = XMLUtils.InputStream2Document(inputsXSLTest);
+			NodeList xyz = docXSLTest.getElementsByTagName("testName");
+			if (xyz.getLength() == 1)
+				sTestName = xyz.item(0).getTextContent();
+
+			try {
+				inputsXSLTest.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			sResultFile = sResultsDir + File.separator + sTestName + ".xml";
+			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
+			System.out.println("Results posted: " + sResultFile);
 		}
 	}
 
@@ -47,13 +69,11 @@ public class ValidatorService extends HttpServlet {
 				sSessionId + File.separator + sSessionId + ".xml");
 
 		if (fRepository.exists() && fRepository.canRead()) {
-			//setup a results directory when tests are found
-			if (getServletContext().getResourcePaths("/WEB-INF/Tests").size() > 0) {
-				System.out.println("!!!!!!!!!!!!!!!");
+			//setup a results directory if tests are found
+			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
 				sResultsDir = sServletContextDir + File.separator + 
 						sSessionId + File.separator + "results";
-				boolean x = FileUtils.setupWorkDir(sResultsDir);
-				System.out.println(x);
+				FileUtils.setupWorkDir(sResultsDir);
 			}
 			//now it's time to run all tests.
 			testRunner();

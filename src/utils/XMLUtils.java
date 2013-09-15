@@ -44,7 +44,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Reify a DOM document from a file
+	 * Creates a DOM document from a file
 	 * @param filename
 	 * @return DOM document
 	 */
@@ -61,6 +61,31 @@ public class XMLUtils {
 
 		try {
 			docXML = docBXML.parse(filename);
+		} catch(Exception e) {
+			publishException(e);
+		}
+
+		return docXML;
+	}
+
+	/**
+	 * Creates a DOM document from an InputStream
+	 * @param InputStream
+	 * @return DOM document
+	 */
+	public static Document InputStream2Document(InputStream isFile) {
+		DocumentBuilderFactory dBFXML = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBXML = null;
+		Document docXML = null;
+
+		try {
+			docBXML = dBFXML.newDocumentBuilder();
+		} catch(Exception e) {
+			publishException(e);
+		}
+
+		try {
+			docXML = docBXML.parse(isFile);
 		} catch(Exception e) {
 			publishException(e);
 		}
@@ -138,16 +163,20 @@ public class XMLUtils {
 		xsltSource = new javax.xml.transform.stream.StreamSource(inputsXSLFile);
 		result = new javax.xml.transform.stream.StreamResult(fResult);
 		transFact = javax.xml.transform.TransformerFactory.newInstance();
-		try {trans = transFact.newTransformer(xsltSource);
+		try {
+			trans = transFact.newTransformer(xsltSource);
 		} catch (TransformerConfigurationException tcE) {
-			System.out.println("3"); publishException(tcE);}
-		try {trans.transform(xmlSource, result);
+			System.out.println("3");
+			publishException(tcE);}
+		try {
+			trans.transform(xmlSource, result);
 		} catch (TransformerException tE) {
-			System.out.println("4"); publishException(tE);}
+			System.out.println("4");
+			publishException(tE);}
 	}
 
 	/**
-	 * Transform an XML file using an XSL file stored within the jar file
+	 * Transform an XML file using an XSL InputStream
 	 * @param fXMLFile
 	 * @param inputsXSLFile
 	 * @param strRESFile
@@ -166,11 +195,17 @@ public class XMLUtils {
 		xsltSource = new javax.xml.transform.stream.StreamSource(inputsXSLFile);
 		result = new javax.xml.transform.stream.StreamResult(fResult);
 		transFact = javax.xml.transform.TransformerFactory.newInstance();
-		try {trans = transFact.newTransformer(xsltSource);
+
+		try {
+			trans = transFact.newTransformer(xsltSource);
 		} catch (TransformerConfigurationException tcE) {
-			System.out.println("3"); publishException(tcE);}
-		try {trans.transform(xmlSource, result);
+			System.out.println("3");
+			publishException(tcE);}
+
+		try {
+			trans.transform(xmlSource, result);
 		} catch (TransformerException tE) {
-			System.out.println("4"); publishException(tE);}
+			System.out.println("4");
+			publishException(tE);}
 	}
 }

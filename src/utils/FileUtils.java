@@ -19,13 +19,11 @@ public class FileUtils {
 
 	public static boolean setupWorkDir(String sPath) {
 		File fDir = new File(sPath); 
-		if (fDir.exists()) {
-			System.out.println("Deleting old directory.");
+		if (fDir.exists())
 			fDir.delete();
-		}
 		else {
 			fDir.mkdir();
-			System.out.println("Creating the directory for session: " + fDir.getAbsolutePath());
+			System.out.println("Session directory: " + fDir.getAbsolutePath());
 		}
 		return fDir.exists();
 	}

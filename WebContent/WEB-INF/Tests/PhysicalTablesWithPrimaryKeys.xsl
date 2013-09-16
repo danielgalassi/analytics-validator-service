@@ -57,13 +57,37 @@
 					<xsl:value-of select="$databaseName"/>
 				</xsl:attribute>
 				<xsl:attribute name="greatGrandParentObject">Physical Layer</xsl:attribute>
-				<xsl:attribute name="result">
-					<xsl:choose>
-						<xsl:when test="count(../PhysicalKey[@parentId=$tableId] and ..//PhysicalColumn[@parentId=$tableId])=1">Yes</xsl:when>
-						<xsl:otherwise>No</xsl:otherwise>
-					</xsl:choose>
-				</xsl:attribute>
-				<xsl:attribute name="comment"></xsl:attribute>
+				<xsl:choose>
+					<xsl:when test="count(../PhysicalKey[@parentId=$tableId])=1">
+						<xsl:for-each select="../PhysicalKey[@parentId=$tableId]">
+							<xsl:choose>
+								<xsl:when test="count(.//RefPhysicalColumn)=1">
+								<xsl:for-each select="">
+								<!-- gotta match rowCount and final id... -->
+								</xsl:for-each>
+									<!--xsl:attribute name="result">Pass</xsl:attribute>
+									<xsl:attribute name="comment"></xsl:attribute-->
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:attribute name="result">N/A</xsl:attribute>
+									<xsl:attribute name="comment">Cannot evaluate a composite key (<xsl:value-of select="count(.//RefPhysicalColumn)"/> columns)</xsl:attribute>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each>
+					</xsl:when>
+					<xsl:when test="count(../PhysicalKey[@parentId=$tableId])=0">
+						<xsl:attribute name="result">Fail</xsl:attribute>
+						<xsl:attribute name="comment">No PK set</xsl:attribute>
+					</xsl:when>
+					<xsl:when test="count(../PhysicalKey[@parentId=$tableId])>1">
+						<xsl:attribute name="result">Fail</xsl:attribute>
+						<xsl:attribute name="comment">Multiple PK's set</xsl:attribute>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:attribute name="result">N/A</xsl:attribute>
+						<xsl:attribute name="comment">Please check the repository.</xsl:attribute>
+					</xsl:otherwise>
+				</xsl:choose>
 			</PhysicalTable>
 		</xsl:for-each>
 	</xsl:template>

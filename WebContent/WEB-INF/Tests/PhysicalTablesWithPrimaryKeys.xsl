@@ -62,30 +62,46 @@
 						<xsl:for-each select="../PhysicalKey[@parentId=$tableId]">
 							<xsl:choose>
 								<xsl:when test="count(.//RefPhysicalColumn)=1">
-								<xsl:for-each select="">
-								<!-- gotta match rowCount and final id... -->
-								</xsl:for-each>
-									<!--xsl:attribute name="result">Pass</xsl:attribute>
-									<xsl:attribute name="comment"></xsl:attribute-->
+									<xsl:variable name="physicalColumnId" select=".//RefPhysicalColumn/@id"/>
+									<xsl:for-each select="../../..//PhysicalColumn[@id=$physicalColumnId and @parentId=$tableId]">
+										<xsl:choose>
+											<xsl:when test="not(@rowCount) or $tableRowCount=''">
+												<xsl:attribute name="result">Fail</xsl:attribute>
+												<xsl:attribute name="comment">Please check the repository (missing row counts)</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@rowCount=$tableRowCount">
+												<xsl:attribute name="result">Pass</xsl:attribute>
+												<xsl:attribute name="comment">OK</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="not(@rowCount=$tableRowCount)">
+												<xsl:attribute name="result">Fail</xsl:attribute>
+												<xsl:attribute name="comment">Please check the repository, the cardinality/row counts for key column and table do not match</xsl:attribute>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:attribute name="result">Fail</xsl:attribute>
+												<xsl:attribute name="comment">Please check the repository</xsl:attribute>
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:for-each>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:attribute name="result">N/A</xsl:attribute>
-									<xsl:attribute name="comment">Cannot evaluate a composite key (<xsl:value-of select="count(.//RefPhysicalColumn)"/> columns)</xsl:attribute>
+									<xsl:attribute name="comment">Review the composite key (<xsl:value-of select="count(.//RefPhysicalColumn)"/> columns)</xsl:attribute>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:for-each>
 					</xsl:when>
 					<xsl:when test="count(../PhysicalKey[@parentId=$tableId])=0">
 						<xsl:attribute name="result">Fail</xsl:attribute>
-						<xsl:attribute name="comment">No PK set</xsl:attribute>
+						<xsl:attribute name="comment">No Primary Key set</xsl:attribute>
 					</xsl:when>
 					<xsl:when test="count(../PhysicalKey[@parentId=$tableId])>1">
 						<xsl:attribute name="result">Fail</xsl:attribute>
-						<xsl:attribute name="comment">Multiple PK's set</xsl:attribute>
+						<xsl:attribute name="comment">Multiple Primary Keys set</xsl:attribute>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:attribute name="result">N/A</xsl:attribute>
-						<xsl:attribute name="comment">Please check the repository.</xsl:attribute>
+						<xsl:attribute name="comment">Please check the repository</xsl:attribute>
 					</xsl:otherwise>
 				</xsl:choose>
 			</PhysicalTable>

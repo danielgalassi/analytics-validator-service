@@ -46,7 +46,7 @@
 		<xsl:for-each select="../PhysicalTable[@parentId=$schemaId]">
 			<xsl:variable name="tableId" select="@id"/>
 			<xsl:variable name="tableRowCount" select="@rowCount"/>
-			<PhysicalTable>
+			<Object>
 				<xsl:attribute name="name">
 					<xsl:value-of select="@name"/>
 				</xsl:attribute>
@@ -104,7 +104,7 @@
 						<xsl:attribute name="comment">Please check the repository</xsl:attribute>
 					</xsl:otherwise>
 				</xsl:choose>
-			</PhysicalTable>
+			</Object>
 		</xsl:for-each>
 	</xsl:template>
 </xsl:stylesheet>

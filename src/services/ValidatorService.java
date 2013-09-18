@@ -42,7 +42,7 @@ public class ValidatorService extends HttpServlet {
 			inputsXSLTest = getServletContext().getResourceAsStream(s);
 
 			docXSLTest = XMLUtils.InputStream2Document(inputsXSLTest);
-			nlTestName = docXSLTest.getElementsByTagName("testName");
+			nlTestName = docXSLTest.getElementsByTagName("TestName");
 			if (nlTestName.getLength() == 1)
 				sTestName = nlTestName.item(0).getTextContent();
 
@@ -53,6 +53,7 @@ public class ValidatorService extends HttpServlet {
 			}
 
 			sResultFile = sResultsDir + File.separator + sTestName + ".xml";
+			System.out.println("****\t" + sResultFile);
 			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
 			System.out.println("Results: " + sResultFile);
 		}

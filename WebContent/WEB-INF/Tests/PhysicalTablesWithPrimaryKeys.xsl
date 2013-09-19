@@ -7,9 +7,9 @@
 				<TestName>PhysicalTableKeys</TestName>
 				<TestDescription></TestDescription>
 				<Object>Physical Table</Object>
-				<ParentObject>Schema</ParentObject>
-				<GrandParentObject>Database</GrandParentObject>
-				<GreatGrandParentObject>Physical Layer</GreatGrandParentObject>
+				<ParentObject type="Object">Schema</ParentObject>
+				<GrandParentObject type="Object">Database</GrandParentObject>
+				<GreatGrandParentObject type="Repository Layer">Physical Layer</GreatGrandParentObject>
 			</TestHeader>
 			<Results>
 				<xsl:for-each select="//Database">

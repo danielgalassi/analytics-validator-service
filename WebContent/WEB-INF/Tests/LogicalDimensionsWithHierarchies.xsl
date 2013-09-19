@@ -6,8 +6,9 @@
 			<TestHeader>
 				<TestName>DimensionHierarchies</TestName>
 				<TestDescription></TestDescription>
-				<Object>Logical Table</Object>
-				<ParentObject>Business Model and Mapping Layer</ParentObject>
+				<Object type="Object">Logical Dimension</Object>
+				<ParentObject type="Object">Business Model</ParentObject>
+				<GrandParentObject type="Repository Layer">Business Model and Mapping Layer</GrandParentObject>
 			</TestHeader>
 			<Results>
 				<xsl:for-each select="//BusinessModel">

@@ -2,6 +2,7 @@ package utils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,6 +16,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * XML Utilities class
@@ -207,5 +209,19 @@ public class XMLUtils {
 		} catch (TransformerException tE) {
 			System.out.println("4");
 			publishException(tE);}
+	}
+	
+	public static void createIndexDocument (Vector <String> vsTests, String sDir) {
+		Document docIndex = createDOMDocument();
+		Element r = docIndex.createElement("index");
+		for (String s : vsTests) {
+			System.out.println(s);
+			Element e = docIndex.createElement("results");
+			e.setTextContent(s);
+			r.appendChild(e);
+		}
+		docIndex.appendChild(r);
+		System.out.println(sDir+File.separator+"index.xml");
+		Document2File(docIndex, sDir+File.separator+"index.xml");
 	}
 }

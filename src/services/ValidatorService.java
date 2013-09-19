@@ -3,6 +3,7 @@ package services;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,6 +37,10 @@ public class ValidatorService extends HttpServlet {
 		InputStream inputsXSLTest = null;
 		Document docXSLTest = null;
 		NodeList nlTestName = null;
+		Vector <String> vsTests = null;
+		
+		if (getServletContext().getResourcePaths(sTestDir).size() > 0)
+			vsTests = new Vector <String> ();
 
 		for (String s : getServletContext().getResourcePaths(sTestDir)) {
 
@@ -54,9 +59,11 @@ public class ValidatorService extends HttpServlet {
 			}
 
 			sResultFile = sResultsDir + File.separator + sTestName + ".xml";
-			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
+			vsTests.add(sResultFile);
+			//XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
 			System.out.println("Results: " + sResultFile);
 		}
+		XMLUtils.createIndexDocument(vsTests, sResultsDir);
 	}
 
 	/**
@@ -71,16 +78,17 @@ public class ValidatorService extends HttpServlet {
 		fRepository = new File(sServletContextDir + File.separator + 
 				sSessionId + File.separator + sSessionId + ".xml");
 
+		//validates the repository file can be used
 		if (fRepository.exists() && fRepository.canRead()) {
 			//setup a results directory if tests are found
 			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
 				sResultsDir = sServletContextDir + File.separator + 
 						sSessionId + File.separator + "results";
 				FileUtils.setupWorkDir(sResultsDir);
-			}
 
-			//now it's time to run all tests.
-			testRunner();
+				//now it's time to run all tests.
+				testRunner();
+			}
 		}
 	}
 }

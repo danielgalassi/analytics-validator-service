@@ -3,7 +3,6 @@ package services;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,10 +36,6 @@ public class ValidatorService extends HttpServlet {
 		InputStream inputsXSLTest = null;
 		Document docXSLTest = null;
 		NodeList nlTestName = null;
-		Vector <String> vsTests = null;
-
-		if (getServletContext().getResourcePaths(sTestDir).size()>0)
-			vsTests = new Vector <String> ();
 
 		for (String s : getServletContext().getResourcePaths(sTestDir)) {
 
@@ -51,8 +46,6 @@ public class ValidatorService extends HttpServlet {
 			sTestName = "Test";
 			if (nlTestName.getLength() == 1)
 				sTestName = nlTestName.item(0).getTextContent();
-
-			vsTests.add(sTestName);
 
 			try {
 				inputsXSLTest.reset();

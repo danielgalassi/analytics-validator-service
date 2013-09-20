@@ -1,88 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-	<!--xsl:output method="html"/-->
 	<xsl:output method="xml" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" indent="yes"/>
 	<xsl:template match="/">
-		<!--html-->
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<style type="text/css">
 		h1 {font-family: Helvetica, sans-serif; font-weight: bold; font-size: 24pt; color: #676767;}
 		h2 {font-family: Helvetica, sans-serif; font-weight: bold; font-size: 20pt; color: #777777;}
-		h3 {font-family: Helvetica, sans-serif; font-size: 14pt; color: #777777;}
+		h3 {font-family: Helvetica, sans-serif; font-size: 16pt; color: #777777;}
 		h4 {font-family: Helvetica, sans-serif; font-size: 14pt; color: #888888;}
 		li {font-family: Helvetica, sans-serif; font-size: 10pt; color: #474747;}
 		a  {font-family: Helvetica, sans-serif; font-size: 10pt; color: #444444;}
 		*  {font-family: Helvetica, sans-serif; font-size: 8pt; color: #333333;}
+		p  {font-family: Helvetica, sans-serif; font-size:10pt; color: rgb(128, 128, 128);}
 		tr {height:30; font-size: 8.5pt;}
 		tr:hover {background: rgb(248,248,248);}
 		table {
-		white-space:nowrap;
 			border-spacing: 0 0;
 			margin: 1px;
 			border-right: 1px solid #DEDEDE;
 			font-family: Helvetica, sans-serif; font-size: 8.5pt;}
-		thead th {
-		white-space:nowrap;
+		th {
 			font-family: Helvetica, sans-serif; font-size: 8pt;
 			background: #EFEFEF;
 			border-left: 1px solid #DEDEDE;
 			border-top: 1px solid #DEDEDE;}
 		tbody td {
-		white-space:nowrap;
         		font-family: Helvetica, sans-serif; font-size: 8.5pt;
 			border-bottom: 1px solid #DEDEDE;
 			border-left: 1px solid #DEDEDE;}
 				</style>
 				
-				<title>Oracle Business Intelligence Security Matrix - Features</title>
+				<title>Oracle Business Intelligence Validator Service Report</title>
 			</head>
 			<body>
-				<!-- Security Matrix heading -->
-				<h1>OBIEE Security Setup</h1>
+				<!-- Validator Service headings -->
+				<h1>OBIEE Validator Service Report</h1>
 				<br/>
-				<xsl:for-each select="/WebCatalog">
-					<h2>Feature Privilege Matrix</h2>
+				<h2>Metadata test results</h2>
+				<br/>
+				<xsl:for-each select="Test">
+				<!-- Results Section -->
+					<h3>Test: <xsl:value-of select="./TestHeader/TestName"/>
+					</h3>
+					<p>Description: <xsl:value-of select="./TestHeader/TestDescription"/>
+					</p>
 					<br/>
-					<!-- Matrix Section -->
+					<!-- Table Section -->
 					<table>
 						<tbody>
-							<!-- Component list and ticks -->
-							<!-- Component Names -->
-							<xsl:for-each select="./ComponentList/Component">
-								<tr>
-									<td style="background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
-										<xsl:value-of select="@ComponentName"/>
-									</td>
-									<!-- greyed out cells -->
-									<xsl:for-each select="../../..//ApplicationRole/@ApplicationRoleName">
-										<td style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
+							<!-- Object Hierarchy across table heading -->
+							<tr>
+								<xsl:if test="count(./TestHeader/GreatGrandParentObject)>0">
+									<xsl:for-each select="./TestHeader/GrandParentObject">
+										<td width="250px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
 											<xsl:value-of select="."/>
 										</td>
 									</xsl:for-each>
-								</tr>
-								<!-- Privilege Section -->
-								<xsl:for-each select="./Privilege">
-									<tr>
-										<!-- Privilege Names -->
-										<td style="background: #F6F6F6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555; padding-left:20px;">
-											<xsl:value-of select="@PrivilegeName"/>
+								</xsl:if>
+								<xsl:if test="count(./TestHeader/GrandParentObject)>0">
+									<xsl:for-each select="./TestHeader/ParentObject">
+										<td width="350px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
+											<xsl:value-of select="."/>
 										</td>
-										<xsl:variable name="compName" select="../@ComponentName"/>
-										<xsl:variable name="privName" select="@PrivilegeName"/>
-										<xsl:for-each select="../../..//ApplicationRole/@ApplicationRoleName">
-											<xsl:variable name="appRole" select="."/>
-											<xsl:choose>
-												<xsl:when test="count(../../..//Component[@ComponentName=$compName]/Privilege[@PrivilegeName=$privName]/RoleList/Role[@access='Granted' and .= $appRole]) > 0">
-													<td style="background: #CCFF99; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: green; text-align:center;">YES</td>
-												</xsl:when>
-												<xsl:otherwise>
-													<td style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:center;">-</td>
-												</xsl:otherwise>
-											</xsl:choose>
-										</xsl:for-each>
-									</tr>
-								</xsl:for-each>
+									</xsl:for-each>
+								</xsl:if>
+								<xsl:if test="count(./TestHeader/ParentObject)>0">
+									<xsl:for-each select="./TestHeader/Object">
+										<td width="350px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
+											<xsl:value-of select="normalize-space(.)"/>
+										</td>
+									</xsl:for-each>
+								</xsl:if>
+								<td width="50px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Result</td>
+								<td width="250px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Comment</td>
+							</tr>
+							<!-- Test Results Section -->
+							<xsl:for-each select="./Results/Object">
+								<tr>
+									<xsl:if test="count(../../TestHeader/GreatGrandParentObject)>0">
+										<td  height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+											<xsl:value-of select="@grandParentObject"/>
+										</td>
+									</xsl:if>
+									<xsl:if test="count(../../TestHeader/GrandParentObject)>0">
+										<td style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+											<xsl:value-of select="@parentObject"/>
+										</td>
+									</xsl:if>
+									<xsl:if test="count(../../TestHeader/ParentObject)>0">
+										<td style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+											<xsl:value-of select="@name"/>
+										</td>
+									</xsl:if>
+									<xsl:if test="@result='Pass'">
+										<td style="background: #CCFF99; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: green; text-align:center;">
+											<xsl:value-of select="@result"/>
+										</td>
+										<td style="background: #CCFF99; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: green; text-align:left;">
+											<xsl:value-of select="@comment"/>
+										</td>
+									</xsl:if>
+									<xsl:if test="@result='Fail'">
+										<td style="background: #FCB1B5; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:center;">
+											<xsl:value-of select="@result"/>
+										</td>
+										<td style="background: #FCB1B5; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:left;">
+											<xsl:value-of select="@comment"/>
+										</td>
+									</xsl:if>
+									<xsl:if test="@result='N/A'">
+										<td style="background: #F5FCB1; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:center;">
+											<xsl:value-of select="@result"/>
+										</td>
+										<td style="background: #F5FCB1; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:left;">
+											<xsl:value-of select="@comment"/>
+										</td>
+									</xsl:if>
+								</tr>
 							</xsl:for-each>
 						</tbody>
 					</table>
@@ -94,7 +129,7 @@
 				</xsl:for-each>
 				<div style="padding-top: 20px;">
 					<p style="color: rgb(128, 128, 128); float: left;">Mozilla Firefox or Google Chrome are strongly recommended for best results.</p>
-					<p style="color: rgb(128, 128, 128); float: right;">Generated using <a href="http://code.google.com/p/obiee-security-audit/" style="font-family: Helvetica, sans-serif; font-size: 8pt;color: rgb(128, 128, 128);" target="_blank">OBIEE Security Audit</a> application.</p>
+					<p style="color: rgb(128, 128, 128); float: right;">Generated using <a href="http://code.google.com/p/analytics-validator-service/" style="font-family: Helvetica, sans-serif; font-size: 8pt;color: rgb(128, 128, 128);" target="_blank">OBIEE Validator Service</a>.</p>
 				</div>
 				<p style="color: rgb(0, 0, 255); float: center;"> This HTML page is W3C compliant.</p>
 			</body>

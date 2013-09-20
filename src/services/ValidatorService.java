@@ -78,7 +78,6 @@ public class ValidatorService extends HttpServlet {
 
 		fRepository = new File(sServletContextDir + File.separator + 
 				sSessionId + File.separator + sSessionId + ".xml");
-
 		//validates the repository file can be used
 		if (fRepository.exists() && fRepository.canRead()) {
 			//setup a results directory if tests are found
@@ -88,11 +87,13 @@ public class ValidatorService extends HttpServlet {
 				FileUtils.setupWorkDir(sResultsDir);
 
 				//it's time to run all tests.
-				testRunner();
+				//testRunner();
 				//the results page is created
-				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Verbose.xml");
-				File fIndex = new File(sServletContextDir + File.separator + sSessionId + File.separator + "index.xml");
-				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir+"MetadataValidated.html");
+				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Verbose.xsl");
+				File fIndex = new File(sResultsDir + File.separator + "index.xml");
+				System.out.println(fIndex.getAbsolutePath());
+				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir+File.separator+"MetadataValidated.html");
+				System.out.println("***");
 				//TODO: create a results Zip file
 				//TODO: redirect to results page
 			}

@@ -40,9 +40,94 @@
 				<h2>Metadata test results</h2>
 				<br/>
 				
-				<xsl:apply-templates select="document(/index/results)//Test">
-					<xsl:sort/>
-				</xsl:apply-templates>
+				<xsl:for-each select="document(//results)">
+					<xsl:for-each select=".//Test">
+					<!-- Results Section -->
+						<h3>Test: <xsl:value-of select="./TestHeader/TestName"/>
+						</h3>
+						<p>Description: <xsl:value-of select="./TestHeader/TestDescription"/>
+						</p>
+						<br/>
+						<!-- Table Section -->
+						<table>
+							<tbody>
+							<!-- Object Hierarchy across table heading -->
+								<tr>
+									<xsl:if test="count(./TestHeader/GreatGrandParentObject)>0">
+										<xsl:for-each select="./TestHeader/GrandParentObject">
+											<td width="250px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
+												<xsl:value-of select="."/>
+											</td>
+										</xsl:for-each>
+									</xsl:if>
+									<xsl:if test="count(./TestHeader/GrandParentObject)>0">
+										<xsl:for-each select="./TestHeader/ParentObject">
+											<td width="350px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
+												<xsl:value-of select="."/>
+											</td>
+										</xsl:for-each>
+									</xsl:if>
+									<xsl:if test="count(./TestHeader/ParentObject)>0">
+										<xsl:for-each select="./TestHeader/Object">
+											<td width="350px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
+												<xsl:value-of select="normalize-space(.)"/>
+											</td>
+										</xsl:for-each>
+									</xsl:if>
+									<td width="50px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Result</td>
+									<td width="250px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Comment</td>
+								</tr>
+								<!-- Test Results Section -->
+								<xsl:for-each select="./Results/Object">
+									<tr>
+										<xsl:if test="count(../../TestHeader/GreatGrandParentObject)>0">
+											<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+												<xsl:value-of select="@grandParentObject"/>
+											</td>
+										</xsl:if>
+										<xsl:if test="count(../../TestHeader/GrandParentObject)>0">
+											<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+												<xsl:value-of select="@parentObject"/>
+											</td>
+										</xsl:if>
+										<xsl:if test="count(../../TestHeader/ParentObject)>0">
+											<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+												<xsl:value-of select="@name"/>
+											</td>
+										</xsl:if>
+										<!-- Green cells = Pass -->
+										<xsl:if test="@result='Pass'">
+											<td style="background: #CCFF99; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: green; text-align:center;">
+												<xsl:value-of select="@result"/>
+											</td>
+											<td style="background: #CCFF99; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: green; text-align:left;">
+												<xsl:value-of select="@comment"/>
+											</td>
+										</xsl:if>
+										<!-- Red cells = Fail -->
+										<xsl:if test="@result='Fail'">
+											<td style="background: #FCB1B5; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:center;">
+												<xsl:value-of select="@result"/>
+											</td>
+											<td style="background: #FCB1B5; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:left;">
+												<xsl:value-of select="@comment"/>
+											</td>
+										</xsl:if>
+										<!-- Amber cells = N/A -->
+										<xsl:if test="@result='N/A'">
+											<td style="background: #F5FCB1; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:center;">
+												<xsl:value-of select="@result"/>
+											</td>
+											<td style="background: #F5FCB1; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:left;">
+												<xsl:value-of select="@comment"/>
+											</td>
+										</xsl:if>
+									</tr>
+								</xsl:for-each>
+							</tbody>
+						</table>
+					</xsl:for-each>
+				</xsl:for-each>
 				
 				<br/>
 				<br/>
@@ -56,93 +141,5 @@
 			</body>
 		</html>
 	</xsl:template>
-	
-	<xsl:template match="Test">
-		<xsl:for-each select=".">
-			<!-- Results Section -->
-			<h3>Test: <xsl:value-of select="./TestHeader/TestName"/>
-			</h3>
-			<p>Description: <xsl:value-of select="./TestHeader/TestDescription"/>
-			</p>
-			<br/>
-			<!-- Table Section -->
-			<table>
-				<tbody>
-					<!-- Object Hierarchy across table heading -->
-					<tr>
-						<xsl:if test="count(./TestHeader/GreatGrandParentObject)>0">
-							<xsl:for-each select="./TestHeader/GrandParentObject">
-								<td width="250px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
-									<xsl:value-of select="."/>
-								</td>
-							</xsl:for-each>
-						</xsl:if>
-						<xsl:if test="count(./TestHeader/GrandParentObject)>0">
-							<xsl:for-each select="./TestHeader/ParentObject">
-								<td width="350px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
-									<xsl:value-of select="."/>
-								</td>
-							</xsl:for-each>
-						</xsl:if>
-						<xsl:if test="count(./TestHeader/ParentObject)>0">
-							<xsl:for-each select="./TestHeader/Object">
-								<td width="350px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">
-									<xsl:value-of select="normalize-space(.)"/>
-								</td>
-							</xsl:for-each>
-						</xsl:if>
-						<td width="50px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Result</td>
-						<td width="250px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Comment</td>
-					</tr>
-					<!-- Test Results Section -->
-					<xsl:for-each select="./Results/Object">
-						<tr>
-							<xsl:if test="count(../../TestHeader/GreatGrandParentObject)>0">
-								<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
-									<xsl:value-of select="@grandParentObject"/>
-								</td>
-							</xsl:if>
-							<xsl:if test="count(../../TestHeader/GrandParentObject)>0">
-								<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
-									<xsl:value-of select="@parentObject"/>
-								</td>
-							</xsl:if>
-							<xsl:if test="count(../../TestHeader/ParentObject)>0">
-								<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
-									<xsl:value-of select="@name"/>
-								</td>
-							</xsl:if>
-							<!-- Green cells = Pass -->
-							<xsl:if test="@result='Pass'">
-								<td style="background: #CCFF99; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: green; text-align:center;">
-									<xsl:value-of select="@result"/>
-								</td>
-								<td style="background: #CCFF99; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: green; text-align:left;">
-									<xsl:value-of select="@comment"/>
-								</td>
-							</xsl:if>
-							<!-- Red cells = Fail -->
-							<xsl:if test="@result='Fail'">
-								<td style="background: #FCB1B5; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:center;">
-									<xsl:value-of select="@result"/>
-								</td>
-								<td style="background: #FCB1B5; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:left;">
-									<xsl:value-of select="@comment"/>
-								</td>
-							</xsl:if>
-							<!-- Amber cells = N/A -->
-							<xsl:if test="@result='N/A'">
-								<td style="background: #F5FCB1; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:center;">
-									<xsl:value-of select="@result"/>
-								</td>
-								<td style="background: #F5FCB1; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:left;">
-									<xsl:value-of select="@comment"/>
-								</td>
-							</xsl:if>
-						</tr>
-					</xsl:for-each>
-				</tbody>
-			</table>
-		</xsl:for-each>
-	</xsl:template>
 </xsl:stylesheet>
+

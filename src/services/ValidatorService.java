@@ -27,6 +27,7 @@ public class ValidatorService extends HttpServlet {
 	private String sResultsDir = null;
 	private String sServletContextDir = null;
 	private final String sTestDir = "/WEB-INF/Tests";
+	private final String sViewDir = "/WEB-INF/Views";
 
 	/**
 	 * 
@@ -38,7 +39,7 @@ public class ValidatorService extends HttpServlet {
 		Document docXSLTest = null;
 		NodeList nlTestName = null;
 		Vector <String> vsTests = null;
-		
+
 		if (getServletContext().getResourcePaths(sTestDir).size() > 0)
 			vsTests = new Vector <String> ();
 
@@ -60,7 +61,7 @@ public class ValidatorService extends HttpServlet {
 
 			sResultFile = sResultsDir + File.separator + sTestName + ".xml";
 			vsTests.add(sResultFile);
-			//XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
+			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
 			System.out.println("Results: " + sResultFile);
 		}
 		XMLUtils.createIndexDocument(vsTests, sResultsDir);
@@ -86,8 +87,14 @@ public class ValidatorService extends HttpServlet {
 						sSessionId + File.separator + "results";
 				FileUtils.setupWorkDir(sResultsDir);
 
-				//now it's time to run all tests.
+				//it's time to run all tests.
 				testRunner();
+				//the results page is created
+				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+"Verbose.xml");
+				File fIndex = new File(sServletContextDir + File.separator + sSessionId + File.separator + sSessionId + ".xml");
+				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir+"MetadataValidated.html");
+				//TODO: create a results Zip file
+				//TODO: redirect to results page
 			}
 		}
 	}

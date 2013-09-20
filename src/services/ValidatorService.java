@@ -90,8 +90,8 @@ public class ValidatorService extends HttpServlet {
 				//it's time to run all tests.
 				testRunner();
 				//the results page is created
-				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+"Verbose.xml");
-				File fIndex = new File(sServletContextDir + File.separator + sSessionId + File.separator + sSessionId + ".xml");
+				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Verbose.xml");
+				File fIndex = new File(sServletContextDir + File.separator + sSessionId + File.separator + "index.xml");
 				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir+"MetadataValidated.html");
 				//TODO: create a results Zip file
 				//TODO: redirect to results page

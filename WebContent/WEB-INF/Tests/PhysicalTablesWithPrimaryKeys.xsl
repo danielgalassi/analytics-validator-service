@@ -5,7 +5,7 @@
 		<Test>
 			<TestHeader>
 				<TestName>PhysicalTableKeys</TestName>
-				<TestDescription></TestDescription>
+				<TestDescription>Evaluates Primary Keys have been set for Physical Tables, Views and Opaque Views</TestDescription>
 				<Object>Physical Table</Object>
 				<ParentObject type="Object">Schema</ParentObject>
 				<GrandParentObject type="Object">Database</GrandParentObject>

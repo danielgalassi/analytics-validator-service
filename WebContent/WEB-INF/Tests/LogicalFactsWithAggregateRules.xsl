@@ -5,7 +5,7 @@
 		<Test>
 			<TestHeader>
 				<TestName>AggregateRulesForFacts</TestName>
-				<TestDescription></TestDescription>
+				<TestDescription>Evaluates Fact Table attributes are set up as metrics</TestDescription>
 				<Object>Logical Column</Object>
 				<ParentObject type="Object">Logical Fact Table</ParentObject>
 				<GrandParentObject type="Object">Business Model</GrandParentObject>

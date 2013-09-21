@@ -91,10 +91,12 @@ public class ValidatorService extends HttpServlet {
 				//the results page is created
 				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Verbose.xsl");
 				File fIndex = new File(sResultsDir + File.separator + "index.xml");
-				System.out.println(fIndex.getAbsolutePath());
-				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir+File.separator+"MetadataValidated.html");
-				System.out.println("***");
-				//TODO: create a results Zip file
+				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir + File.separator + "MetadataValidated.html");
+				System.out.println("Results HTML page generated");
+				//results Zip file is created
+				FileUtils.Zip(sResultsDir + File.separator + "MetadataValidated.html",
+						sResultsDir + File.separator + "MetadataValidated.zip");
+				System.out.println("Resutls ZIP page generated");
 				//TODO: redirect to results page
 			}
 		}

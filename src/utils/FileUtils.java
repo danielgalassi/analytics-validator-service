@@ -2,11 +2,15 @@ package utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 /***
  * 
@@ -86,5 +90,32 @@ public class FileUtils {
 			isZip = false;
 		}
 		return isZip;
+	}
+
+	public static void Zip(String sSource, String sTarget) {
+		byte[] buffer = new byte[1024];
+
+		try{
+
+			FileOutputStream fos = new FileOutputStream(sTarget);
+			ZipOutputStream zipOS = new ZipOutputStream(fos);
+			ZipEntry zipEntry = new ZipEntry("spy.log");
+			zipOS.putNextEntry(zipEntry);
+			FileInputStream in = new FileInputStream(sSource);
+
+			int len;
+			while ((len = in.read(buffer)) > 0) {
+				zipOS.write(buffer, 0, len);
+			}
+
+			in.close();
+			zipOS.closeEntry();
+
+			//remember close it
+			zipOS.close();
+
+		}catch(IOException ex){
+			ex.printStackTrace();
+		}
 	}
 }

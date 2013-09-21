@@ -5,8 +5,8 @@
 		<Test>
 			<TestHeader>
 				<TestName>DimensionHierarchies</TestName>
-				<TestDescription></TestDescription>
-				<Object type="Object">Logical Dimension</Object>
+				<TestDescription>Evaluates that a Hierarchy has been set up for each Logical Dimension Table</TestDescription>
+				<Object>Logical Dimension</Object>
 				<ParentObject type="Object">Business Model</ParentObject>
 				<GrandParentObject type="Repository Layer">Business Model and Mapping Layer</GrandParentObject>
 			</TestHeader>

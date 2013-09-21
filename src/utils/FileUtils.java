@@ -99,7 +99,7 @@ public class FileUtils {
 
 			FileOutputStream fos = new FileOutputStream(sTarget);
 			ZipOutputStream zipOS = new ZipOutputStream(fos);
-			ZipEntry zipEntry = new ZipEntry("spy.log");
+			ZipEntry zipEntry = new ZipEntry("results.html");
 			zipOS.putNextEntry(zipEntry);
 			FileInputStream in = new FileInputStream(sSource);
 

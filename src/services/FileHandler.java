@@ -56,29 +56,28 @@ public class FileHandler extends HttpServlet {
 		// sets maximum size of request (include file + form data)
 		upload.setSizeMax(MAX_REQUEST_SIZE);
 
-		// constructs the directory path to store upload file
-		// this path is relative to application's directory
+		//constructs the directory path to store upload file
+		//this path is relative to application directory in the web server
 		String sSessionId = request.getRequestedSessionId();
 		String uploadPath = getServletContext().getRealPath("")
 				+ File.separator + sSessionId;
 		FileUtils.setupWorkDir(uploadPath);
 
 		try {
-			// parses the request's content to extract file data
+			//parses the request content to extract file data
 			List<FileItem> formItems = upload.parseRequest(request);
 
 			if (formItems != null && formItems.size() > 0)
 				for (FileItem item : formItems) {
 					if (item.isFormField())
-						if (item.getFieldName().equals("fileFormat"))
-							request.setAttribute("fileFormat", item.getString());
+						request.setAttribute(item.getFieldName(), item.getString());
 
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;
 						File storeFile = new File(filePath);
 
-						// saves the file on disk
+						//saves the file on disk
 						item.write(storeFile);
 						request.setAttribute("message",
 								"Upload has been done successfully!<br/>" +
@@ -90,7 +89,7 @@ public class FileHandler extends HttpServlet {
 			request.setAttribute("message",
 					"There was an error: " + ex.getMessage());
 		}
-		// redirects client to message page
+		//redirects client to message page
 		//getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
 		getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
 	}

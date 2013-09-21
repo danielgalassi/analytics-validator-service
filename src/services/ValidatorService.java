@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,7 +33,7 @@ public class ValidatorService extends HttpServlet {
 	/**
 	 * 
 	 */
-	private void testRunner() {
+	private void executeTests() {
 		String sTestName = "";
 		String sResultFile = "";
 		InputStream inputsXSLTest = null;
@@ -47,7 +48,7 @@ public class ValidatorService extends HttpServlet {
 
 			inputsXSLTest = getServletContext().getResourceAsStream(s);
 
-			docXSLTest = XMLUtils.InputStream2Document(inputsXSLTest);
+			docXSLTest = XMLUtils.loadDocument(inputsXSLTest);
 			nlTestName = docXSLTest.getElementsByTagName("TestName");
 			sTestName = "Test";
 			if (nlTestName.getLength() == 1)
@@ -59,7 +60,7 @@ public class ValidatorService extends HttpServlet {
 				e.printStackTrace();
 			}
 
-			sResultFile = sResultsDir + File.separator + sTestName + ".xml";
+			sResultFile = sResultsDir + sTestName + ".xml";
 			vsTests.add(sResultFile);
 			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
 			System.out.println("Results: " + sResultFile);
@@ -72,6 +73,7 @@ public class ValidatorService extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//temporarily mocking up the session Id as "abc"
+		//TODO: revert to actual session folder and file.
 		//String sSessionId = request.getRequestedSessionId();
 		String sSessionId = "abc";
 		sServletContextDir = getServletContext().getRealPath("");
@@ -83,21 +85,31 @@ public class ValidatorService extends HttpServlet {
 			//setup a results directory if tests are found
 			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
 				sResultsDir = sServletContextDir + File.separator + 
-						sSessionId + File.separator + "results";
+						sSessionId + File.separator + "results" + File.separator;
 				FileUtils.setupWorkDir(sResultsDir);
 
 				//it's time to run all tests.
-				//testRunner();
+				//TODO: reinstate test runner line (next)
+				//executeTests();
 				//the results page is created
 				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Verbose.xsl");
-				File fIndex = new File(sResultsDir + File.separator + "index.xml");
-				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir + File.separator + "MetadataValidated.html");
+				String resFormat = (String) request.getAttribute("resultsFormat");
+				if (!(resFormat.equals("Verbose")))
+					inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Summary.xsl");
+
+				File fIndex = new File(sResultsDir + "index.xml");
+				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, sResultsDir + "MetadataValidated.html");
 				System.out.println("Results HTML page generated");
+
 				//results Zip file is created
-				FileUtils.Zip(sResultsDir + File.separator + "MetadataValidated.html",
-						sResultsDir + File.separator + "MetadataValidated.zip");
-				System.out.println("Resutls ZIP page generated");
+				FileUtils.Zip(sResultsDir  + "MetadataValidated.html",
+						sResultsDir + "MetadataValidated.zip");
+				System.out.println("Results ZIP page generated");
+
 				//TODO: redirect to results page
+				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 
+						sSessionId + File.separator + "results" + File.separator+"MetadataValidated.html");
+				rd.forward(request, response);
 			}
 		}
 	}

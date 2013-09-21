@@ -50,7 +50,7 @@ public class XMLUtils {
 	 * @param filename
 	 * @return DOM document
 	 */
-	public static Document File2Document(File filename) {
+	public static Document loadDocument (File filename) {
 		DocumentBuilderFactory dBFXML = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBXML = null;
 		Document docXML = null;
@@ -75,7 +75,7 @@ public class XMLUtils {
 	 * @param InputStream
 	 * @return DOM document
 	 */
-	public static Document InputStream2Document(InputStream isFile) {
+	public static Document loadDocument (InputStream inputsFile) {
 		DocumentBuilderFactory dBFXML = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBXML = null;
 		Document docXML = null;
@@ -87,7 +87,7 @@ public class XMLUtils {
 		}
 
 		try {
-			docXML = docBXML.parse(isFile);
+			docXML = docBXML.parse(inputsFile);
 		} catch(Exception e) {
 			publishException(e);
 		}
@@ -100,7 +100,7 @@ public class XMLUtils {
 	 * @param doc
 	 * @param filename
 	 */
-	public static void Document2File(Document doc, String filename) {
+	public static void saveDocument2File(Document doc, String filename) {
 		Source source = new DOMSource(doc);
 
 		File XMLFile = new File(filename);
@@ -210,7 +210,7 @@ public class XMLUtils {
 			System.out.println("4");
 			publishException(tE);}
 	}
-	
+
 	public static void createIndexDocument (Vector <String> vsTests, String sDir) {
 		Document docIndex = createDOMDocument();
 		Element r = docIndex.createElement("index");
@@ -222,6 +222,6 @@ public class XMLUtils {
 		}
 		docIndex.appendChild(r);
 		System.out.println(sDir+File.separator+"index.xml");
-		Document2File(docIndex, sDir+File.separator+"index.xml");
+		saveDocument2File(docIndex, sDir+File.separator+"index.xml");
 	}
 }

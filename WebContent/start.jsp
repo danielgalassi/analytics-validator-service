@@ -9,11 +9,16 @@
 <body>
 
 <form action="upload" method="post" enctype="multipart/form-data">
-<label for="fileFormat">Select file format </label>
+<label for="fileFormat">I want to upload a </label>
 <input name="fileFormat" type="radio" value="zip" checked>Zip file
 <input name="fileFormat" type="radio" value="xudml">XUDML file<br/><br/> 
-<label for="zipFile">Select metadata file </label>
-<input id="metadataFile" type="file" name="metadata" size="35"/><br/>
+
+<label for="results">Show my results in a </label>
+<input name="results" type="radio" value="Summary" checked>Summary view
+<input name="results" type="radio" value="Verbose">Verbose view<br/><br/> 
+
+<label for="zipFile">Select metadata file </label><br/>
+<input id="metadataFile" type="file" name="metadata" size="25"/><br/>
 <input type="submit" value="Upload"/>
 </form>
 

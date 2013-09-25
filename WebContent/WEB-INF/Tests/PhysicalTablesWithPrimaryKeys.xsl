@@ -15,7 +15,7 @@
 				<xsl:for-each select="//Database">
 					<xsl:variable name="databaseId" select="@id"/>
 					<xsl:variable name="databaseName" select="@name"/>
-<!-- direct path... Database -> Schema -->
+					<!-- direct path... Database -> Schema -->
 					<xsl:for-each select="../Schema[@parentId=$databaseId]">
 						<xsl:call-template name="tables">
 							<xsl:with-param name="schemaId" select="@id"/>
@@ -23,7 +23,7 @@
 							<xsl:with-param name="databaseName" select="$databaseName"/>
 						</xsl:call-template>
 					</xsl:for-each>
-<!-- indirect path... Database -> Catalog -> Schema -->
+					<!-- indirect path... Database -> Catalog -> Schema -->
 					<xsl:for-each select="../PhysicalCatalog[@parentId=$databaseId]">
 						<xsl:variable name="catalogId" select="@id"/>
 						<xsl:for-each select="../Schema[@parentId=$catalogId]">
@@ -38,7 +38,7 @@
 			</Results>
 		</Test>
 	</xsl:template>
-<!-- this template is the actual test -->
+	<!-- this template is the actual test -->
 	<xsl:template name="tables">
 		<xsl:param name="schemaId"/>
 		<xsl:param name="databaseName"/>
@@ -58,22 +58,27 @@
 				</xsl:attribute>
 				<xsl:attribute name="greatGrandParentObject">Physical Layer</xsl:attribute>
 				<xsl:choose>
-				<!-- One (and only one) PK set for this table -->
+					<!-- One (and only one) PK set for this table -->
 					<xsl:when test="count(../PhysicalKey[@parentId=$tableId])=1">
 						<xsl:for-each select="../PhysicalKey[@parentId=$tableId]">
 							<xsl:choose>
-							<!-- One (and only one) Physical Column in the PK -->
+								<!-- One (and only one) Physical Column in the PK -->
 								<xsl:when test="count(.//RefPhysicalColumn)=1">
 									<xsl:variable name="physicalColumnId" select=".//RefPhysicalColumn/@id"/>
 									<xsl:for-each select="../../..//PhysicalColumn[@id=$physicalColumnId and @parentId=$tableId]">
 										<xsl:choose>
-										<!-- Table row count or Column (PK) row count missing -->
+											<!-- Table row count or Column (PK) row count missing -->
+											<xsl:when test="$tableRowCount=0">
+												<xsl:attribute name="result">N/A</xsl:attribute>
+												<xsl:attribute name="comment">PK found but no records in this table (insufficient data to confirm this column is the PK)</xsl:attribute>
+											</xsl:when>
+											<!-- Table row count or Column (PK) row count missing -->
 											<xsl:when test="not(@rowCount) or $tableRowCount=''">
 												<xsl:attribute name="result">Fail</xsl:attribute>
 												<xsl:attribute name="comment">Please check the repository (missing row counts)</xsl:attribute>
 											</xsl:when>
 											<!-- Row counts match -->
-											<xsl:when test="@rowCount=$tableRowCount">
+											<xsl:when test="@rowCount=$tableRowCount and not(@rowCount=0)">
 												<xsl:attribute name="result">Pass</xsl:attribute>
 												<xsl:attribute name="comment">OK</xsl:attribute>
 											</xsl:when>
@@ -108,8 +113,8 @@
 						<xsl:attribute name="result">Fail</xsl:attribute>
 						<xsl:attribute name="comment">Multiple Primary Keys set</xsl:attribute>
 					</xsl:when>
-					<xsl:otherwise>
 					<!-- Table cannot be evaluated -->
+					<xsl:otherwise>
 						<xsl:attribute name="result">N/A</xsl:attribute>
 						<xsl:attribute name="comment">Please check the repository</xsl:attribute>
 					</xsl:otherwise>

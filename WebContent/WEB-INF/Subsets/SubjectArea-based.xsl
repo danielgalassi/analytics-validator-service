@@ -20,12 +20,10 @@
 						</PresentationTable>
 						<!-- Presentation Columns -->
 						<xsl:for-each select="..//PresentationColumn[@parentId=$PresentationTableId]">
-							<!--PresentationColumn>
+							<PresentationColumn>
 								<xsl:copy-of select="@*|node()"/>
-							</PresentationColumn-->
-
-<!-- PresentationColumn/RefLogicalColumn id's reference LogicalColumn id -->
-									
+							</PresentationColumn>
+							<!-- PresentationColumn/RefLogicalColumn id's reference LogicalColumn id -->
 						</xsl:for-each>
 					</xsl:for-each>
 					<!-- Business Model -->

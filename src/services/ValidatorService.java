@@ -106,7 +106,7 @@ public class ValidatorService extends HttpServlet {
 						sResultsDir + "MetadataValidated.zip");
 				System.out.println("Results ZIP page generated");
 
-				//TODO: redirect to results page
+				//redirects to resutls page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 
 						sSessionId + File.separator + "results" + File.separator+"MetadataValidated.html");
 				rd.forward(request, response);

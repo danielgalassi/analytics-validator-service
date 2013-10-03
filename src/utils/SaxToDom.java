@@ -93,7 +93,7 @@ public class SaxToDom
 
 			sTag = "PhysicalTable";
 			//stores the PhysicalTable (Aliases included) list
-			Vector<String> vPhT = findElements(sTag, vLTS, "id", "id", false);
+			Vector<String> vPhT = findElements(sTag, vLTS, "id", "id", true);
 
 			sTag = "PhysicalColumn";
 			//stores the PhysicalTable list
@@ -110,6 +110,3 @@ public class SaxToDom
 		return doc;
 	}
 }
-//1st pass: PresentationCatalog + "name" + name of the Subject Area
-//2nd pass: PresentationTable + "id" + id of the PresentationCatalog (parent)
-//3rd pass: PresentationColumn + "id" + id of the presentation tables

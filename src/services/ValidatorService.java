@@ -73,13 +73,14 @@ public class ValidatorService extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//temporarily mocking up the session Id as "abc"
-		//TODO: revert to actual session folder and file.
-		//String sSessionId = request.getRequestedSessionId();
-		String sSessionId = "abc";
+		String sSessionId = request.getRequestedSessionId();
+		//String sSessionId = "abc";
 		sServletContextDir = getServletContext().getRealPath("");
 
+//		fRepository = new File(sServletContextDir + File.separator + 
+//				sSessionId + File.separator + sSessionId + ".xml");
 		fRepository = new File(sServletContextDir + File.separator + 
-				sSessionId + File.separator + sSessionId + ".xml");
+				sSessionId + File.separator + "metadata.xml");
 		//validates the repository file can be used
 		if (fRepository.exists() && fRepository.canRead()) {
 			//setup a results directory if tests are found
@@ -89,8 +90,7 @@ public class ValidatorService extends HttpServlet {
 				FileUtils.setupWorkDir(sResultsDir);
 
 				//it's time to run all tests.
-				//TODO: reinstate test runner line (next)
-				//executeTests();
+				executeTests();
 				//the results page is created
 				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Verbose.xsl");
 				String resFormat = (String) request.getAttribute("resultsFormat");

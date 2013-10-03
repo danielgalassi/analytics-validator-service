@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -104,14 +103,16 @@ public class FileHandler extends HttpServlet {
 
 
 	private void pruneFile(File storeFile, String uploadPath) {
-		//Document doc = null;
 		InputSource is = FileUtils.getIS(storeFile);
 		XMLReader XMLr = FileUtils.getXMLReader();
 
+		//Document doc = null;
 		//SaxToDom xml = new SaxToDom(doc, XMLr, is);
 		SaxToDom xml = new SaxToDom(null, XMLr, is);
 		Vector<String> vFindSA = new Vector<String> ();
 		vFindSA.add("Inventory - Balances");
-		XMLUtils.saveDocument2File(xml.makeDom("PresentationCatalog", vFindSA), uploadPath + File.separator + "metadata.xml");
+		XMLUtils.saveDocument2File(
+				xml.makeDom("PresentationCatalog", vFindSA), 
+				uploadPath + File.separator + "metadata.xml");
 	}
 }

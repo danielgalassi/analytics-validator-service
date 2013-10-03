@@ -6,11 +6,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /***
  * 
@@ -20,6 +29,43 @@ import java.util.zip.ZipOutputStream;
 public class FileUtils {
 
 	public static byte[] MAGIC = { 'P', 'K', 0x3, 0x4 };
+
+	public static XMLReader getXMLReader() {
+		SAXParserFactory SAXpf = SAXParserFactory.newInstance();
+		//enabling the namespaces processing
+		if(!SAXpf.isNamespaceAware())
+			SAXpf.setNamespaceAware(true);
+
+		//get a SAXParser object
+		SAXParser SAXparser= null;
+		//get the XMLReader
+		XMLReader XMLr = null;
+
+		try {
+			SAXparser = SAXpf.newSAXParser();
+			XMLr = SAXparser.getXMLReader();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		return XMLr;
+	}
+
+	public static InputSource getIS(File theFile) {
+		InputStream in = null;
+		InputSource is = null;
+
+		try {
+			in = new FileInputStream(theFile);
+			is = new InputSource(new InputStreamReader(in));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		is.setEncoding("UTF-8");
+		return is;
+	}
 
 	public static boolean setupWorkDir(String sPath) {
 		File fDir = new File(sPath); 

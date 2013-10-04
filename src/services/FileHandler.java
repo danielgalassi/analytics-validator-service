@@ -88,7 +88,8 @@ public class FileHandler extends HttpServlet {
 								"Upload has been done successfully!<br/>" +
 										"File can be found: " + storeFile.getAbsolutePath());
 						System.out.println(storeFile.getAbsolutePath());
-						pruneFile(storeFile, uploadPath);
+						File xmlFile = FileUtils.unZipIt(storeFile.getAbsolutePath(), uploadPath);
+						pruneFile(xmlFile, uploadPath);
 					}
 				}
 		} catch (Exception ex) {

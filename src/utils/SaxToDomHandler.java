@@ -13,26 +13,33 @@ import org.xml.sax.helpers.DefaultHandler;
 
 class SaxToDomHandler extends DefaultHandler
 {
-	private Document xmlDoc;
-	private Node currentNode;
-	private boolean isInteresting = false;
-	private boolean isReallyInteresting = false;
-	private String processingNode;
-	private String sTag;
-	private Vector<String> vValue;
-	private String sParam;
-	private String sReturnParam;
-	private Vector<String> vList;
-	private boolean appendToDoc;
+	private Document		doc;
+	private Node			currentNode;
+	private boolean			isInteresting = false;
+	private boolean			isReallyInteresting = false;
+	private String			processingNode;
+	private String			pickTag;
+	private Vector<String>	listOfValues;
+	private String			matchingAttrib;
+	private String			returningAttrib;
+	private Vector<String>	vList;
+	private boolean			appendToDoc;
 
-	public SaxToDomHandler(Document doc, String sTagNm, Vector<String> vObjValue, Vector<String> vLst, String sPar, String sRetParam, boolean append) {
-		xmlDoc = doc;
-		currentNode = xmlDoc.getFirstChild().getFirstChild();
-		sTag = sTagNm;
-		vValue = vObjValue;
+	public SaxToDomHandler(
+			Document doc, 
+			String pickTag, 
+			Vector<String> listOfValues, 
+			Vector<String> vLst, 
+			String matchingAttrib, 
+			String returningAttrib, 
+			boolean append) {
+		this.doc = doc;
+		currentNode = doc.getFirstChild().getFirstChild();
+		this.pickTag = pickTag;
+		this.listOfValues = listOfValues;
 		vList = vLst;
-		sParam = sPar;
-		sReturnParam = sRetParam;
+		this.matchingAttrib = matchingAttrib;
+		this.returningAttrib = returningAttrib;
 		appendToDoc = append;
 	}
 
@@ -42,7 +49,7 @@ class SaxToDomHandler extends DefaultHandler
 		for (int i = 0; i<attrs.getLength(); i++) {
 			qname  = attrs.getQName(i);
 			value  = attrs.getValue(i);
-			if (qname.equals(sReturnParam) && !vList.contains(value)) {
+			if (qname.equals(returningAttrib) && !vList.contains(value)) {
 				//System.out.println(i + ")>>\t" + ns_uri + "\t" + processingNode + qname + "\t" + value + "\t" + a + "\t" + attrs.getLength());
 				vList.add(value);
 				break;
@@ -52,28 +59,28 @@ class SaxToDomHandler extends DefaultHandler
 
 	public void startElement(String uri, String name, String qName, Attributes attrs) {
 
-		if (qName.equals(sTag)) {
+		if (qName.equals(pickTag)) {
 			isInteresting = true;
-			processingNode = sTag;
+			processingNode = pickTag;
 		}
 
 		if (isInteresting) {
 			// Create the element.
-			Element elem = xmlDoc.createElementNS(uri, qName);
+			Element elem = doc.createElementNS(uri, qName);
 			// Add each attribute.
 			for (int i = 0; i < attrs.getLength(); ++i) {
 				String ns_uri = attrs.getURI(i);
 				String qname = attrs.getQName(i);
 				String value = attrs.getValue(i);
-				Attr attr = xmlDoc.createAttributeNS(ns_uri, qname);
+				Attr attr = doc.createAttributeNS(ns_uri, qname);
 				attr.setValue(value);
 				elem.setAttributeNodeNS(attr);
 
 				//if this is such object and 
 				//the name or id (sParam) matches one we need...
 				if (qName.equals(processingNode) && 
-						qname.equals(sParam) && 
-						vValue.contains(value)) {
+						qname.equals(matchingAttrib) && 
+						listOfValues.contains(value)) {
 					isReallyInteresting = true;
 					pickAttrib(attrs, "1");
 				}
@@ -129,7 +136,7 @@ class SaxToDomHandler extends DefaultHandler
 
 	public void characters(char[] ch, int start, int length) {
 		String str  = new String(ch, start, length);
-		Text   text = xmlDoc.createTextNode(str);
+		Text   text = doc.createTextNode(str);
 		if (isReallyInteresting && appendToDoc)
 			currentNode.appendChild(text);
 	}
@@ -137,14 +144,14 @@ class SaxToDomHandler extends DefaultHandler
 	// Add a new text node in the DOM tree, at the right place.
 	public void ignorableWhitespace(char[] ch, int start, int length) {
 		String str  = new String(ch, start, length);
-		Text   text = xmlDoc.createTextNode(str);
+		Text   text = doc.createTextNode(str);
 		if (isReallyInteresting && appendToDoc)
 			currentNode.appendChild(text);
 	}
 
 	// Add a new text PI in the DOM tree, at the right place.
 	public void processingInstruction(String target, String data) {
-		ProcessingInstruction pi = xmlDoc.createProcessingInstruction(target, data);
+		ProcessingInstruction pi = doc.createProcessingInstruction(target, data);
 		if (isReallyInteresting && appendToDoc)
 			currentNode.appendChild(pi);
 	}

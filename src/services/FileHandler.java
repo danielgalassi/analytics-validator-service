@@ -100,15 +100,11 @@ public class FileHandler extends HttpServlet {
 		getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
 	}
 
-
-
 	private void pruneFile(File storeFile, String uploadPath) {
 		InputSource is = FileUtils.getIS(storeFile);
 		XMLReader XMLr = FileUtils.getXMLReader();
 
-		//Document doc = null;
-		//SaxToDom xml = new SaxToDom(doc, XMLr, is);
-		SaxToDom xml = new SaxToDom(null, XMLr, is);
+		SaxToDom xml = new SaxToDom(null, XMLr, is, storeFile);
 		Vector<String> vFindSA = new Vector<String> ();
 		vFindSA.add("Inventory - Balances");
 		XMLUtils.saveDocument2File(

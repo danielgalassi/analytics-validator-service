@@ -13,100 +13,120 @@ import org.xml.sax.XMLReader;
 
 public class SaxToDom
 {
-	private XMLReader   myReader;
-	private InputSource myInput;
-	private SaxToDomHandler handlers = null;
-	private Document doc;
+	private XMLReader		reader;
+	private InputSource		input;
+	private SaxToDomHandler	handlers;
+	private Document		doc;
+	private File			metadata;
 
-	public SaxToDom(Document docXML, XMLReader reader, InputSource input) {
-		myReader = reader;
-		myInput  = input;
-		doc = docXML;
+	public SaxToDom(Document doc, XMLReader reader, InputSource input, File metadata) {
+		this.reader = reader;
+		this.input  = input;
+		this.doc = doc;
+		this.metadata = metadata;
 	}
 
-	public Vector<String> findElements(String sTag, Vector<String> valueList, String sRelAttrib, String sRetAttrib, boolean append) {
-		myInput = FileUtils.getIS(new File("c:\\data\\workspace\\analytics-validator-service\\sampleCases\\output_20130924.xml"));
+	public Vector<String> findElements(
+			String pickTag, 
+			Vector<String> valueList, 
+			String sMatchingAttrib, 
+			String sReturningAttrib, 
+			boolean append) {
+
+		input = FileUtils.getIS(metadata);
 		Vector<String> foundIdList = new Vector<String>();
-		handlers = new SaxToDomHandler(doc, sTag, valueList, foundIdList, sRelAttrib, sRetAttrib, append);
-		myReader.setContentHandler(handlers);
-		myReader.setErrorHandler(handlers);
+		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, sMatchingAttrib, sReturningAttrib, append);
+		reader.setContentHandler(handlers);
+		reader.setErrorHandler(handlers);
 
 		try {
-			myReader.parse(myInput);
+			reader.parse(input);
 		} catch (IOException | SAXException e) {
 			e.printStackTrace();
 		}
 
-		//System.out.println(sTag + ": " + foundIdList.size());
+		System.out.println(pickTag + ": " + foundIdList.size());
 		return foundIdList;
 	}
 
-	public Document makeDom(String sTag, Vector<String> valueList) {
-		//System.out.println("makeDom()");
+	public Document makeDom(String pickTag, Vector<String> pickValues) {
+
 		try {
 			if (doc == null) {
-				//System.out.println("Creating the DOM document");
 				doc = XMLUtils.createDOMDocument();
-				Element repo = doc.createElement("Repository");
-				Element DECL = doc.createElement("DECLARE");
-				repo.appendChild(DECL);
-				doc.appendChild(repo);
+				Element tagRepository = doc.createElement("Repository");
+				Element tagDeclare = doc.createElement("DECLARE");
+				tagRepository.appendChild(tagDeclare);
+				doc.appendChild(tagRepository);
 			}
-
-			//stores SA id and BM id
-			Vector<String> vSA = findElements(sTag, valueList, "name", "id", true);
-
-			sTag = "PresentationTable";
-			//stores PresentationTable id
-			Vector<String> vPT = findElements(sTag, vSA, "parentId", "id", true);
-
-			sTag = "PresentationColumn";
-			//stores PresentationColumn id and referenced logical column id
-			Vector<String> vPC = findElements(sTag, vPT, "parentId", "id", true);
-
-			sTag = "BusinessModel";
-			//stores the BM id list
-			Vector<String> vBM = findElements(sTag, vSA, "id", "id", true);
-
-			sTag = "LogicalColumn";
-			//stores the LogicalColumn parentId list 
-			Vector<String> vLC = findElements(sTag, vPC, "id", "parentId", false);
-
-			sTag = "LogicalTable";
-			//stores the LogicalTable list
-			Vector<String> vLT = findElements(sTag, vLC, "id", "id", true);
-
-			sTag = "LogicalColumn";
-			//stores the LogicalColumn list
-			vLC = findElements(sTag, vLT, "parentId", "id", true);
-
-			sTag = "MeasureDefn";
-			//stores the Measure Definition list
-			Vector<String> vMD = findElements(sTag, vLC, "parentId", "id", true);
-
-			sTag = "LogicalTable";
-			//stores the LTS id
-			Vector<String> vLTStemp = findElements(sTag, vLT, "id", "id", false);
-			sTag = "LogicalTableSource";
-			//stores the LTS and PhysicalTable id list
-			Vector<String> vLTS = findElements(sTag, vLTStemp, "id", "id", true);
-
-			sTag = "PhysicalTable";
-			//stores the PhysicalTable (Aliases included) list
-			Vector<String> vPhT = findElements(sTag, vLTS, "id", "id", true);
-
-			sTag = "PhysicalColumn";
-			//stores the PhysicalTable list
-			Vector<String> vPhC = findElements(sTag, vPhT, "parentId", "id", true);
-
-			sTag = "PhysicalKey";
-			//stores the PK list
-			Vector<String> vPK = findElements(sTag, vPhT, "parentId", "id", true);
 		}
 		// For the catch handlers below, use your usual logging facilities.
 		catch (DOMException e) {
 			e.printStackTrace();
 		}
+
+		//stores SA id and BM id
+		Vector<String> listOfSAs = findElements(pickTag, pickValues, "name", "id", true);
+
+		pickTag = "PresentationTable";
+		//stores PresentationTable id
+		Vector<String> listOfPresTables = findElements(pickTag, listOfSAs, "parentId", "id", true);
+
+		pickTag = "PresentationColumn";
+		//stores PresentationColumn id and referenced logical column id
+		Vector<String> listOfPresCols = findElements(pickTag, listOfPresTables, "parentId", "id", true);
+
+		pickTag = "BusinessModel";
+		//stores the BM id list
+		Vector<String> listOfBizModels = findElements(pickTag, listOfSAs, "id", "id", true);
+
+		pickTag = "LogicalColumn";
+		//stores the LogicalColumn parentId list 
+		Vector<String> listofLogCols = findElements(pickTag, listOfPresCols, "id", "parentId", false);
+
+		pickTag = "LogicalTable";
+		//stores the LogicalTable list
+		Vector<String> listOfLogTables = findElements(pickTag, listofLogCols, "id", "id", true);
+
+		pickTag = "LogicalColumn";
+		//stores the LogicalColumn list
+		listofLogCols = findElements(pickTag, listOfLogTables, "parentId", "id", true);
+
+		pickTag = "MeasureDefn";
+		//stores the Measure Definition list
+		Vector<String> listOfMeasureDefs = findElements(pickTag, listofLogCols, "parentId", "id", true);
+
+		pickTag = "LogicalTable";
+		//stores the LTS id
+		Vector<String> tempListOfLogTables = findElements(pickTag, listOfLogTables, "id", "id", false);
+		pickTag = "LogicalTableSource";
+		//stores the LTS and PhysicalTable id list
+		Vector<String> listOfLTSs = findElements(pickTag, tempListOfLogTables, "id", "id", true);
+
+		pickTag = "PhysicalTable";
+		//stores the PhysicalTable (Aliases included) list
+		Vector<String> listOfPhysTables = findElements(pickTag, listOfLTSs, "id", "id", true);
+
+		pickTag = "Schema";
+		//stores the Schema list
+		Vector<String> listOfSchemas = findElements(pickTag, listOfPhysTables, "parentId", "id", true);
+
+		pickTag = "PhysicalCatalog";
+		//stores the Schema list
+		Vector<String> listOfPhysCatalogs = findElements(pickTag, listOfSchemas, "parentId", "id", true);
+
+		pickTag = "Database";
+		//NOT storing the DB list
+		findElements(pickTag, listOfPhysCatalogs, "parentId", "id", true);
+		findElements(pickTag, listOfSchemas, "parentId", "id", true);
+
+		pickTag = "PhysicalColumn";
+		//stores the PhysicalTable list
+		Vector<String> listOfPhysCols = findElements(pickTag, listOfPhysTables, "parentId", "id", true);
+
+		pickTag = "PhysicalKey";
+		//stores the PK list
+		Vector<String> listOfPhysKeys = findElements(pickTag, listOfPhysTables, "parentId", "id", true);
 		return doc;
 	}
 }

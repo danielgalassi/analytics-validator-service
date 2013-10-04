@@ -11,6 +11,7 @@ import java.io.RandomAccessFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -163,5 +164,44 @@ public class FileUtils {
 		}catch(IOException ex){
 			ex.printStackTrace();
 		}
+	}
+
+	public static File unZipIt(String zipFile, String outputFolder) {
+		byte[] buffer = new byte[1024];
+		File newFile = null;
+
+		try{
+			//get the zip file content
+			ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+			//get the zipped file list entry
+			ZipEntry ze = zis.getNextEntry();
+
+			while (ze!=null) {
+				String fileName = ze.getName();
+				newFile = new File(outputFolder + File.separator + fileName);
+
+				System.out.println("Unzipping: "+ newFile.getAbsolutePath());
+				//create all non exists folders
+				//else you will hit FileNotFoundException for compressed folder
+				new File(newFile.getParent()).mkdirs();
+
+				FileOutputStream fos = new FileOutputStream(newFile);             
+
+				int len;
+				while ((len = zis.read(buffer)) > 0)
+					fos.write(buffer, 0, len);
+
+				fos.close();   
+				ze = zis.getNextEntry();
+			}
+
+			zis.closeEntry();
+			zis.close();
+
+		} catch(IOException ex) {
+			ex.printStackTrace();
+		}
+		
+		return newFile;
 	}
 }

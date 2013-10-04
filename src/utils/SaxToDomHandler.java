@@ -26,13 +26,13 @@ class SaxToDomHandler extends DefaultHandler
 	private boolean			appendToDoc;
 
 	public SaxToDomHandler(
-			Document doc, 
-			String pickTag, 
-			Vector<String> listOfValues, 
-			Vector<String> vLst, 
-			String matchingAttrib, 
-			String returningAttrib, 
-			boolean append) {
+			Document		doc, 
+			String			pickTag, 
+			Vector<String>	listOfValues, 
+			Vector<String>	vLst, 
+			String			matchingAttrib, 
+			String			returningAttrib, 
+			boolean			append) {
 		this.doc = doc;
 		currentNode = doc.getFirstChild().getFirstChild();
 		this.pickTag = pickTag;
@@ -46,6 +46,7 @@ class SaxToDomHandler extends DefaultHandler
 	private void pickAttrib (Attributes attrs, String a) {
 		String qname;
 		String value;
+
 		for (int i = 0; i<attrs.getLength(); i++) {
 			qname  = attrs.getQName(i);
 			value  = attrs.getValue(i);
@@ -65,9 +66,9 @@ class SaxToDomHandler extends DefaultHandler
 		}
 
 		if (isInteresting) {
-			// Create the element.
+			//Creates the element
 			Element elem = doc.createElementNS(uri, qName);
-			// Add each attribute.
+			//Adds each attribute
 			for (int i = 0; i < attrs.getLength(); ++i) {
 				String ns_uri = attrs.getURI(i);
 				String qname = attrs.getQName(i);
@@ -135,21 +136,21 @@ class SaxToDomHandler extends DefaultHandler
 	}
 
 	public void characters(char[] ch, int start, int length) {
-		String str  = new String(ch, start, length);
-		Text   text = doc.createTextNode(str);
+		String	str  = new String(ch, start, length);
+		Text	text = doc.createTextNode(str);
 		if (isReallyInteresting && appendToDoc)
 			currentNode.appendChild(text);
 	}
 
-	// Add a new text node in the DOM tree, at the right place.
+	//Add a new text node in the DOM tree, at the right place.
 	public void ignorableWhitespace(char[] ch, int start, int length) {
-		String str  = new String(ch, start, length);
-		Text   text = doc.createTextNode(str);
+		String	str  = new String(ch, start, length);
+		Text	text = doc.createTextNode(str);
 		if (isReallyInteresting && appendToDoc)
 			currentNode.appendChild(text);
 	}
 
-	// Add a new text PI in the DOM tree, at the right place.
+	//Add a new text PI in the DOM tree, at the right place.
 	public void processingInstruction(String target, String data) {
 		ProcessingInstruction pi = doc.createProcessingInstruction(target, data);
 		if (isReallyInteresting && appendToDoc)

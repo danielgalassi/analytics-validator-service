@@ -83,20 +83,20 @@ public class FileHandler extends HttpServlet {
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;
-						File storeFile = new File(filePath);
+						File storedFile = new File(filePath);
 
 						//saves the file on disk
-						item.write(storeFile);
+						item.write(storedFile);
 						request.setAttribute("message",
 								"Upload has been done successfully!<br/>" +
-										"File can be found: " + storeFile.getAbsolutePath());
+										"File can be found: " + storedFile.getAbsolutePath());
 						//System.out.println(storeFile.getAbsolutePath());
 						if (isZipFile) {
-							xmlFile = FileUtils.unZipIt(storeFile.getAbsolutePath(), uploadPath);
-							storeFile.delete();
+							xmlFile = FileUtils.unZipIt(storedFile.getAbsolutePath(), uploadPath);
+							storedFile.delete();
 						}
 						else
-							xmlFile = storeFile;
+							xmlFile = storedFile;
 
 						//trims the metadata XML file,
 						//keeping one subject area
@@ -112,16 +112,17 @@ public class FileHandler extends HttpServlet {
 		getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
 	}
 
-	private void pruneFile(File storeFile, String uploadPath) {
+	private void pruneFile(File xmlFile, String sessionFolder) {
 		//TODO: it's time to introduce the SA selector page and move this stub from the FileHandler
-		InputSource is = FileUtils.getIS(storeFile);
+		InputSource is = FileUtils.getIS(xmlFile);
 		XMLReader XMLr = FileUtils.getXMLReader();
 
-		SaxToDom xml = new SaxToDom(null, XMLr, is, storeFile);
+		SaxToDom xml = new SaxToDom(null, XMLr, is, xmlFile);
 		Vector<String> vFindSA = new Vector<String> ();
 		vFindSA.add("Inventory - Balances");
 		XMLUtils.saveDocument2File(
 				xml.makeDom("PresentationCatalog", vFindSA), 
-				uploadPath + File.separator + "metadata.xml");
+				sessionFolder + File.separator + "metadata.xml");
+		xmlFile.delete();
 	}
 }

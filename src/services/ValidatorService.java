@@ -23,12 +23,12 @@ import utils.XMLUtils;
  */
 @WebServlet(description = "This controller provides test runner services.", urlPatterns = { "/ValidatorService" })
 public class ValidatorService extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private File fRepository = null;
-	private String sResultsDir = null;
-	private String sServletContextDir = null;
-	private final String sTestDir = "/WEB-INF/Tests";
-	private final String sViewDir = "/WEB-INF/Views";
+	private static final long	serialVersionUID = 1L;
+	private File				fRepository = null;
+	private String				sResultsDir = null;
+	private String				sServletContextDir = null;
+	private final String		sTestDir = "/WEB-INF/Tests";
+	private final String		sViewDir = "/WEB-INF/Views";
 
 	/**
 	 * 
@@ -84,8 +84,8 @@ public class ValidatorService extends HttpServlet {
 		sServletContextDir = getServletContext().getRealPath("");
 		fRepository = new File(sServletContextDir + File.separator + 
 				sSessionId + File.separator + "metadata.xml");
-		//validates the repository file can be used
 
+		//validates the repository file can be used
 		if (fRepository.exists() && fRepository.canRead()) {
 			//setup a results directory if tests are found
 			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {

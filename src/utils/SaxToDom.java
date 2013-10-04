@@ -102,23 +102,33 @@ public class SaxToDom
 		pickTag = "LogicalTableSource";
 		//stores the LTS and PhysicalTable id list
 		Vector<String> listOfLTSs = findElements(pickTag, tempListOfLogTables, "id", "id", true);
+		tempListOfLogTables = null;
 
 		pickTag = "PhysicalTable";
 		//stores the PhysicalTable (Aliases included) list
 		Vector<String> listOfPhysTables = findElements(pickTag, listOfLTSs, "id", "id", true);
 
+		Vector<String> tempListOfSchemas = findElements(pickTag, listOfPhysTables, "id", "parentId", false);
+		//stores the Schema list
 		pickTag = "Schema";
-		//stores the Schema list
-		Vector<String> listOfSchemas = findElements(pickTag, listOfPhysTables, "parentId", "id", true);
+		Vector<String> listOfSchemas = findElements(pickTag, tempListOfSchemas, "id", "id", true);
 
+		Vector<String> tempListOfPhysCatalogs = findElements(pickTag, listOfSchemas, "id", "parentId", false);
+		//stores the Schema list
 		pickTag = "PhysicalCatalog";
-		//stores the Schema list
-		Vector<String> listOfPhysCatalogs = findElements(pickTag, listOfSchemas, "parentId", "id", true);
+		Vector<String> listOfPhysCatalogs = findElements(pickTag, tempListOfPhysCatalogs, "id", "id", true);
+		tempListOfPhysCatalogs = null;
 
-		pickTag = "Database";
+		Vector<String> tempListOfDBs = findElements(pickTag, listOfSchemas, "id", "parentId", false);
+		Vector<String> tempListOfDBs2 = findElements(pickTag, listOfPhysCatalogs, "id", "parentId", false);
+		for (String db : tempListOfDBs2)
+			if (!tempListOfDBs.contains(db))
+				tempListOfDBs.add(db);
 		//NOT storing the DB list
-		findElements(pickTag, listOfPhysCatalogs, "parentId", "id", true);
-		findElements(pickTag, listOfSchemas, "parentId", "id", true);
+		pickTag = "Database";
+		Vector<String> listOfDatabases = findElements(pickTag, tempListOfDBs, "id", "id", true);
+		tempListOfDBs2 = null;
+		tempListOfDBs = null;
 
 		pickTag = "PhysicalColumn";
 		//stores the PhysicalTable list

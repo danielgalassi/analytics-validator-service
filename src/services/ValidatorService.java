@@ -34,20 +34,25 @@ public class ValidatorService extends HttpServlet {
 	 * 
 	 */
 	private void executeTests() {
-		String sTestName = "";
-		String sResultFile = "";
-		InputStream inputsXSLTest = null;
-		Document docXSLTest = null;
-		NodeList nlTestName = null;
-		Vector <String> vsTests = null;
+		String			sTestName = "";
+		String			sResultFile = "";
+		InputStream		inputsXSLTest = null;
+		Document		docXSLTest = null;
+		NodeList		nlTestName = null;
+		Vector<String>	testList = null;
+		Vector<Double>	elapsedTime = null;
+		long			startTimeMs;
 
-		if (getServletContext().getResourcePaths(sTestDir).size() > 0)
-			vsTests = new Vector <String> ();
+		if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
+			testList = new Vector<String> ();
+			elapsedTime = new Vector<Double> ();
+		}
 
 		for (String s : getServletContext().getResourcePaths(sTestDir)) {
 
-			inputsXSLTest = getServletContext().getResourceAsStream(s);
+			startTimeMs = System.currentTimeMillis();
 
+			inputsXSLTest = getServletContext().getResourceAsStream(s);
 			docXSLTest = XMLUtils.loadDocument(inputsXSLTest);
 			nlTestName = docXSLTest.getElementsByTagName("TestName");
 			sTestName = "Test";
@@ -61,27 +66,26 @@ public class ValidatorService extends HttpServlet {
 			}
 
 			sResultFile = sResultsDir + sTestName + ".xml";
-			vsTests.add(sResultFile);
+			elapsedTime.add((double) (System.currentTimeMillis() - startTimeMs) / 1000);
+
+			testList.add(sResultFile);
 			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
-			System.out.println("Results: " + sResultFile);
+			//System.out.println("Results: " + sResultFile);
 		}
-		XMLUtils.createIndexDocument(vsTests, sResultsDir);
+		XMLUtils.createIndexDocument(testList, elapsedTime, sResultsDir);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//temporarily mocking up the session Id as "abc"
-		String sSessionId = request.getRequestedSessionId();
-		//String sSessionId = "abc";
-		sServletContextDir = getServletContext().getRealPath("");
 
-//		fRepository = new File(sServletContextDir + File.separator + 
-//				sSessionId + File.separator + sSessionId + ".xml");
+		String sSessionId = request.getRequestedSessionId();
+		sServletContextDir = getServletContext().getRealPath("");
 		fRepository = new File(sServletContextDir + File.separator + 
 				sSessionId + File.separator + "metadata.xml");
 		//validates the repository file can be used
+
 		if (fRepository.exists() && fRepository.canRead()) {
 			//setup a results directory if tests are found
 			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {

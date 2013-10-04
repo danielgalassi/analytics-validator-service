@@ -211,17 +211,19 @@ public class XMLUtils {
 			publishException(tE);}
 	}
 
-	public static void createIndexDocument (Vector <String> vsTests, String sDir) {
+	public static void createIndexDocument (Vector<String> testList, Vector<Double> elapsedTime, String sDir) {
 		Document docIndex = createDOMDocument();
 		Element r = docIndex.createElement("index");
-		for (String s : vsTests) {
-			System.out.println(s);
+		int i = 0;
+		for (String test : testList) {
+			System.out.println(test);
 			Element e = docIndex.createElement("results");
-			e.setTextContent(s);
+			e.setAttribute("elapsedTime", elapsedTime.get(i++).toString());
+			e.setTextContent(test);
 			r.appendChild(e);
 		}
 		docIndex.appendChild(r);
-		System.out.println(sDir+File.separator+"index.xml");
-		saveDocument2File(docIndex, sDir+File.separator+"index.xml");
+		//System.out.println(sDir + "index.xml");
+		saveDocument2File(docIndex, sDir + "index.xml");
 	}
 }

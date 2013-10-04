@@ -45,7 +45,7 @@ public class SaxToDom
 			e.printStackTrace();
 		}
 
-		System.out.println(pickTag + ": " + foundIdList.size());
+		//System.out.println(pickTag + ": " + foundIdList.size());
 		return foundIdList;
 	}
 

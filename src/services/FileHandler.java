@@ -32,13 +32,17 @@ public class FileHandler extends HttpServlet {
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
 	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
 	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
+	private static boolean isZipFile = false;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		File xmlFile = null;
 
+		if (request.getAttribute("fileFormat").equals("zip"))
+			isZipFile = true;
 		System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
 		System.out.println("Session Id: " + request.getRequestedSessionId());
 
-		// checks if the request actually contains upload file
+		//checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
 			PrintWriter writer = response.getWriter();
 			writer.println("Error: Form must have enctype=multipart/form-data.");
@@ -46,23 +50,22 @@ public class FileHandler extends HttpServlet {
 			return;
 		}
 
-		// configures upload settings
+		//configures upload settings
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-		// sets memory threshold - beyond which files are stored in disk 
+		//sets memory threshold - beyond which files are stored in disk 
 		factory.setSizeThreshold(MEMORY_THRESHOLD);
-		// sets temporary location to store files
+		//sets temporary location to store files
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
-		// sets maximum size of upload file
+		//sets maximum size of upload file
 		upload.setFileSizeMax(MAX_FILE_SIZE);
 
-		// sets maximum size of request (include file + form data)
+		//sets maximum size of request (include file + form data)
 		upload.setSizeMax(MAX_REQUEST_SIZE);
 
-		//constructs the directory path to store upload file
-		//this path is relative to application directory in the web server
+		//sets up the working directory for this session
 		String sSessionId = request.getRequestedSessionId();
 		String uploadPath = getServletContext().getRealPath("")
 				+ File.separator + sSessionId;
@@ -87,8 +90,16 @@ public class FileHandler extends HttpServlet {
 						request.setAttribute("message",
 								"Upload has been done successfully!<br/>" +
 										"File can be found: " + storeFile.getAbsolutePath());
-						System.out.println(storeFile.getAbsolutePath());
-						File xmlFile = FileUtils.unZipIt(storeFile.getAbsolutePath(), uploadPath);
+						//System.out.println(storeFile.getAbsolutePath());
+						if (isZipFile) {
+							xmlFile = FileUtils.unZipIt(storeFile.getAbsolutePath(), uploadPath);
+							storeFile.delete();
+						}
+						else
+							xmlFile = storeFile;
+
+						//trims the metadata XML file,
+						//keeping one subject area
 						pruneFile(xmlFile, uploadPath);
 					}
 				}
@@ -102,6 +113,7 @@ public class FileHandler extends HttpServlet {
 	}
 
 	private void pruneFile(File storeFile, String uploadPath) {
+		//TODO: it's time to introduce the SA selector page and move this stub from the FileHandler
 		InputSource is = FileUtils.getIS(storeFile);
 		XMLReader XMLr = FileUtils.getXMLReader();
 

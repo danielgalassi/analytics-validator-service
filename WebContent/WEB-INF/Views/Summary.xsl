@@ -41,23 +41,21 @@
 				<br/>
 				<h2>Metadata Test Summary Results</h2>
 				<br/>
-				<h4>Number of tests executed: <xsl:value-of select="count(document(//results))"/>
-				</h4>
-				<h4>Total elapsed time: </h4>
+				<h4>Tests executed: <xsl:value-of select="count(document(//results))"/></h4>
+				<h4>Total elapsed time: <xsl:value-of select="sum(//results/@elapsedTime)"/> seconds</h4>
 				<br/>
 				<!-- Table Section -->
 				<table>
 					<tbody>
 					<!-- Table heading -->
 						<tr>
-							<th width="200px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Test</th>
-							<th width="500px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Description</th>
-							<th width="110px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Objects tested</th>
-							<th width="110px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Errors</th>
-							<th width="110px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Failures</th>
-							<th width="110px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">N/A</th>
-							<th width="110px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Success Rate</th>
-							<th width="110px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #555555;">Elapsed Time</th>
+							<th width="250px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Test</th>
+							<th width="550px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Description</th>
+							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Objects tested</th>
+							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Errors</th>
+							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Failures</th>
+							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">N/A</th>
+							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Success Rate</th>
 						</tr>
 				<!-- Test Results Section -->
 						<xsl:for-each select="document(//results)">
@@ -69,21 +67,20 @@
 									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
 										<xsl:value-of select="./TestHeader/TestDescription"/>
 									</td>
-									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:40px;">
+									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object)"/>
 									</td>
-									<td height="28px" style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:40px;">
+									<td height="28px" style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[not(@result)])"/>
 									</td>
-									<td height="28px" style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:40px;">
+									<td height="28px" style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[@result='Fail'])"/>
 									</td>
-									<td height="28px" style="background: #F8FCCF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:40px;">
+									<td height="28px" style="background: #F8FCCF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[@result='N/A'])"/>
 									</td>
-									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:40px;">
+									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:48px;">
 										<xsl:value-of select="round(100 * number(count(.//Results/Object[@result='Pass'])) div number(count(.//Results/Object)))"/> %</td>
-									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:40px;"></td>
 								</tr>
 							</xsl:for-each>
 						</xsl:for-each>

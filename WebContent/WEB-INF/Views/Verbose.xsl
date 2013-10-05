@@ -128,10 +128,10 @@
 											</xsl:if>
 										<!-- Red cells = Fail -->
 											<xsl:if test="@result='Fail'">
-												<td style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:center;">
+												<td style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:center;">
 													<xsl:value-of select="@result"/>
 												</td>
-												<td style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:left;">
+												<td style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:left;">
 													<xsl:value-of select="@comment"/>
 												</td>
 											</xsl:if>
@@ -146,8 +146,8 @@
 											</xsl:if>
 										<!-- Missing results -->
 											<xsl:if test="not(@result)">
-												<td style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:center;">Error</td>
-												<td style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:left;">This object could not be tested, please check</td>
+												<td style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:center;">Error</td>
+												<td style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:left;">This object could not be tested, please check</td>
 											</xsl:if>
 										</tr>
 									</xsl:if>

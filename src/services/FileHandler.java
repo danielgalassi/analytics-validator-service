@@ -78,8 +78,8 @@ public class FileHandler extends HttpServlet {
 					if (item.isFormField()) {
 						request.setAttribute(item.getFieldName(), item.getString());
 						if (item.getFieldName().equals("fileFormat"))
-								if (request.getAttribute("fileFormat").equals("zip"))
-							isZipFile = true;
+							if (request.getAttribute("fileFormat").equals("zip"))
+								isZipFile = true;
 					}
 
 					if (!item.isFormField()) {
@@ -103,8 +103,9 @@ public class FileHandler extends HttpServlet {
 						//keeping one subject area
 						request.setAttribute("startTime", System.currentTimeMillis());
 						pruneFile(xmlFile, uploadPath);
-						if (!xmlFile.delete())
-							xmlFile.deleteOnExit();
+						System.out.println(xmlFile.delete());
+//						if (!xmlFile.delete())
+//							xmlFile.deleteOnExit();
 					}
 				}
 		} catch (Exception ex) {
@@ -118,22 +119,28 @@ public class FileHandler extends HttpServlet {
 
 	private void pruneFile(File xmlFile, String sessionFolder) {
 
-//		SaxParser sas = new SaxParser(xmlFile, "PresentationCatalog", "name");
-//		Vector<String> v = sas.getValues();
-//		System.out.println(v.size());
-//		for (String s : v)
-//			System.out.println(s);
+		//		SaxParser sas = new SaxParser(xmlFile, "PresentationCatalog", "name");
+		//		Vector<String> v = sas.getValues();
+		//		System.out.println(v.size());
+		//		for (String s : v)
+		//			System.out.println(s);
 
 		//TODO: it's time to introduce the SA selector page and move this stub from the FileHandler
 		InputSource is = FileUtils.getIS(xmlFile);
 		XMLReader XMLr = FileUtils.getXMLReader();
-
 		SaxToDom xml = new SaxToDom(null, XMLr, is, xmlFile);
 		Vector<String> vFindSA = new Vector<String> ();
+
 		vFindSA.add("Inventory - Balances");
 		XMLUtils.saveDocument2File(
 				xml.makeDom("PresentationCatalog", vFindSA), 
 				sessionFolder + File.separator + "metadata.xml");
+		try {
+			is.getByteStream().close();
+		} catch (IOException e) {
+			System.out.println(123);
+			e.printStackTrace();
+		}
 		System.out.println("Subject Area-based file generated");
 	}
 }

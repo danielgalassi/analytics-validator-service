@@ -42,7 +42,7 @@
 				<h2>Metadata Test Summary Results</h2>
 				<br/>
 				<h4>Tests executed: <xsl:value-of select="count(document(//results))"/></h4>
-				<h4>Total elapsed time: <xsl:value-of select="sum(//results/@elapsedTime)"/> seconds</h4>
+				<h4>Total elapsed time: <xsl:value-of select="format-number(sum(//results/@elapsedTime), '0.000')"/> seconds</h4>
 				<br/>
 				<!-- Table Section -->
 				<table>
@@ -70,10 +70,10 @@
 									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object)"/>
 									</td>
-									<td height="28px" style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
+									<td height="28px" style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[not(@result)])"/>
 									</td>
-									<td height="28px" style="background: #FADCE6; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
+									<td height="28px" style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[@result='Fail'])"/>
 									</td>
 									<td height="28px" style="background: #F8FCCF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:60px;">

@@ -46,6 +46,12 @@ public class SaxToDom
 		}
 
 		//System.out.println(pickTag + ": " + foundIdList.size());
+//		try {
+//			input.getByteStream().close();
+//		} catch (IOException e) {
+//			System.out.println(456);
+//			e.printStackTrace();
+//		}
 		return foundIdList;
 	}
 

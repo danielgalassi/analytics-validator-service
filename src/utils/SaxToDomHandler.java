@@ -43,18 +43,12 @@ class SaxToDomHandler extends DefaultHandler
 		appendToDoc = append;
 	}
 
-	private void pickAttrib (Attributes attrs, String a) {
-		String qname;
+	private void pickAttrib (Attributes attrs) {
 		String value;
-
-		for (int i = 0; i<attrs.getLength(); i++) {
-			qname  = attrs.getQName(i);
-			value  = attrs.getValue(i);
-			if (qname.equals(returningAttrib) && !vList.contains(value)) {
-				//System.out.println(i + ")>>\t" + ns_uri + "\t" + processingNode + qname + "\t" + value + "\t" + a + "\t" + attrs.getLength());
-				vList.add(value);
-				break;
-			}
+		if (attrs.getIndex(returningAttrib) > -1) {
+			value = attrs.getValue(returningAttrib);
+			if (!vList.contains(value))
+				vList.add(attrs.getValue(returningAttrib));
 		}
 	}
 
@@ -83,38 +77,38 @@ class SaxToDomHandler extends DefaultHandler
 						qname.equals(matchingAttrib) && 
 						listOfValues.contains(value)) {
 					isReallyInteresting = true;
-					pickAttrib(attrs, "1");
+					pickAttrib(attrs);
 				}
 
 				//finds list of PresentationCatalog child nodes
 				if (isReallyInteresting && 
 						qName.equals("RefBusinessModel") && 
 						processingNode.equals("PresentationCatalog"))
-					pickAttrib(attrs, "2");
+					pickAttrib(attrs);
 
 				//finds list of PresentationColumn child nodes
 				if (isReallyInteresting && 
 						qName.equals("RefLogicalColumn") && 
 						processingNode.equals("PresentationColumn"))
-					pickAttrib(attrs, "3");
+					pickAttrib(attrs);
 
 				//finds list of LTS
 				if (isReallyInteresting && 
 						qName.equals("RefLogicalTableSource") && 
 						processingNode.equals("LogicalTable"))
-					pickAttrib(attrs, "4");
+					pickAttrib(attrs);
 
 				//finds list of PhysicalTables
 				if (isReallyInteresting && 
 						qName.equals("RefPhysicalTable") && 
 						processingNode.equals("LogicalTableSource"))
-					pickAttrib(attrs, "5");
+					pickAttrib(attrs);
 
 				//need to find a way to pickup aliases...
 				if (isReallyInteresting && 
 						qName.equals("RefPhysicalTable") && 
 						processingNode.equals("PhysicalTable"))
-					pickAttrib(attrs, "6");
+					pickAttrib(attrs);
 			}
 			// Actually add it in the tree, and adjust the right place.
 			if (isReallyInteresting && appendToDoc) {

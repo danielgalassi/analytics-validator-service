@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import utils.FileUtils;
@@ -126,20 +125,14 @@ public class FileHandler extends HttpServlet {
 		//			System.out.println(s);
 
 		//TODO: it's time to introduce the SA selector page and move this stub from the FileHandler
-		InputSource is = FileUtils.getIS(xmlFile);
 		XMLReader XMLr = FileUtils.getXMLReader();
-		SaxToDom xml = new SaxToDom(null, XMLr, is, xmlFile);
+		SaxToDom xml = new SaxToDom(null, XMLr, xmlFile);
 		Vector<String> vFindSA = new Vector<String> ();
 
 		vFindSA.add("Inventory - Balances");
 		XMLUtils.saveDocument2File(
 				xml.makeDom("PresentationCatalog", vFindSA), 
 				sessionFolder + File.separator + "metadata.xml");
-		try {
-			is.getByteStream().close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		System.out.println("Subject Area-based file generated");
 	}
 }

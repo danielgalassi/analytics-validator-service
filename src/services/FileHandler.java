@@ -138,7 +138,6 @@ public class FileHandler extends HttpServlet {
 		try {
 			is.getByteStream().close();
 		} catch (IOException e) {
-			System.out.println(123);
 			e.printStackTrace();
 		}
 		System.out.println("Subject Area-based file generated");

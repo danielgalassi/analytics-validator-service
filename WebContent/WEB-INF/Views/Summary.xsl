@@ -41,8 +41,8 @@
 				<br/>
 				<h2>Metadata Test Summary Results</h2>
 				<br/>
-				<h4>Tests executed: <xsl:value-of select="count(document(//results))"/></h4>
-				<h4>Total elapsed time: <xsl:value-of select="format-number(sum(//results/@elapsedTime), '0.000')"/> seconds</h4>
+				<h4>Tests executed: <xsl:value-of select="count(document(//results))"/> (in <xsl:value-of select="format-number(sum(//results/@elapsedTime), '0.000')"/> seconds)</h4>
+				<h4>Total elapsed time: <xsl:value-of select="format-number(//index/@totalElapsedTime, '0.0')"/> seconds</h4>
 				<br/>
 				<!-- Table Section -->
 				<table>

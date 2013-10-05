@@ -29,6 +29,7 @@ public class ValidatorService extends HttpServlet {
 	private String				sServletContextDir = null;
 	private final String		sTestDir = "/WEB-INF/Tests";
 	private final String		sViewDir = "/WEB-INF/Views";
+	private long				startTime;
 
 	/**
 	 * 
@@ -72,7 +73,7 @@ public class ValidatorService extends HttpServlet {
 			XMLUtils.xsl4Files(fRepository, inputsXSLTest, sResultFile);
 			//System.out.println("Results: " + sResultFile);
 		}
-		XMLUtils.createIndexDocument(testList, elapsedTime, sResultsDir);
+		XMLUtils.createIndexDocument(testList, elapsedTime, sResultsDir, startTime);
 	}
 
 	/**
@@ -81,6 +82,7 @@ public class ValidatorService extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String sSessionId = request.getRequestedSessionId();
+		startTime = (long) request.getAttribute("startTime");
 		sServletContextDir = getServletContext().getRealPath("");
 		fRepository = new File(sServletContextDir + File.separator + 
 				sSessionId + File.separator + "metadata.xml");
@@ -109,6 +111,7 @@ public class ValidatorService extends HttpServlet {
 				FileUtils.Zip(sResultsDir  + "MetadataValidated.html",
 						sResultsDir + "MetadataValidated.zip");
 				System.out.println("Results ZIP page generated");
+				//System.out.println(System.currentTimeMillis());
 
 				//redirects to resutls page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 

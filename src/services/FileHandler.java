@@ -101,6 +101,7 @@ public class FileHandler extends HttpServlet {
 
 						//trims the metadata XML file,
 						//keeping one subject area
+						request.setAttribute("startTime", System.currentTimeMillis());
 						pruneFile(xmlFile, uploadPath);
 						if (!xmlFile.delete())
 							xmlFile.deleteOnExit();
@@ -133,5 +134,6 @@ public class FileHandler extends HttpServlet {
 		XMLUtils.saveDocument2File(
 				xml.makeDom("PresentationCatalog", vFindSA), 
 				sessionFolder + File.separator + "metadata.xml");
+		System.out.println("Subject Area-based file generated");
 	}
 }

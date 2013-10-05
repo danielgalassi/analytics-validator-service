@@ -137,6 +137,7 @@ public class SaxToDom
 		pickTag = "PhysicalKey";
 		//stores the PK list
 		Vector<String> listOfPhysKeys = findElements(pickTag, listOfPhysTables, "parentId", "id", true);
+
 		return doc;
 	}
 }

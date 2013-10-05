@@ -211,7 +211,7 @@ public class XMLUtils {
 			publishException(tE);}
 	}
 
-	public static void createIndexDocument (Vector<String> testList, Vector<Double> elapsedTime, String sDir) {
+	public static void createIndexDocument (Vector<String> testList, Vector<Double> elapsedTime, String sDir, long startTime) {
 		Document docIndex = createDOMDocument();
 		Element r = docIndex.createElement("index");
 		int i = 0;
@@ -222,8 +222,9 @@ public class XMLUtils {
 			e.setTextContent(test);
 			r.appendChild(e);
 		}
+		System.out.println(System.currentTimeMillis());
+		r.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
 		docIndex.appendChild(r);
-		//System.out.println(sDir + "index.xml");
 		saveDocument2File(docIndex, sDir + "index.xml");
 	}
 }

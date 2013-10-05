@@ -37,8 +37,6 @@ public class FileHandler extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		File xmlFile = null;
 
-		if (request.getAttribute("fileFormat").equals("zip"))
-			isZipFile = true;
 		System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
 		System.out.println("Session Id: " + request.getRequestedSessionId());
 
@@ -52,7 +50,7 @@ public class FileHandler extends HttpServlet {
 
 		//configures upload settings
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-		//sets memory threshold - beyond which files are stored in disk 
+		//sets memory threshold - beyond which files are stored in disk
 		factory.setSizeThreshold(MEMORY_THRESHOLD);
 		//sets temporary location to store files
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
@@ -77,14 +75,17 @@ public class FileHandler extends HttpServlet {
 
 			if (formItems != null && formItems.size() > 0)
 				for (FileItem item : formItems) {
-					if (item.isFormField())
+					if (item.isFormField()) {
 						request.setAttribute(item.getFieldName(), item.getString());
+						if (item.getFieldName().equals("fileFormat"))
+								if (request.getAttribute("fileFormat").equals("zip"))
+							isZipFile = true;
+					}
 
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;
 						File storedFile = new File(filePath);
-
 						//saves the file on disk
 						item.write(storedFile);
 						request.setAttribute("message",
@@ -101,6 +102,8 @@ public class FileHandler extends HttpServlet {
 						//trims the metadata XML file,
 						//keeping one subject area
 						pruneFile(xmlFile, uploadPath);
+						if (!xmlFile.delete())
+							xmlFile.deleteOnExit();
 					}
 				}
 		} catch (Exception ex) {
@@ -113,6 +116,13 @@ public class FileHandler extends HttpServlet {
 	}
 
 	private void pruneFile(File xmlFile, String sessionFolder) {
+
+//		SaxParser sas = new SaxParser(xmlFile, "PresentationCatalog", "name");
+//		Vector<String> v = sas.getValues();
+//		System.out.println(v.size());
+//		for (String s : v)
+//			System.out.println(s);
+
 		//TODO: it's time to introduce the SA selector page and move this stub from the FileHandler
 		InputSource is = FileUtils.getIS(xmlFile);
 		XMLReader XMLr = FileUtils.getXMLReader();
@@ -123,6 +133,5 @@ public class FileHandler extends HttpServlet {
 		XMLUtils.saveDocument2File(
 				xml.makeDom("PresentationCatalog", vFindSA), 
 				sessionFolder + File.separator + "metadata.xml");
-		xmlFile.delete();
 	}
 }

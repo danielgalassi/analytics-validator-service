@@ -14,44 +14,42 @@ import org.xml.sax.XMLReader;
 public class SaxToDom
 {
 	private XMLReader		reader;
-	private InputSource		input;
+	//private InputSource		input;
 	private SaxToDomHandler	handlers;
 	private Document		doc;
 	private File			metadata;
 
-	public SaxToDom(Document doc, XMLReader reader, InputSource input, File metadata) {
-		this.reader = reader;
-		this.input  = input;
-		this.doc = doc;
-		this.metadata = metadata;
+	public SaxToDom(Document doc, XMLReader reader, File metadata) {
+		this.reader		= reader;
+		this.doc		= doc;
+		this.metadata	= metadata;
 	}
 
 	public Vector<String> findElements(
-			String pickTag, 
-			Vector<String> valueList, 
-			String sMatchingAttrib, 
-			String sReturningAttrib, 
-			boolean append) {
+			String			pickTag, 
+			Vector<String>	valueList, 
+			String			sMatchingAttrib, 
+			String			sReturningAttrib, 
+			boolean			append) {
 
-		input = FileUtils.getIS(metadata);
+		InputSource input = FileUtils.getIS(metadata);
 		Vector<String> foundIdList = new Vector<String>();
 		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, sMatchingAttrib, sReturningAttrib, append);
 		reader.setContentHandler(handlers);
 		reader.setErrorHandler(handlers);
-
 		try {
 			reader.parse(input);
 		} catch (IOException | SAXException e) {
 			e.printStackTrace();
 		}
 
-		//System.out.println(pickTag + ": " + foundIdList.size());
 //		try {
+//			System.out.println("trying...");
 //			input.getByteStream().close();
 //		} catch (IOException e) {
-//			System.out.println(456);
 //			e.printStackTrace();
 //		}
+		//System.out.println(pickTag + ": " + foundIdList.size());
 		return foundIdList;
 	}
 

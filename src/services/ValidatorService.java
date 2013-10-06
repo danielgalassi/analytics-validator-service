@@ -82,6 +82,11 @@ public class ValidatorService extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String sSessionId = request.getRequestedSessionId();
+
+		System.out.println(sSessionId);
+		
+		System.out.println(request.getAttribute("metadataFile"));
+
 		startTime = (long) request.getAttribute("startTime");
 		sServletContextDir = getServletContext().getRealPath("");
 		fRepository = new File(sServletContextDir + File.separator + 

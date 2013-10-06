@@ -84,27 +84,26 @@ public class FileHandler extends HttpServlet {
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						String filePath = uploadPath + File.separator + fileName;
-						File storedFile = new File(filePath);
+						File metadataFile = new File(filePath);
 						//saves the file on disk
-						item.write(storedFile);
+						item.write(metadataFile);
 						request.setAttribute("message",
 								"Upload has been done successfully!<br/>" +
-										"File can be found: " + storedFile.getAbsolutePath());
+										"File can be found: " + metadataFile.getAbsolutePath());
 						//System.out.println(storeFile.getAbsolutePath());
 						if (isZipFile) {
-							xmlFile = FileUtils.unZipIt(storedFile.getAbsolutePath(), uploadPath);
-							storedFile.delete();
+							xmlFile = FileUtils.unZipIt(metadataFile.getAbsolutePath(), uploadPath);
+							metadataFile.delete();
 						}
 						else
-							xmlFile = storedFile;
+							xmlFile = metadataFile;
 
+						request.setAttribute("metadataFile", xmlFile);
+						request.setAttribute("startTime", System.currentTimeMillis());
 						//trims the metadata XML file,
 						//keeping one subject area
-						request.setAttribute("startTime", System.currentTimeMillis());
-						pruneFile(xmlFile, uploadPath);
-						System.out.println(xmlFile.delete());
-//						if (!xmlFile.delete())
-//							xmlFile.deleteOnExit();
+						//pruneFile(xmlFile, uploadPath);
+						//xmlFile.delete();
 					}
 				}
 		} catch (Exception ex) {
@@ -113,7 +112,8 @@ public class FileHandler extends HttpServlet {
 		}
 		//redirects client to message page
 		//getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
-		getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
+		//getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
+		getServletContext().getRequestDispatcher("/SubjectAreaSelector").forward(request, response);
 	}
 
 	private void pruneFile(File xmlFile, String sessionFolder) {

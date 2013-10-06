@@ -17,14 +17,15 @@ public class SaxHandler extends DefaultHandler {
 			Vector<String>	listOfValues) {
 		this.pickTag = pickTag;
 		this.pickAttrib = pickAttrib;
-		this.listOfValues = listOfValues;
+		if (listOfValues == null)
+				this.listOfValues = new Vector<String> ();
+			else
+				this.listOfValues = listOfValues;
 	}
 
 	public void startElement(String uri, String name, String qName, Attributes attrs) {
 		if (qName.equals(pickTag)) {
 			if (attrs.getIndex(pickAttrib) > -1) {
-				if (listOfValues == null)
-					listOfValues = new Vector<String> ();
 				listOfValues.add(attrs.getValue(pickAttrib));
 			}
 		}

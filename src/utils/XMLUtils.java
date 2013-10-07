@@ -2,6 +2,7 @@ package utils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -167,6 +168,7 @@ public class XMLUtils {
 		transFact = javax.xml.transform.TransformerFactory.newInstance();
 		try {
 			trans = transFact.newTransformer(xsltSource);
+			trans.setParameter("ShowErrorsOnly", "false");
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3");
 			publishException(tcE);}
@@ -183,15 +185,16 @@ public class XMLUtils {
 	 * @param inputsXSLFile
 	 * @param strRESFile
 	 */
-	public static void xsl4Files(File fXMLFile,
-			InputStream inputsXSLFile,
-			String strRESFile){
-		File fResult = new File(strRESFile);
-		Source xmlSource = null;
-		Source xsltSource = null;
-		Transformer trans = null;
-		TransformerFactory transFact = null;
-		Result result = null;
+	public static void xsl4Files(File fXMLFile, 
+			InputStream inputsXSLFile, 
+			String strRESFile, 
+			HashMap<String, String> params) {
+		File				fResult = new File(strRESFile);
+		Source				xmlSource = null;
+		Source				xsltSource = null;
+		Transformer			trans = null;
+		TransformerFactory	transFact = null;
+		Result				result = null;
 
 		xmlSource = new javax.xml.transform.stream.StreamSource(fXMLFile);
 		xsltSource = new javax.xml.transform.stream.StreamSource(inputsXSLFile);
@@ -200,6 +203,12 @@ public class XMLUtils {
 
 		try {
 			trans = transFact.newTransformer(xsltSource);
+			if (params != null) {
+				if (params.containsKey("ShowErrorsOnly"))
+					trans.setParameter("ShowErrorsOnly", params.get("ShowErrorsOnly"));
+				if (params.containsKey("SelectedSubjectArea"))
+					trans.setParameter("SelectedSubjectArea", params.get("SelectedSubjectArea"));
+			}
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3");
 			publishException(tcE);}
@@ -211,19 +220,23 @@ public class XMLUtils {
 			publishException(tE);}
 	}
 
-	public static void createIndexDocument (Vector<String> testList, Vector<Double> elapsedTime, String sDir, long startTime) {
+	public static void createIndexDocument (
+			Vector<String> testList, 
+			Vector<Double> elapsedTime, 
+			String sDir, 
+			long startTime) {
 		Document docIndex = createDOMDocument();
 		Element r = docIndex.createElement("index");
-		int i = 0;
-		for (String test : testList) {
-			System.out.println(test);
+
+		for (int i=0; i<testList.size(); i++) {
 			Element e = docIndex.createElement("results");
-			e.setAttribute("elapsedTime", elapsedTime.get(i++).toString());
-			e.setTextContent(test);
+			e.setTextContent(testList.get(i));
+			e.setAttribute("elapsedTime", elapsedTime.get(i).toString());
 			r.appendChild(e);
 		}
+
 		r.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
 		docIndex.appendChild(r);
-		saveDocument2File(docIndex, sDir + "index.xml");
+		saveDocument2File(docIndex, sDir + File.separator + "index.xml");
 	}
 }

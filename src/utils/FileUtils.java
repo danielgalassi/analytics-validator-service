@@ -53,12 +53,12 @@ public class FileUtils {
 		return XMLr;
 	}
 
-	public static InputSource getIS(File theFile) {
+	public static InputSource getIS(File file) {
 		InputStream in = null;
 		InputSource is = null;
 
 		try {
-			in = new FileInputStream(theFile);
+			in = new FileInputStream(file);
 			is = new InputSource(new InputStreamReader(in));
 		} catch (Exception e) {
 			e.printStackTrace();

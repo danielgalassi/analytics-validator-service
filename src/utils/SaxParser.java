@@ -34,12 +34,11 @@ public class SaxParser
 
 	public void setMetadata (String metadata) {
 		this.metadata = new File (workDir + File.separator + metadata);
-		System.out.println(this.metadata);
 	}
 
 	public Vector<String> getListOfValues() {
 		listOfValues = new Vector<String> ();
-		if (metadata == null) {
+		if (metadata == null || workDir == null) {
 			listOfValues.add("No subject areas found");
 			return listOfValues;
 		}

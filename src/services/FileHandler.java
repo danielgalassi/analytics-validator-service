@@ -74,7 +74,6 @@ public class FileHandler extends HttpServlet {
 				for (FileItem item : formItems) {
 					if (item.isFormField()) {
 						request.setAttribute(item.getFieldName(), item.getString());
-						//System.out.println(item.getFieldName());
 						session.setAttribute(item.getFieldName(), item.getString());
 						if (item.getFieldName().equals("fileFormat"))
 							if (request.getAttribute("fileFormat").equals("zip"))

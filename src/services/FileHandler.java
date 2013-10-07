@@ -28,10 +28,10 @@ public class FileHandler extends HttpServlet {
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
 	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
 	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
-	private static boolean isZipFile = false;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		boolean isZipFile = false;
 		File xmlFile = null;
 		HttpSession session = request.getSession();
 		System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
@@ -87,7 +87,8 @@ public class FileHandler extends HttpServlet {
 						File metadataFile = new File(filePath);
 						//saves the file on disk
 						item.write(metadataFile);
-						//System.out.println(storeFile.getAbsolutePath());
+
+						//unzip if appropriate
 						if (isZipFile) {
 							xmlFile = FileUtils.unZipIt(metadataFile.getAbsolutePath(), uploadPath);
 							metadataFile.delete();
@@ -95,9 +96,7 @@ public class FileHandler extends HttpServlet {
 						else
 							xmlFile = metadataFile;
 
-						System.out.println("setting upload folder " + uploadPath);
 						session.setAttribute("workDir", uploadPath);
-						System.out.println("setting metadatafile " + xmlFile.getName());
 						session.setAttribute("metadataFile", xmlFile.getName());
 					}
 				}

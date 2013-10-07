@@ -3,6 +3,7 @@ package services;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
@@ -31,7 +32,7 @@ public class ValidatorService extends HttpServlet {
 	private String				resultsDir = null;
 	private String				workDir = null;
 	private final String		sTestDir = "/WEB-INF/Tests";
-	private final String		sViewDir = "/WEB-INF/Views";
+	private final String		viewDir = "/WEB-INF/Views";
 	private long				startTime = System.currentTimeMillis();
 
 	private void trimRPD(File rpd, String selectedSubjectArea) {
@@ -49,8 +50,8 @@ public class ValidatorService extends HttpServlet {
 	 * 
 	 */
 	private void executeTests() {
-		String			sTestName = "";
-		String			sResultFile = "";
+		String			testName = "";
+		String			resultFile = "";
 		InputStream		inputsXSLTest = null;
 		Document		docXSLTest = null;
 		NodeList		nlTestName = null;
@@ -67,16 +68,17 @@ public class ValidatorService extends HttpServlet {
 
 			//stopwatch starts
 			startTimeMs		= System.currentTimeMillis();
+
 			inputsXSLTest	= getServletContext().getResourceAsStream(s);
 			docXSLTest		= XMLUtils.loadDocument(inputsXSLTest);
 
 			//setting up test name with a default value
-			sTestName		= "Test" + System.currentTimeMillis();
+			testName		= "Test" + System.currentTimeMillis();
 			nlTestName		= docXSLTest.getElementsByTagName("TestName");
 			if (nlTestName.getLength() == 1)
-				sTestName = nlTestName.item(0).getTextContent();
+				testName = nlTestName.item(0).getTextContent();
 			//setting up test name with retrieved tag content
-			sResultFile = resultsDir + sTestName + ".xml";
+			resultFile = resultsDir + File.separator + testName + ".xml";
 
 			try {
 				inputsXSLTest.reset();
@@ -85,13 +87,14 @@ public class ValidatorService extends HttpServlet {
 			}
 
 			//adding results file name created by current test to index list
-			testList.add(sResultFile);
+			testList.add(resultFile);
 			//executing test, generating the results file
-			XMLUtils.xsl4Files(trimmedRPD, inputsXSLTest, sResultFile);
+			XMLUtils.xsl4Files(trimmedRPD, inputsXSLTest, resultFile, null);
 
 			//stopwatch ends
 			elapsedTime.add((double) (System.currentTimeMillis() - startTimeMs) / 1000);
 		}
+
 		XMLUtils.createIndexDocument(testList, elapsedTime, resultsDir, startTime);
 	}
 
@@ -120,6 +123,7 @@ public class ValidatorService extends HttpServlet {
 		//trimming repository file
 		//keeping only selected subject area objects
 		trimRPD (rpd, selectedSubjectArea);
+		rpd.delete();
 
 		trimmedRPD = new File(workDir + File.separator + "metadata.xml");
 
@@ -127,30 +131,46 @@ public class ValidatorService extends HttpServlet {
 		if (trimmedRPD.exists() && trimmedRPD.canRead()) {
 			//setup a results directory if tests are found
 			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
-				resultsDir = workDir + File.separator + "results" + File.separator;
+				resultsDir = workDir + File.separator + "results";
 				FileUtils.setupWorkDir(resultsDir);
 
 				//it's time to run all tests.
 				executeTests();
-				//the results page is created
-				InputStream inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Verbose.xsl");
-				String resFormat = (String) session.getAttribute("resultsFormat");
-				if (!(resFormat.equals("Verbose")))
-					inputsXSLHTML = getServletContext().getResourceAsStream(sViewDir+File.separator+"Summary.xsl");
 
-				File fIndex = new File(resultsDir + "index.xml");
-				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, resultsDir + "MetadataValidated.html");
+				//the results page is created
+				InputStream inputsXSLHTML = null;
+				String resFormat = (String) session.getAttribute("resultsFormat");
+				HashMap<String, String> params = new HashMap<String, String> ();
+				String xsl = viewDir + File.separator + "Verbose.xsl";
+
+				params.put("SelectedSubjectArea", selectedSubjectArea);
+
+				if (resFormat.equals("Summary")) {
+					params.put("ShowErrorsOnly", "false");
+					xsl = viewDir + File.separator + "Summary.xsl";
+				}
+
+				if (resFormat.equals("Verbose"))
+					params.put("ShowErrorsOnly", "false");
+
+				if (resFormat.equals("ShowErrorsOnly"))
+					params.put("ShowErrorsOnly", "true");
+
+				inputsXSLHTML = getServletContext().getResourceAsStream(xsl);
+
+				File fIndex = new File(resultsDir + File.separator + "index.xml");
+				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, resultsDir + File.separator + "MetadataValidated.html", params);
 				System.out.println("Results HTML page generated");
 
 				//results Zip file is created
-				FileUtils.Zip(resultsDir  + "MetadataValidated.html",
-						resultsDir + "MetadataValidated.zip");
+				FileUtils.Zip(resultsDir + File.separator + "MetadataValidated.html",
+						resultsDir + File.separator + "MetadataValidated.zip");
 				System.out.println("Results ZIP page generated");
 				//System.out.println(System.currentTimeMillis());
 
 				//redirects to resutls page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 
-						sessionId + File.separator + "results" + File.separator+"MetadataValidated.html");
+						sessionId + File.separator + "results" + File.separator + "MetadataValidated.html");
 				rd.forward(request, response);
 			}
 		}

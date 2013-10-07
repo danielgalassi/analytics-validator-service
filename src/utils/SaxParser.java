@@ -18,6 +18,7 @@ public class SaxParser
 	private String			pickTag = "none";
 	private String			pickAttribute = "id";
 	private File			metadata;
+	private String			workDir;
 
 	public void setTag (String pickTag) {
 		this.pickTag = pickTag;
@@ -26,16 +27,25 @@ public class SaxParser
 	public void setAttribute (String pickAttribute) {
 		this.pickAttribute = pickAttribute;
 	}
-	
-	public void setMetadata (File metadata) {
-		this.metadata = metadata;
+
+	public void setWorkDir (String workDir) {
+		this.workDir = workDir;
+	}
+
+	public void setMetadata (String metadata) {
+		this.metadata = new File (workDir + File.separator + metadata);
+		System.out.println(this.metadata);
 	}
 
 	public Vector<String> getListOfValues() {
+		listOfValues = new Vector<String> ();
+		if (metadata == null) {
+			listOfValues.add("No subject areas found");
+			return listOfValues;
+		}
 		input = FileUtils.getIS(metadata);
 		reader = FileUtils.getXMLReader();
-		listOfValues = new Vector<String> ();
-		
+
 		handlers = new SaxHandler(pickTag, pickAttribute, listOfValues);
 		reader.setContentHandler(handlers);
 		reader.setErrorHandler(handlers);

@@ -4,22 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.xml.sax.XMLReader;
 
 import utils.FileUtils;
-import utils.SaxToDom;
-import utils.XMLUtils;
 
 /**
  * Servlet implementation class FileHandler
@@ -34,8 +31,9 @@ public class FileHandler extends HttpServlet {
 	private static boolean isZipFile = false;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		File xmlFile = null;
 
+		File xmlFile = null;
+		HttpSession session = request.getSession();
 		System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
 		System.out.println("Session Id: " + request.getRequestedSessionId());
 
@@ -76,6 +74,8 @@ public class FileHandler extends HttpServlet {
 				for (FileItem item : formItems) {
 					if (item.isFormField()) {
 						request.setAttribute(item.getFieldName(), item.getString());
+						//System.out.println(item.getFieldName());
+						session.setAttribute(item.getFieldName(), item.getString());
 						if (item.getFieldName().equals("fileFormat"))
 							if (request.getAttribute("fileFormat").equals("zip"))
 								isZipFile = true;
@@ -87,9 +87,6 @@ public class FileHandler extends HttpServlet {
 						File metadataFile = new File(filePath);
 						//saves the file on disk
 						item.write(metadataFile);
-						request.setAttribute("message",
-								"Upload has been done successfully!<br/>" +
-										"File can be found: " + metadataFile.getAbsolutePath());
 						//System.out.println(storeFile.getAbsolutePath());
 						if (isZipFile) {
 							xmlFile = FileUtils.unZipIt(metadataFile.getAbsolutePath(), uploadPath);
@@ -98,12 +95,10 @@ public class FileHandler extends HttpServlet {
 						else
 							xmlFile = metadataFile;
 
-						request.setAttribute("metadataFile", xmlFile);
-						request.setAttribute("startTime", System.currentTimeMillis());
-						//trims the metadata XML file,
-						//keeping one subject area
-						//pruneFile(xmlFile, uploadPath);
-						//xmlFile.delete();
+						System.out.println("setting upload folder " + uploadPath);
+						session.setAttribute("workDir", uploadPath);
+						System.out.println("setting metadatafile " + xmlFile.getName());
+						session.setAttribute("metadataFile", xmlFile.getName());
 					}
 				}
 		} catch (Exception ex) {
@@ -114,25 +109,5 @@ public class FileHandler extends HttpServlet {
 		//getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
 		//getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
 		getServletContext().getRequestDispatcher("/SubjectAreaSelector").forward(request, response);
-	}
-
-	private void pruneFile(File xmlFile, String sessionFolder) {
-
-		//		SaxParser sas = new SaxParser(xmlFile, "PresentationCatalog", "name");
-		//		Vector<String> v = sas.getValues();
-		//		System.out.println(v.size());
-		//		for (String s : v)
-		//			System.out.println(s);
-
-		//TODO: it's time to introduce the SA selector page and move this stub from the FileHandler
-		XMLReader XMLr = FileUtils.getXMLReader();
-		SaxToDom xml = new SaxToDom(null, XMLr, xmlFile);
-		Vector<String> vFindSA = new Vector<String> ();
-
-		vFindSA.add("Inventory - Balances");
-		XMLUtils.saveDocument2File(
-				xml.makeDom("PresentationCatalog", vFindSA), 
-				sessionFolder + File.separator + "metadata.xml");
-		System.out.println("Subject Area-based file generated");
 	}
 }

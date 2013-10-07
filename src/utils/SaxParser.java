@@ -38,7 +38,10 @@ public class SaxParser
 
 	public Vector<String> getListOfValues() {
 		listOfValues = new Vector<String> ();
-		if (metadata == null || workDir == null) {
+		if (metadata == null || 
+				workDir == null || 
+				pickTag == null || 
+				pickAttribute == null) {
 			listOfValues.add("No subject areas found");
 			return listOfValues;
 		}

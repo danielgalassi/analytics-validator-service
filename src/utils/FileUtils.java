@@ -68,8 +68,8 @@ public class FileUtils {
 		return is;
 	}
 
-	public static boolean setupWorkDir(String sPath) {
-		File fDir = new File(sPath); 
+	public static boolean setupWorkDir(String newFolder) {
+		File fDir = new File(newFolder); 
 		if (fDir.exists())
 			fDir.delete();
 		else {

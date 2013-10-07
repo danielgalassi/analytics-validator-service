@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Vector;
 
+import javax.servlet.http.HttpSession;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;

@@ -14,7 +14,6 @@ import org.xml.sax.XMLReader;
 public class SaxToDom
 {
 	private XMLReader		reader;
-	//private InputSource		input;
 	private SaxToDomHandler	handlers;
 	private Document		doc;
 	private File			metadata;
@@ -43,13 +42,6 @@ public class SaxToDom
 			e.printStackTrace();
 		}
 
-//		try {
-//			System.out.println("trying...");
-//			input.getByteStream().close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		//System.out.println(pickTag + ": " + foundIdList.size());
 		return foundIdList;
 	}
 

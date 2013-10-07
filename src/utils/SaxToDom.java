@@ -30,7 +30,6 @@ public class SaxToDom
 			String			sMatchingAttrib, 
 			String			sReturningAttrib, 
 			boolean			append) {
-
 		InputSource input = FileUtils.getIS(metadata);
 		Vector<String> foundIdList = new Vector<String>();
 		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, sMatchingAttrib, sReturningAttrib, append);
@@ -41,7 +40,6 @@ public class SaxToDom
 		} catch (IOException | SAXException e) {
 			e.printStackTrace();
 		}
-
 		return foundIdList;
 	}
 
@@ -50,10 +48,10 @@ public class SaxToDom
 		try {
 			if (doc == null) {
 				doc = XMLUtils.createDOMDocument();
-				Element tagRepository = doc.createElement("Repository");
-				Element tagDeclare = doc.createElement("DECLARE");
-				tagRepository.appendChild(tagDeclare);
-				doc.appendChild(tagRepository);
+				Element repoTag = doc.createElement("Repository");
+				Element declTag = doc.createElement("DECLARE");
+				repoTag.appendChild(declTag);
+				doc.appendChild(repoTag);
 			}
 		}
 		// For the catch handlers below, use your usual logging facilities.
@@ -115,8 +113,9 @@ public class SaxToDom
 		Vector<String> listOfPhysCatalogs = findElements(pickTag, tempListOfPhysCatalogs, "id", "id", true);
 		tempListOfPhysCatalogs = null;
 
-		Vector<String> tempListOfDBs = findElements(pickTag, listOfSchemas, "id", "parentId", false);
 		Vector<String> tempListOfDBs2 = findElements(pickTag, listOfPhysCatalogs, "id", "parentId", false);
+		pickTag = "Schema";
+		Vector<String> tempListOfDBs = findElements(pickTag, listOfSchemas, "id", "parentId", false);
 		for (String db : tempListOfDBs2)
 			if (!tempListOfDBs.contains(db))
 				tempListOfDBs.add(db);

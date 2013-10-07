@@ -22,7 +22,7 @@ class SaxToDomHandler extends DefaultHandler
 	private Vector<String>	listOfValues;
 	private String			matchingAttrib;
 	private String			returningAttrib;
-	private Vector<String>	vList;
+	private Vector<String>	foundTokensList;
 	private boolean			appendToDoc;
 
 	public SaxToDomHandler(
@@ -32,23 +32,23 @@ class SaxToDomHandler extends DefaultHandler
 			Vector<String>	vLst, 
 			String			matchingAttrib, 
 			String			returningAttrib, 
-			boolean			append) {
+			boolean			appendToDoc) {
 		this.doc = doc;
 		currentNode = doc.getFirstChild().getFirstChild();
 		this.pickTag = pickTag;
 		this.listOfValues = listOfValues;
-		vList = vLst;
+		foundTokensList = vLst;
 		this.matchingAttrib = matchingAttrib;
 		this.returningAttrib = returningAttrib;
-		appendToDoc = append;
+		this.appendToDoc = appendToDoc;
 	}
 
 	private void pickAttrib (Attributes attrs) {
 		String value;
 		if (attrs.getIndex(returningAttrib) > -1) {
 			value = attrs.getValue(returningAttrib);
-			if (!vList.contains(value))
-				vList.add(attrs.getValue(returningAttrib));
+			if (!foundTokensList.contains(value))
+				foundTokensList.add(attrs.getValue(returningAttrib));
 		}
 	}
 

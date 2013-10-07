@@ -27,15 +27,14 @@ import utils.XMLUtils;
  */
 @WebServlet(description = "This controller provides test runner services.", urlPatterns = { "/ValidatorService" })
 public class ValidatorService extends HttpServlet {
-	private static final long	serialVersionUID = 1L;
-	private File				trimmedRPD = null;
-	private String				resultsDir = null;
-	private String				workDir = null;
-	private final String		sTestDir = "/WEB-INF/Tests";
-	private final String		viewDir = "/WEB-INF/Views";
-	private long				startTime = System.currentTimeMillis();
 
-	private void trimRPD(File rpd, String selectedSubjectArea) {
+	private static final long	serialVersionUID = 1L;
+	private static final String	sTestDir = "/WEB-INF/Tests";
+	private static final String	viewDir = "/WEB-INF/Views";
+
+	private void trimRPD(File rpd, 
+			String selectedSubjectArea, 
+			String workDir) {
 		XMLReader		XMLr = FileUtils.getXMLReader();
 		SaxToDom		xml = new SaxToDom(null, XMLr, rpd);
 
@@ -49,7 +48,9 @@ public class ValidatorService extends HttpServlet {
 	/**
 	 * 
 	 */
-	private void executeTests() {
+	private void executeTests(String resultsDir, 
+			File trimmedRPD, 
+			long startTime) {
 		String			testName = "";
 		String			resultFile = "";
 		InputStream		inputsXSLTest = null;
@@ -103,6 +104,11 @@ public class ValidatorService extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		File			trimmedRPD = null;
+		String			resultsDir = null;
+		String			workDir = null;
+		long			startTime = System.currentTimeMillis();
+
 		String			selectedSubjectArea = "None";
 		String			rpdFileName = "";
 		String			sessionId = "";
@@ -122,7 +128,7 @@ public class ValidatorService extends HttpServlet {
 
 		//trimming repository file
 		//keeping only selected subject area objects
-		trimRPD (rpd, selectedSubjectArea);
+		trimRPD (rpd, selectedSubjectArea, workDir);
 		rpd.delete();
 
 		trimmedRPD = new File(workDir + File.separator + "metadata.xml");
@@ -135,7 +141,7 @@ public class ValidatorService extends HttpServlet {
 				FileUtils.setupWorkDir(resultsDir);
 
 				//it's time to run all tests.
-				executeTests();
+				executeTests(resultsDir, trimmedRPD, startTime);
 
 				//the results page is created
 				InputStream inputsXSLHTML = null;
@@ -166,7 +172,6 @@ public class ValidatorService extends HttpServlet {
 				FileUtils.Zip(resultsDir + File.separator + "MetadataValidated.html",
 						resultsDir + File.separator + "MetadataValidated.zip");
 				System.out.println("Results ZIP page generated");
-				//System.out.println(System.currentTimeMillis());
 
 				//redirects to resutls page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 

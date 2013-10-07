@@ -33,7 +33,7 @@ public class FileHandler extends HttpServlet {
 
 		boolean isZipFile = false;
 		File xmlFile = null;
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(true);
 		System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
 		System.out.println("Session Id: " + request.getRequestedSessionId());
 

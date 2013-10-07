@@ -2,7 +2,6 @@ package services;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -39,10 +38,8 @@ public class FileHandler extends HttpServlet {
 
 		//checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
-			PrintWriter writer = response.getWriter();
-			writer.println("Error: Form must have enctype=multipart/form-data.");
-			writer.flush();
-			return;
+			request.setAttribute("message", "There was an error.");
+			getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
 		}
 
 		//configures upload settings
@@ -82,6 +79,14 @@ public class FileHandler extends HttpServlet {
 
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
+
+						if (fileName.equals("")) {
+							System.out.println("Empty file selector");
+							request.setAttribute("message", "Please select a file before submitting a request.");
+							getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
+							return;
+						}
+
 						String filePath = uploadPath + File.separator + fileName;
 						File metadataFile = new File(filePath);
 						//saves the file on disk

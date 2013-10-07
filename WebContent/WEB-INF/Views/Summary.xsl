@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:output method="xml" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" indent="yes"/>
+	<xsl:param name="SelectedSubjectArea"/>
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
@@ -39,6 +40,8 @@
 				<h1>OBIEE Validator Service</h1>
 				<br/>
 				<h2>Metadata Test Summary Results</h2>
+				<br/>
+				<h3>Subject Area: <xsl:value-of select="$SelectedSubjectArea"/> </h3>
 				<br/>
 				<h4>Tests executed: <xsl:value-of select="count(document(//results))"/> (in <xsl:value-of select="format-number(sum(//results/@elapsedTime), '0.000')"/> seconds)</h4>
 				<h4>Total elapsed time: <xsl:value-of select="format-number(//index/@totalElapsedTime, '0.0')"/> seconds</h4>

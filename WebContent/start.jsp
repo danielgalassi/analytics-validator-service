@@ -11,11 +11,12 @@
 <form action="upload" method="post" enctype="multipart/form-data">
 <label for="fileFormat">I want to upload a </label>
 <input name="fileFormat" type="radio" value="zip" checked>Zip file
-<input name="fileFormat" type="radio" value="xudml">XUDML file<br/><br/> 
+<input name="fileFormat" type="radio" value="xudml">XUDML file<br/><br/><br/> 
 
 <label for="resultsFormat">Show my results in a </label>
-<input name="resultsFormat" type="radio" value="Summary" checked>Summary view
-<input name="resultsFormat" type="radio" value="Verbose">Verbose view<br/><br/> 
+<input name="resultsFormat" type="radio" value="Summary" checked>Summary view  
+<input name="resultsFormat" type="radio" value="Verbose">Verbose view   
+<input name="resultsFormat" type="radio" value="ShowErrorsOnly">Verbose view (errors only)<br/><br/> 
 
 <label for="zipFile">Select metadata file </label><br/>
 <input id="metadataFile" type="file" name="metadata" size="25"/><br/>

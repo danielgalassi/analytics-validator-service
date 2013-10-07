@@ -10,6 +10,7 @@
 <body>
 
 	<jsp:useBean id="obj" class="utils.SaxParser" scope="page">
+		<jsp:setProperty name="obj" property="workDir" value="${workDir}" />
 		<jsp:setProperty name="obj" property="metadata" value="${metadataFile}" />
 		<jsp:setProperty name="obj" property="tag" value="PresentationCatalog" />
 		<jsp:setProperty name="obj" property="attribute" value="name" />
@@ -17,9 +18,9 @@
 
 	<form action="ValidatorService" method="POST">
 	<label>Select the Subject Area to validate </label>
-	<select onchange="this.form.submit()">
+	<select name="SubjectArea" onchange="this.form.submit()">
 			<c:forEach var="item" items="${obj.listOfValues}">
-				<option>${item}</option>
+				<option value="${item}">${item}</option>
 			</c:forEach>
 		</select>
 	</form>

@@ -20,31 +20,30 @@
 				<div class="inputcontent">
 					<input type="radio" id="zip" name="fileFormat" value="zip" checked>
 					<label for="zip">ZIP</label>
-					<input type="radio" id="xudml" name="fileFormat"value="xudml">
+					<input type="radio" id="xudml" name="fileFormat" value="xudml">
 					<label for="xudml">XUDML</label>
 				</div>
 			</div>
 
 			<div class="input">
-				<div class="inputtext">Display results</div>
+				<div class="inputtext">Generate results</div>
 					<div class="inputcontent">
 						<input type="radio" id="Verbose" name="resultsFormat" value="Verbose" checked>
 						<label for="Verbose">Verbose</label>
-						<input type="radio" id="ShowErrorsOnly" name="resultsFormat"value="ShowErrorsOnly">
+						<input type="radio" id="ShowErrorsOnly" name="resultsFormat" value="ShowErrorsOnly">
 						<label for="ShowErrorsOnly">Errors Only</label>
 					</div>
 			</div>
 
 			<div class="input nobottomborder">	
 				<div class="inputtext">Select metadata file</div>
-				<div class="inputcontent">
+				<div class="inputcontent nobottomborder">
 					<input id="metadataFile" type="file" name="metadata" size="15" />
 				</div>
 			</div>
 
 			<div class="buttons">
 				<input class="orangebutton" type="submit" value="Upload" />
-
 			</div>
 		</form>
 	</div>

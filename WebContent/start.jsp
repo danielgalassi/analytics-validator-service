@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Step 1. Start the validation process.</title>
+<title>Analytics Validator Service</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/style.css" type="text/css" />
 </head>
@@ -13,7 +13,7 @@
 	<div class="wrapper">
 		<form class="form1" action="upload" method="post"
 			enctype="multipart/form-data">
-			<div class="formtitle">Repository Metadata Validator Service</div>
+			<div class="formtitle">Step 1 - Start the validation process</div>
 
 			<div class="input">
 				<div class="inputtext">File format</div>

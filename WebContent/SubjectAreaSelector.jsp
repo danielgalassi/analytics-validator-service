@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Step 2. Select the subject area to review.</title>
+<title>Analytics Validator Service</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/style.css" type="text/css" />
 </head>
 <body>
@@ -17,13 +17,20 @@
 		<jsp:setProperty name="obj" property="attribute" value="name" />
 	</jsp:useBean>
 
-	<form action="ValidatorService" method="POST">
-	<label>Select the Subject Area to validate </label>
-	<select name="SubjectArea" onchange="this.form.submit()">
-			<c:forEach var="item" items="${obj.listOfValues}">
-				<option value="${item}">${item}</option>
-			</c:forEach>
-		</select>
+	<div class="wrapper">
+	<form class="form2" action="ValidatorService" method="POST">
+		<div class="formtitle">Step 2 - Subject Area Picker</div>
+		<div class="input nobottomborder">
+			<div class="inputtext">Validate</div>
+			<div class="inputcontent">
+				<select name="SubjectArea" onchange="this.form.submit()">
+					<c:forEach var="item" items="${obj.listOfValues}">
+						<option value="${item}">${item}</option>
+					</c:forEach>
+				</select>
+			</div>
+		</div>
 	</form>
+	</div>
 </body>
 </html>

@@ -28,11 +28,11 @@
 			<div class="input">
 				<div class="inputtext">Generate results</div>
 					<div class="inputcontent">
-						<input type="radio" id="Verbose" name="resultsFormat" value="Verbose" checked>
-						<label for="Verbose">Verbose</label>
-						<input type="radio" id="ShowErrorsOnly" name="resultsFormat" value="ShowErrorsOnly">
-						<label for="ShowErrorsOnly">Errors Only</label>
-					</div>
+					<input type="radio" id="Verbose" name="resultsFormat" value="Verbose" checked>
+					<label for="Verbose">Verbose</label>
+					<input type="radio" id="ShowErrorsOnly" name="resultsFormat" value="ShowErrorsOnly">
+					<label for="ShowErrorsOnly">Errors Only</label>
+				</div>
 			</div>
 
 			<div class="input nobottomborder">	

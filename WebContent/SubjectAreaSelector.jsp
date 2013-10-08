@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Analytics Validator Service</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/style.css" type="text/css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/selector.css" type="text/css" />
 </head>
 <body>
 
@@ -18,8 +18,8 @@
 	</jsp:useBean>
 
 	<div class="wrapper">
-	<form class="form2" action="ValidatorService" method="POST">
-		<div class="formtitle">Step 2 - Subject Area Picker</div>
+	<form class="theForm" action="ValidatorService" method="POST">
+		<div class="formtitle">Step 2 - Select Subject Area</div>
 		<div class="input nobottomborder">
 			<div class="inputtext">Validate</div>
 			<div class="inputcontent">

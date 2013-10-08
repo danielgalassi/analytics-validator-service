@@ -1,27 +1,53 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Step 1. Start the validation process.</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/style.css" type="text/css" />
 </head>
 <body>
 
-<form action="upload" method="post" enctype="multipart/form-data">
-<label for="fileFormat">I want to upload a </label>
-<input name="fileFormat" type="radio" value="zip" checked>Zip file
-<input name="fileFormat" type="radio" value="xudml">XUDML file<br/><br/>
+	<div class="wrapper">
+		<form class="form1" action="upload" method="post"
+			enctype="multipart/form-data">
+			<div class="formtitle">Repository Metadata Validator Service</div>
 
-<label for="resultsFormat">Show my results in a </label>
-<input name="resultsFormat" type="radio" value="Summary" checked>Summary view  
-<input name="resultsFormat" type="radio" value="Verbose">Verbose view   
-<input name="resultsFormat" type="radio" value="ShowErrorsOnly">Verbose view (errors only)<br/><br/> 
+			<div class="input">
+				<div class="inputtext">File format</div>
+				<div class="inputcontent">
+					<input type="radio" id="zip" name="fileFormat" value="zip" checked>
+					<label for="zip">ZIP</label>
+					<input type="radio" id="xudml" name="fileFormat"value="xudml">
+					<label for="xudml">XUDML</label>
+				</div>
+			</div>
 
-<label for="zipFile">Select metadata file </label><br/>
-<input id="metadataFile" type="file" name="metadata" size="25"/><br/><br/>
-<input type="submit" value="Upload"/>
-</form>
+			<div class="input">
+				<div class="inputtext">Display results</div>
+					<div class="inputcontent">
+						<input type="radio" id="Verbose" name="resultsFormat" value="Verbose" checked>
+						<label for="Verbose">Verbose</label>
+						<input type="radio" id="ShowErrorsOnly" name="resultsFormat"value="ShowErrorsOnly">
+						<label for="ShowErrorsOnly">Errors Only</label>
+					</div>
+			</div>
+
+			<div class="input nobottomborder">	
+				<div class="inputtext">Select metadata file</div>
+				<div class="inputcontent">
+					<input id="metadataFile" type="file" name="metadata" size="15" />
+				</div>
+			</div>
+
+			<div class="buttons">
+				<input class="orangebutton" type="submit" value="Upload" />
+
+			</div>
+		</form>
+	</div>
 
 </body>
 </html>

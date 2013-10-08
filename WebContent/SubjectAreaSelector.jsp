@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Step 2. Select the subject area to review.</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/style.css" type="text/css" />
 </head>
 <body>
 

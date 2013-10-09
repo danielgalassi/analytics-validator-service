@@ -80,7 +80,6 @@ public class FileHandler extends HttpServlet {
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						if (fileName.equals("")) {
-							System.out.println("Empty file selector");
 							request.setAttribute("message", "Please select a file before submitting a request.");
 							getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
 							return;

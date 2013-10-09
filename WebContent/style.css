@@ -113,7 +113,7 @@ body {
 }
 
 input[type=radio] {
-	width: 82px;
+	width: 80px;
 	display: none;
 }
 
@@ -122,13 +122,13 @@ div+p {
 }
 
 input[type=radio] {width =80px;
-	width: 82px;
+	width: 80px;
 	display: none;
 }
 
 input[type=radio]+label {
 	display: inline-block; width =80px;
-	width: 82px;
+	width: 80px;
 	margin: 0px;
 	padding: 4px 12px;
 	margin-bottom: 0px;

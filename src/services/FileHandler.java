@@ -107,8 +107,6 @@ public class FileHandler extends HttpServlet {
 					"There was an error: " + ex.getMessage());
 		}
 		//redirects client to message page
-		//getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
-		//getServletContext().getRequestDispatcher("/ValidatorService").forward(request, response);
 		getServletContext().getRequestDispatcher("/SubjectAreaSelector").forward(request, response);
 	}
 }

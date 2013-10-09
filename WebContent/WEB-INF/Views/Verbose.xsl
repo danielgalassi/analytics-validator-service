@@ -40,7 +40,7 @@
 				<!-- Validator Service headings -->
 				<h1>OBIEE Validator Service Report</h1>
 				<br/>
-				<h2>Metadata test results</h2>
+				<h2>Detailed results</h2>
 				<br/>
 				<h3>Subject Area: <xsl:value-of select="$SelectedSubjectArea"/> </h3>
 				<br/>

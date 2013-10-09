@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:output method="xml" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" indent="yes"/>
 	<xsl:param name="SelectedSubjectArea"/>
+	<xsl:param name="SessionFolder"/>
 	<xsl:template match="/">
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
@@ -37,9 +38,10 @@
 			</head>
 			<body>
 				<!-- Validator Service headings -->
-				<h1>OBIEE Validator Service</h1>
+				<h1>OBIEE Validator Service Report</h1>
 				<br/>
-				<h2>Metadata Test Summary Results</h2>
+				<h2>Summary results <a href="{$SessionFolder}/results/Details.html" target="_blank">(see detailed results)</a></h2>
+				
 				<br/>
 				<h3>Subject Area: <xsl:value-of select="$SelectedSubjectArea"/> </h3>
 				<br/>

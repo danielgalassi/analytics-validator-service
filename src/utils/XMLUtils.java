@@ -208,6 +208,8 @@ public class XMLUtils {
 					trans.setParameter("ShowErrorsOnly", params.get("ShowErrorsOnly"));
 				if (params.containsKey("SelectedSubjectArea"))
 					trans.setParameter("SelectedSubjectArea", params.get("SelectedSubjectArea"));
+				if (params.containsKey("SessionFolder"))
+					trans.setParameter("SessionFolder", params.get("SessionFolder"));
 			}
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3");

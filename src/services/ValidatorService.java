@@ -23,7 +23,10 @@ import utils.SaxToDom;
 import utils.XMLUtils;
 
 /**
- * Servlet implementation class ValidatorService
+ * Manages the trimming of the metadata file and tests execution.
+ * All result files are generated here.
+ * @author danielgalassi@gmail.com
+ *
  */
 @WebServlet(description = "This controller provides test runner services.", urlPatterns = { "/ValidatorService" })
 public class ValidatorService extends HttpServlet {

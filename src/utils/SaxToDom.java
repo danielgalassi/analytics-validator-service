@@ -11,6 +11,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+/**
+ * Class to trim a large metadata file keeping only objects associated with the selected subject area
+ * @author danielgalassi@gmail.com
+ *
+ */
 public class SaxToDom
 {
 	private XMLReader		reader;

@@ -19,12 +19,16 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /***
- * 
+ * Set of methods to handle IO file operations.
  * @author danielgalassi@gmail.com
  *
  */
 public class FileUtils {
 
+	/**
+	 * XMLReader factory
+	 * @return XMLReader object for future SAX parsing operations 
+	 */
 	public static XMLReader getXMLReader() {
 		SAXParserFactory SAXpf = SAXParserFactory.newInstance();
 		//enabling the namespaces processing
@@ -47,6 +51,11 @@ public class FileUtils {
 		return XMLr;
 	}
 
+	/**
+	 * Generates an InputSource of the argument
+	 * @param file
+	 * @return InputSource
+	 */
 	public static InputSource getIS(File file) {
 		InputStream in = null;
 		InputSource is = null;
@@ -62,17 +71,27 @@ public class FileUtils {
 		return is;
 	}
 
+	/**
+	 * Creates a directory with the name of the argument. If it already exists, it will be deleted and re-created
+	 * @param newFolder
+	 * @return true if the directory exists
+	 */
 	public static boolean setupWorkDir(String newFolder) {
 		File fDir = new File(newFolder); 
 		if (fDir.exists())
 			fDir.delete();
 		else {
 			fDir.mkdir();
-			System.out.println("Session directory: " + fDir.getAbsolutePath());
+			System.out.println("Work directory: " + fDir.getAbsolutePath());
 		}
 		return fDir.exists();
 	}
 
+	/**
+	 * Generates a ZIP archive
+	 * @param sSource
+	 * @param sTarget
+	 */
 	public static void Zip(String sSource, String sTarget) {
 		byte[] buffer = new byte[1024];
 
@@ -100,6 +119,12 @@ public class FileUtils {
 		}
 	}
 
+	/**
+	 * Extracts a file from ZIP archives to the folder specified in the argument
+	 * @param zipFile
+	 * @param outputFolder
+	 * @return reference of the extracted file
+	 */
 	public static File unZipIt(String zipFile, String outputFolder) {
 		byte[] buffer = new byte[1024];
 		File newFile = null;

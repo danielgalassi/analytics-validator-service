@@ -18,7 +18,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import utils.FileUtils;
 
 /**
- * Servlet implementation class FileHandler
+ * Servlet to manage the first step of the validation process.
+ * Work directory and ZIP extraction are managed by this servlet.
+ * Also, session attributes are setup based on form values. 
+ * @author danielgalassi@gmail.com
+ *
  */
 @WebServlet(description = "This controller handles file-based requests", urlPatterns = { "/FileHandler" })
 public class FileHandler extends HttpServlet {

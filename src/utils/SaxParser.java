@@ -9,6 +9,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+/**
+ * Utility class to quickly traverse a (metadata) file and return a list of values
+ * @author danielgalassi@gmail.com
+ *
+ */
 public class SaxParser
 {
 	private XMLReader		reader;

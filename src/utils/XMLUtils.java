@@ -20,7 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * XML Utilities class
+ * XML Utilities
  * @author danielgalassi@gmail.com
  *
  */
@@ -146,7 +146,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Transform an XML file using an XSL file stored within the jar file
+	 * Transform an XML file using an XSL stylesheet
 	 * @param strXMLFile
 	 * @param inputsXSLFile
 	 * @param strRESFile
@@ -184,6 +184,7 @@ public class XMLUtils {
 	 * @param fXMLFile
 	 * @param inputsXSLFile
 	 * @param strRESFile
+	 * @param params XSL parameters
 	 */
 	public static void xsl4Files(File fXMLFile, 
 			InputStream inputsXSLFile, 
@@ -222,10 +223,17 @@ public class XMLUtils {
 			publishException(tE);}
 	}
 
+	/**
+	 * Generates a catalog file with a list of tests
+	 * @param testList
+	 * @param elapsedTime
+	 * @param targetDir
+	 * @param startTime
+	 */
 	public static void createIndexDocument (
 			Vector<String> testList, 
 			Vector<Double> elapsedTime, 
-			String sDir, 
+			String targetDir, 
 			long startTime) {
 		Document docIndex = createDOMDocument();
 		Element r = docIndex.createElement("index");
@@ -239,6 +247,6 @@ public class XMLUtils {
 
 		r.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
 		docIndex.appendChild(r);
-		saveDocument2File(docIndex, sDir + "index.xml");
+		saveDocument2File(docIndex, targetDir + "index.xml");
 	}
 }

@@ -29,8 +29,6 @@ import org.xml.sax.XMLReader;
  */
 public class FileUtils {
 
-	public static byte[] MAGIC = { 'P', 'K', 0x3, 0x4 };
-
 	public static XMLReader getXMLReader() {
 		SAXParserFactory SAXpf = SAXParserFactory.newInstance();
 		//enabling the namespaces processing
@@ -77,66 +75,6 @@ public class FileUtils {
 			System.out.println("Session directory: " + fDir.getAbsolutePath());
 		}
 		return fDir.exists();
-	}
-
-	static boolean isZipFileValid(final File file) {
-		ZipFile zipfile = null;
-		try {
-			zipfile = new ZipFile(file);
-			return true;
-		} catch (ZipException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
-		} finally {
-			try {
-				if (zipfile != null) {
-					zipfile.close();
-					zipfile = null;
-				}
-			} catch (IOException e) {
-			}
-		}
-	}
-
-	public static boolean isZipStream(InputStream in) {
-		if (!in.markSupported()) {
-			in = new BufferedInputStream(in);
-		}
-		boolean isZip = true;
-		try {
-			in.mark(MAGIC.length);
-			for (int i = 0; i < MAGIC.length; i++) {
-				if (MAGIC[i] != (byte) in.read()) {
-					isZip = false;
-					break;
-				}
-			}
-			in.reset();
-		} catch (IOException e) {
-			isZip = false;
-		}
-		return isZip;
-	}
-
-	public static boolean isZipFile(File f) {
-
-		boolean isZip = true;
-		byte[] buffer = new byte[MAGIC.length];
-		try {
-			RandomAccessFile raf = new RandomAccessFile(f, "r");
-			raf.readFully(buffer);
-			for (int i = 0; i < MAGIC.length; i++) {
-				if (buffer[i] != MAGIC[i]) {
-					isZip = false;
-					break;
-				}
-			}
-			raf.close();
-		} catch (Throwable e) {
-			isZip = false;
-		}
-		return isZip;
 	}
 
 	public static void Zip(String sSource, String sTarget) {

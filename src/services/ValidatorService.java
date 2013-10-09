@@ -144,38 +144,40 @@ public class ValidatorService extends HttpServlet {
 				executeTests(resultsDir, trimmedRPD, startTime);
 
 				//the results page is created
-				InputStream				inputsXSLHTML = null;
+				InputStream				xsl2html = null;
 				String					resFormat = (String) session.getAttribute("resultsFormat");
 				HashMap<String, String>	params = new HashMap<String, String> ();
-				String 					xsl = viewDir + "Verbose.xsl";
+				String 					xsl = viewDir + "Summary.xsl";
+				String					errorsOnly = "false";
 				File 					index = new File(resultsDir + "index.xml");
 
+				//setting up stylesheet parameters
 				params.put("SelectedSubjectArea", selectedSubjectArea);
-
-				if (resFormat.equals("Summary")) {
-					params.put("ShowErrorsOnly", "false");
-					xsl = viewDir + "Summary.xsl";
-				}
-
-				if (resFormat.equals("Verbose"))
-					params.put("ShowErrorsOnly", "false");
-
 				if (resFormat.equals("ShowErrorsOnly"))
-					params.put("ShowErrorsOnly", "true");
+					errorsOnly = "true";
+				params.put("ShowErrorsOnly", errorsOnly);
+				params.put("SessionFolder", sessionId);
 
-				inputsXSLHTML = getServletContext().getResourceAsStream(xsl);
+				//generating summary page
+				xsl2html = getServletContext().getResourceAsStream(xsl);
+				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Summary.html", params);
 
-				XMLUtils.xsl4Files(index, inputsXSLHTML, resultsDir + "MetadataValidated.html", params);
+				//switching to verbose stylesheet
+				xsl = viewDir + "Verbose.xsl";
+				xsl2html = getServletContext().getResourceAsStream(xsl);
+
+				//generating the verbose page
+				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Details.html", params);
 				System.out.println("Results HTML page generated");
 
 				//results Zip file is created
-				FileUtils.Zip(resultsDir + "MetadataValidated.html",
-						resultsDir + "MetadataValidated.zip");
-				System.out.println("Results ZIP page generated");
+				FileUtils.Zip(resultsDir + "Details.html",
+						resultsDir + "Results.zip");
+				System.out.println("Detailed Results ZIP page generated");
 
 				//redirects to resutls page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 
-						sessionId + File.separator + "results" + File.separator + "MetadataValidated.html");
+						sessionId + File.separator + "results" + File.separator + "Summary.html");
 				rd.forward(request, response);
 			}
 		}

@@ -237,6 +237,6 @@ public class XMLUtils {
 
 		r.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
 		docIndex.appendChild(r);
-		saveDocument2File(docIndex, sDir + File.separator + "index.xml");
+		saveDocument2File(docIndex, sDir + "index.xml");
 	}
 }

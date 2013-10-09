@@ -178,7 +178,7 @@ public class FileUtils {
 
 			while (ze!=null) {
 				String fileName = ze.getName();
-				newFile = new File(outputFolder + File.separator + fileName);
+				newFile = new File(outputFolder + fileName);
 
 				System.out.println("Unzipping: "+ newFile.getAbsolutePath());
 				//create all non exists folders

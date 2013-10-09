@@ -60,7 +60,7 @@ public class FileHandler extends HttpServlet {
 		//sets up the working directory for this session
 		String sSessionId = request.getRequestedSessionId();
 		String uploadPath = getServletContext().getRealPath("")
-				+ File.separator + sSessionId;
+				+ File.separator + sSessionId + File.separator;
 		FileUtils.setupWorkDir(uploadPath);
 
 		try {
@@ -86,7 +86,7 @@ public class FileHandler extends HttpServlet {
 							return;
 						}
 
-						String filePath = uploadPath + File.separator + fileName;
+						String filePath = uploadPath + fileName;
 						File metadataFile = new File(filePath);
 						//saves the file on disk
 						item.write(metadataFile);

@@ -29,8 +29,8 @@ import utils.XMLUtils;
 public class ValidatorService extends HttpServlet {
 
 	private static final long	serialVersionUID = 1L;
-	private static final String	sTestDir = "/WEB-INF/Tests";
-	private static final String	viewDir = "/WEB-INF/Views";
+	private static final String	sTestDir = "/WEB-INF/Tests/";
+	private static final String	viewDir = "/WEB-INF/Views/";
 
 	private void trimRPD(File rpd, 
 			String selectedSubjectArea, 
@@ -42,7 +42,7 @@ public class ValidatorService extends HttpServlet {
 		vFindSA.add(selectedSubjectArea);
 
 		XMLUtils.saveDocument2File(xml.makeDom("PresentationCatalog", vFindSA), 
-				workDir + File.separator + "metadata.xml");
+				workDir + "metadata.xml");
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class ValidatorService extends HttpServlet {
 			if (nlTestName.getLength() == 1)
 				testName = nlTestName.item(0).getTextContent();
 			//setting up test name with retrieved tag content
-			resultFile = resultsDir + File.separator + testName + ".xml";
+			resultFile = resultsDir + testName + ".xml";
 
 			try {
 				inputsXSLTest.reset();
@@ -124,36 +124,37 @@ public class ValidatorService extends HttpServlet {
 		workDir		= (String) session.getAttribute("workDir");
 		rpdFileName	= (String) session.getAttribute("metadataFile");
 
-		rpd = new File(workDir + File.separator + rpdFileName);
+		rpd = new File(workDir + rpdFileName);
 
 		//trimming repository file
 		//keeping only selected subject area objects
 		trimRPD (rpd, selectedSubjectArea, workDir);
 		rpd.delete();
 
-		trimmedRPD = new File(workDir + File.separator + "metadata.xml");
+		trimmedRPD = new File(workDir + "metadata.xml");
 
 		//validates the repository file can be used
 		if (trimmedRPD.exists() && trimmedRPD.canRead()) {
 			//setup a results directory if tests are found
 			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
-				resultsDir = workDir + File.separator + "results";
+				resultsDir = workDir + "results" + File.separator;
 				FileUtils.setupWorkDir(resultsDir);
 
 				//it's time to run all tests.
 				executeTests(resultsDir, trimmedRPD, startTime);
 
 				//the results page is created
-				InputStream inputsXSLHTML = null;
-				String resFormat = (String) session.getAttribute("resultsFormat");
-				HashMap<String, String> params = new HashMap<String, String> ();
-				String xsl = viewDir + File.separator + "Verbose.xsl";
+				InputStream				inputsXSLHTML = null;
+				String					resFormat = (String) session.getAttribute("resultsFormat");
+				HashMap<String, String>	params = new HashMap<String, String> ();
+				String 					xsl = viewDir + "Verbose.xsl";
+				File 					index = new File(resultsDir + "index.xml");
 
 				params.put("SelectedSubjectArea", selectedSubjectArea);
 
 				if (resFormat.equals("Summary")) {
 					params.put("ShowErrorsOnly", "false");
-					xsl = viewDir + File.separator + "Summary.xsl";
+					xsl = viewDir + "Summary.xsl";
 				}
 
 				if (resFormat.equals("Verbose"))
@@ -164,13 +165,12 @@ public class ValidatorService extends HttpServlet {
 
 				inputsXSLHTML = getServletContext().getResourceAsStream(xsl);
 
-				File fIndex = new File(resultsDir + File.separator + "index.xml");
-				XMLUtils.xsl4Files(fIndex, inputsXSLHTML, resultsDir + File.separator + "MetadataValidated.html", params);
+				XMLUtils.xsl4Files(index, inputsXSLHTML, resultsDir + "MetadataValidated.html", params);
 				System.out.println("Results HTML page generated");
 
 				//results Zip file is created
-				FileUtils.Zip(resultsDir + File.separator + "MetadataValidated.html",
-						resultsDir + File.separator + "MetadataValidated.zip");
+				FileUtils.Zip(resultsDir + "MetadataValidated.html",
+						resultsDir + "MetadataValidated.zip");
 				System.out.println("Results ZIP page generated");
 
 				//redirects to resutls page (summary level)

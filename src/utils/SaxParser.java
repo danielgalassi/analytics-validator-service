@@ -33,7 +33,7 @@ public class SaxParser
 	}
 
 	public void setMetadata (String metadata) {
-		this.metadata = new File (workDir + File.separator + metadata);
+		this.metadata = new File (workDir + metadata);
 	}
 
 	public Vector<String> getListOfValues() {

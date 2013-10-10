@@ -4,9 +4,9 @@
 	<xsl:template match="/">
 		<Test>
 			<TestHeader>
-				<TestName>OpaqueViews</TestName>
-				<TestDescription>Evaluates Physical Tables and Views are not Opaque Views</TestDescription>
-				<Object>Physical Table</Object>
+				<TestName>PhysicalTablesAndViewsFollowingNamingStandards</TestName>
+				<TestDescription>Evaluates Physical Tables and Views have been set up following naming standards</TestDescription>
+				<Object>Physical Table / View</Object>
 				<ParentObject type="Object">Schema</ParentObject>
 				<GrandParentObject type="Object">Database</GrandParentObject>
 				<GreatGrandParentObject type="Repository Layer">Physical Layer</GreatGrandParentObject>
@@ -58,20 +58,24 @@
 				<xsl:attribute name="greatGrandParentObject">Physical Layer</xsl:attribute>
 				
 				<xsl:choose>
-					<!-- type attribute does not exists (table) -->
-					<xsl:when test="@type='none'">
+					<!-- Standard OBIA naming convention -->
+					<xsl:when test="(starts-with(@name,'WC_') or starts-with(@name,'W_')) and (substring(@name, string-length(@name)-2)='_D' or substring(@name, string-length(@name)-2)='_D' or substring(@name, string-length(@name)-2)='_D')">
 						<xsl:attribute name="result">Pass</xsl:attribute>
 						<xsl:attribute name="comment">OK</xsl:attribute>
 					</xsl:when>
-					<!-- Found an Opaque View -->
-					<xsl:when test="@type='select'">
-						<xsl:attribute name="result">Fail</xsl:attribute>
-						<xsl:attribute name="comment">Consider materialising this view</xsl:attribute>
+					<!-- Standard "own" naming convention -->
+					<xsl:when test="starts-with(@name,'D_') or starts-with(@name,'F_')">
+						<xsl:attribute name="result">Pass</xsl:attribute>
+						<xsl:attribute name="comment">OK</xsl:attribute>
 					</xsl:when>
-					<!-- Table cannot be evaluated -->
+					<xsl:when test="starts-with(@name,'Dim_') or starts-with(@name,'Fact_') or starts-with(@name,'Agg_')">
+						<xsl:attribute name="result">Pass</xsl:attribute>
+						<xsl:attribute name="comment">OK</xsl:attribute>
+					</xsl:when>
+					<!-- Name does not follow naming standards -->
 					<xsl:otherwise>
-						<xsl:attribute name="result">N/A</xsl:attribute>
-						<xsl:attribute name="comment">Please check the repository</xsl:attribute>
+						<xsl:attribute name="result">Fail</xsl:attribute>
+						<xsl:attribute name="comment">Please check the name of this object</xsl:attribute>
 					</xsl:otherwise>
 				</xsl:choose>
 			</Object>

@@ -15,20 +15,18 @@ public class FolderUtils {
 		appFolder = new File (context.getRealPath("/"));
 	}
 
-	public Vector<Vector<String>> getContents() {
+	public Vector<SimpleFile> getContents() {
 
-		Vector<Vector<String>> contents = new Vector<Vector<String>>();
-		Vector<String> v = null;
+		Vector<SimpleFile> contents = new Vector<SimpleFile>();
+		SimpleFile file = null;
 		File[] folderContents = null;
 
 		if (!appFolder.exists())
 			appFolder = null;
 
 		if (appFolder == null) {
-			v = new Vector<String>();
-			v.add("empty");
-			v.add("empty");
-			contents.add(v);
+			file = new SimpleFile ("empty", "empty");
+			contents.add(file);
 			return contents;
 		}
 
@@ -45,11 +43,10 @@ public class FolderUtils {
 		folderContents = appFolder.listFiles(filter);
 
 		for (int i=0; i<folderContents.length; i++) {
-			v = new Vector<String>();
-			v.add(folderContents[i].getName());
-			v.add(date.format(folderContents[i].lastModified()));
-			contents.add(v);
+			file = new SimpleFile (folderContents[i].getName(), date.format(folderContents[i].lastModified()));
+			contents.add(file);
 		}
+
 		return contents;
 	}
 }

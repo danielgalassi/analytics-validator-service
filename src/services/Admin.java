@@ -18,11 +18,14 @@ public class Admin extends HttpServlet {
 
 	private boolean delete(File file) {
 		File[] fileList = file.listFiles();
-		for (File f : fileList)
-			if (f.isDirectory())
+		for (File f : fileList) {
+			if (f.isDirectory()) {
 				delete(f);
-			else
+			}
+			else {
 				f.delete();
+			}
+		}
 		return file.delete();
 	}
 
@@ -33,8 +36,9 @@ public class Admin extends HttpServlet {
 		String[] sessions = request.getParameterValues("sessionFolder");
 		String uploadPath = getServletContext().getRealPath("") + File.separator;
 
-		for (int i=0; i < sessions.length; i++)
+		for (int i=0; i < sessions.length; i++) {
 			delete(new File(uploadPath + sessions[i]));
+		}
 
 		getServletContext().getRequestDispatcher("/admin.jsp").forward(request, response);
 	}

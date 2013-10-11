@@ -32,12 +32,12 @@ public class SaxToDom
 	public Vector<String> findElements(
 			String			pickTag, 
 			Vector<String>	valueList, 
-			String			sMatchingAttrib, 
-			String			sReturningAttrib, 
+			String			matchingAttrib, 
+			String			returningAttrib, 
 			boolean			append) {
 		InputSource input = FileUtils.getIS(metadata);
 		Vector<String> foundIdList = new Vector<String>();
-		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, sMatchingAttrib, sReturningAttrib, append);
+		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, matchingAttrib, returningAttrib, append);
 		reader.setContentHandler(handlers);
 		reader.setErrorHandler(handlers);
 		try {
@@ -48,7 +48,7 @@ public class SaxToDom
 		return foundIdList;
 	}
 
-	public Document makeDom(String pickTag, Vector<String> pickValues) {
+	public Document makeDom(String pickTag, Vector<String> subjectAreaName) {
 
 		try {
 			if (doc == null) {
@@ -65,78 +65,78 @@ public class SaxToDom
 		}
 
 		//stores SA id and BM id
-		Vector<String> listOfSAs = findElements(pickTag, pickValues, "name", "id", true);
+		Vector<String> subjectAreas = findElements(pickTag, subjectAreaName, "name", "id", true);
 
 		pickTag = "PresentationTable";
 		//stores PresentationTable id
-		Vector<String> listOfPresTables = findElements(pickTag, listOfSAs, "parentId", "id", true);
+		Vector<String> presentationTables = findElements(pickTag, subjectAreas, "parentId", "id", true);
 
 		pickTag = "PresentationColumn";
 		//stores PresentationColumn id and referenced logical column id
-		Vector<String> listOfPresCols = findElements(pickTag, listOfPresTables, "parentId", "id", true);
+		Vector<String> presentationColumns = findElements(pickTag, presentationTables, "parentId", "id", true);
 
 		pickTag = "BusinessModel";
 		//stores the BM id list
-		Vector<String> listOfBizModels = findElements(pickTag, listOfSAs, "id", "id", true);
+		Vector<String> businessModels = findElements(pickTag, subjectAreas, "id", "id", true);
 
 		pickTag = "LogicalColumn";
 		//stores the LogicalColumn parentId list 
-		Vector<String> listofLogCols = findElements(pickTag, listOfPresCols, "id", "parentId", false);
+		Vector<String> logicalColumns = findElements(pickTag, presentationColumns, "id", "parentId", false);
 
 		pickTag = "LogicalTable";
 		//stores the LogicalTable list
-		Vector<String> listOfLogTables = findElements(pickTag, listofLogCols, "id", "id", true);
+		Vector<String> logicalTables = findElements(pickTag, logicalColumns, "id", "id", true);
 
 		pickTag = "LogicalColumn";
 		//stores the LogicalColumn list
-		listofLogCols = findElements(pickTag, listOfLogTables, "parentId", "id", true);
+		logicalColumns = findElements(pickTag, logicalTables, "parentId", "id", true);
 
 		pickTag = "MeasureDefn";
 		//stores the Measure Definition list
-		Vector<String> listOfMeasureDefs = findElements(pickTag, listofLogCols, "parentId", "id", true);
+		Vector<String> measureDefs = findElements(pickTag, logicalColumns, "parentId", "id", true);
 
 		pickTag = "LogicalTable";
 		//stores the LTS id
-		Vector<String> tempListOfLogTables = findElements(pickTag, listOfLogTables, "id", "id", false);
+		Vector<String> tempLogicalTables = findElements(pickTag, logicalTables, "id", "id", false);
 		pickTag = "LogicalTableSource";
 		//stores the LTS and PhysicalTable id list
-		Vector<String> listOfLTSs = findElements(pickTag, tempListOfLogTables, "id", "id", true);
-		tempListOfLogTables = null;
+		Vector<String> logicalTableSources = findElements(pickTag, tempLogicalTables, "id", "id", true);
+		tempLogicalTables = null;
 
 		pickTag = "PhysicalTable";
 		//stores the PhysicalTable (Aliases included) list
-		Vector<String> listOfPhysTables = findElements(pickTag, listOfLTSs, "id", "id", true);
+		Vector<String> physicalTables = findElements(pickTag, logicalTableSources, "id", "id", true);
 
-		Vector<String> tempListOfSchemas = findElements(pickTag, listOfPhysTables, "id", "parentId", false);
+		Vector<String> tempSchemas = findElements(pickTag, physicalTables, "id", "parentId", false);
 		//stores the Schema list
 		pickTag = "Schema";
-		Vector<String> listOfSchemas = findElements(pickTag, tempListOfSchemas, "id", "id", true);
+		Vector<String> schemas = findElements(pickTag, tempSchemas, "id", "id", true);
 
-		Vector<String> tempListOfPhysCatalogs = findElements(pickTag, listOfSchemas, "id", "parentId", false);
+		Vector<String> tempPhysicalCatalogs = findElements(pickTag, schemas, "id", "parentId", false);
 		//stores the Schema list
 		pickTag = "PhysicalCatalog";
-		Vector<String> listOfPhysCatalogs = findElements(pickTag, tempListOfPhysCatalogs, "id", "id", true);
-		tempListOfPhysCatalogs = null;
+		Vector<String> physicalCatalogs = findElements(pickTag, tempPhysicalCatalogs, "id", "id", true);
+		tempPhysicalCatalogs = null;
 
-		Vector<String> tempListOfDBs2 = findElements(pickTag, listOfPhysCatalogs, "id", "parentId", false);
+		Vector<String> tempDatabases2 = findElements(pickTag, physicalCatalogs, "id", "parentId", false);
 		pickTag = "Schema";
-		Vector<String> tempListOfDBs = findElements(pickTag, listOfSchemas, "id", "parentId", false);
-		for (String db : tempListOfDBs2)
-			if (!tempListOfDBs.contains(db))
-				tempListOfDBs.add(db);
+		Vector<String> tempDatabases = findElements(pickTag, schemas, "id", "parentId", false);
+		for (String db : tempDatabases2)
+			if (!tempDatabases.contains(db))
+				tempDatabases.add(db);
 		//NOT storing the DB list
 		pickTag = "Database";
-		Vector<String> listOfDatabases = findElements(pickTag, tempListOfDBs, "id", "id", true);
-		tempListOfDBs2 = null;
-		tempListOfDBs = null;
+		Vector<String> databases = findElements(pickTag, tempDatabases, "id", "id", true);
+		tempDatabases2 = null;
+		tempDatabases = null;
 
 		pickTag = "PhysicalColumn";
 		//stores the PhysicalTable list
-		Vector<String> listOfPhysCols = findElements(pickTag, listOfPhysTables, "parentId", "id", true);
+		Vector<String> physicalColumns = findElements(pickTag, physicalTables, "parentId", "id", true);
 
 		pickTag = "PhysicalKey";
 		//stores the PK list
-		Vector<String> listOfPhysKeys = findElements(pickTag, listOfPhysTables, "parentId", "id", true);
+		Vector<String> physicalKeys = findElements(pickTag, physicalTables, "parentId", "id", true);
 
 		return doc;
 	}

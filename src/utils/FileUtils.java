@@ -72,7 +72,8 @@ public class FileUtils {
 	}
 
 	/**
-	 * Creates a directory with the name of the argument. If it already exists, it will be deleted and re-created
+	 * Creates a directory with the name of the argument.
+	 * If it already exists, it will be deleted and re-created.
 	 * @param newFolder
 	 * @return true if the directory exists
 	 */

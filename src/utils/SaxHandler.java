@@ -17,10 +17,12 @@ public class SaxHandler extends DefaultHandler {
 			Vector<String>	listOfValues) {
 		this.pickTag = pickTag;
 		this.pickAttrib = pickAttrib;
-		if (listOfValues == null)
+		if (listOfValues == null) {
 			this.listOfValues = new Vector<String> ();
-		else
+		}
+		else {
 			this.listOfValues = listOfValues;
+		}
 	}
 
 	public void startElement(String uri, 

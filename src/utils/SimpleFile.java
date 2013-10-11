@@ -1,6 +1,10 @@
 package utils;
 
-
+/**
+ * Simplified abstraction of a file
+ * @author danielgalassi@gmail.com
+ *
+ */
 public class SimpleFile {
 
 	private String name;
@@ -17,9 +21,5 @@ public class SimpleFile {
 
 	public String getLastModified() {
 		return lastModified;
-	}
-
-	public void kill() {
-		System.out.println("KILLLL");
 	}
 }

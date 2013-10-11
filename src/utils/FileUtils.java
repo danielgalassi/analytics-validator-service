@@ -32,8 +32,9 @@ public class FileUtils {
 	public static XMLReader getXMLReader() {
 		SAXParserFactory SAXpf = SAXParserFactory.newInstance();
 		//enabling the namespaces processing
-		if(!SAXpf.isNamespaceAware())
+		if(!SAXpf.isNamespaceAware()) {
 			SAXpf.setNamespaceAware(true);
+		}
 
 		//get a SAXParser object
 		SAXParser SAXparser= null;
@@ -79,8 +80,9 @@ public class FileUtils {
 	 */
 	public static boolean setupWorkDir(String newFolder) {
 		File fDir = new File(newFolder); 
-		if (fDir.exists())
+		if (fDir.exists()) {
 			fDir.delete();
+		}
 		else {
 			fDir.mkdir();
 			System.out.println("Work directory: " + fDir.getAbsolutePath());
@@ -148,8 +150,9 @@ public class FileUtils {
 				FileOutputStream fos = new FileOutputStream(newFile);             
 
 				int len;
-				while ((len = zis.read(buffer)) > 0)
+				while ((len = zis.read(buffer)) > 0) {
 					fos.write(buffer, 0, len);
+				}
 
 				fos.close();   
 				ze = zis.getNextEntry();

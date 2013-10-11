@@ -121,9 +121,11 @@ public class SaxToDom
 		Vector<String> tempDatabases2 = findElements(pickTag, physicalCatalogs, "id", "parentId", false);
 		pickTag = "Schema";
 		Vector<String> tempDatabases = findElements(pickTag, schemas, "id", "parentId", false);
-		for (String db : tempDatabases2)
-			if (!tempDatabases.contains(db))
+		for (String db : tempDatabases2) {
+			if (!tempDatabases.contains(db)) {
 				tempDatabases.add(db);
+			}
+		}
 		//NOT storing the DB list
 		pickTag = "Database";
 		Vector<String> databases = findElements(pickTag, tempDatabases, "id", "id", true);

@@ -102,10 +102,9 @@ public class XMLUtils {
 	 * @param filename
 	 */
 	public static void saveDocument2File(Document doc, String filename) {
-		Source source = new DOMSource(doc);
-
-		File XMLFile = new File(filename);
-		Result result = new StreamResult(XMLFile);
+		Source	source = new DOMSource(doc);
+		File	targetFile = new File(filename);
+		Result	result = new StreamResult(targetFile);
 		try {
 			Transformer xformer = TransformerFactory.newInstance().newTransformer();
 			xformer.transform(source, result);
@@ -117,24 +116,24 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Transform an XML file using XSL
-	 * @param strXMLFile
-	 * @param strXSLFile
-	 * @param strRESFile
+	 * Applies a stylesheet (file) to an XML document
+	 * @param xmlFile
+	 * @param xslFile
+	 * @param resFile
 	 */
-	public static void xsl4Files(String strXMLFile,
-			String strXSLFile,
-			String strRESFile){
-		File fXMLFile = new File(strXMLFile);
-		File fXSLFile = new File(strXSLFile);
-		File fResult = new File(strRESFile);
+	public static void xsl4Files(String xmlFile,
+			String xslFile,
+			String resFile){
+		File	xml = new File(xmlFile);
+		File	xsl = new File(xslFile);
+		File	resultingXML = new File(resFile);
+		Source	xmlSource = new javax.xml.transform.stream.StreamSource(xml);
+		Source	xslSource = new javax.xml.transform.stream.StreamSource(xsl);
+		Result	result = new javax.xml.transform.stream.StreamResult(resultingXML);
 		Transformer trans = null;
-		Source xmlSource = new javax.xml.transform.stream.StreamSource(fXMLFile);
-		Source xsltSource = new javax.xml.transform.stream.StreamSource(fXSLFile);
-		Result result = new javax.xml.transform.stream.StreamResult(fResult);
 		TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance();
 		try {
-			trans = transFact.newTransformer(xsltSource);
+			trans = transFact.newTransformer(xslSource);
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3"); publishException(tcE);
 		}
@@ -146,64 +145,67 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Transform an XML file using an XSL stylesheet
-	 * @param strXMLFile
-	 * @param inputsXSLFile
-	 * @param strRESFile
+	 * Applies a stylesheet (InputStream) to an XML document
+	 * @param xmlFile
+	 * @param xsl
+	 * @param resFile
 	 */
-	public static void xsl4Files(String strXMLFile,
-			InputStream inputsXSLFile,
-			String strRESFile){
-		File fXMLFile = new File(strXMLFile);
-		File fResult = new File(strRESFile);
-		Source xmlSource = null;
-		Source xsltSource = null;
+	public static void xsl4Files(String xmlFile,
+			InputStream xsl,
+			String resFile){
+		File	xml = new File(xmlFile);
+		File	resultingXML = new File(resFile);
+		Source	xmlSource = null;
+		Source	xslSource = null;
+		Result	result = null;
 		Transformer trans = null;
 		TransformerFactory transFact = null;
-		Result result = null;
 
-		xmlSource = new javax.xml.transform.stream.StreamSource(fXMLFile);
-		xsltSource = new javax.xml.transform.stream.StreamSource(inputsXSLFile);
-		result = new javax.xml.transform.stream.StreamResult(fResult);
+		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
+		xslSource = new javax.xml.transform.stream.StreamSource(xsl);
+		result = new javax.xml.transform.stream.StreamResult(resultingXML);
 		transFact = javax.xml.transform.TransformerFactory.newInstance();
 		try {
-			trans = transFact.newTransformer(xsltSource);
+			trans = transFact.newTransformer(xslSource);
 			trans.setParameter("ShowErrorsOnly", "false");
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3");
-			publishException(tcE);}
+			publishException(tcE);
+		}
 		try {
 			trans.transform(xmlSource, result);
 		} catch (TransformerException tE) {
 			System.out.println("4");
-			publishException(tE);}
+			publishException(tE);
+		}
 	}
 
 	/**
-	 * Transform an XML file using an XSL InputStream
-	 * @param fXMLFile
-	 * @param inputsXSLFile
-	 * @param strRESFile
+	 * Applies a Stylesheet (InputStream) to an XML document.
+	 * This method is configured to set XSL parameters
+	 * @param xmlFile
+	 * @param xsl
+	 * @param resFile
 	 * @param params XSL parameters
 	 */
-	public static void xsl4Files(File fXMLFile, 
-			InputStream inputsXSLFile, 
-			String strRESFile, 
+	public static void xsl4Files(File xmlFile, 
+			InputStream xsl, 
+			String resFile, 
 			HashMap<String, String> params) {
-		File				fResult = new File(strRESFile);
+		File				results = new File(resFile);
 		Source				xmlSource = null;
-		Source				xsltSource = null;
+		Source				xslSource = null;
 		Transformer			trans = null;
 		TransformerFactory	transFact = null;
 		Result				result = null;
 
-		xmlSource = new javax.xml.transform.stream.StreamSource(fXMLFile);
-		xsltSource = new javax.xml.transform.stream.StreamSource(inputsXSLFile);
-		result = new javax.xml.transform.stream.StreamResult(fResult);
+		xmlSource = new javax.xml.transform.stream.StreamSource(xmlFile);
+		xslSource = new javax.xml.transform.stream.StreamSource(xsl);
+		result = new javax.xml.transform.stream.StreamResult(results);
 		transFact = javax.xml.transform.TransformerFactory.newInstance();
 
 		try {
-			trans = transFact.newTransformer(xsltSource);
+			trans = transFact.newTransformer(xslSource);
 			if (params != null) {
 				if (params.containsKey("ShowErrorsOnly"))
 					trans.setParameter("ShowErrorsOnly", params.get("ShowErrorsOnly"));
@@ -214,13 +216,15 @@ public class XMLUtils {
 			}
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3");
-			publishException(tcE);}
+			publishException(tcE);
+		}
 
 		try {
 			trans.transform(xmlSource, result);
 		} catch (TransformerException tE) {
 			System.out.println("4");
-			publishException(tE);}
+			publishException(tE);
+		}
 	}
 
 	/**

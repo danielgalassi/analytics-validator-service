@@ -21,8 +21,9 @@ public class FolderUtils {
 		SimpleFile file = null;
 		File[] folderContents = null;
 
-		if (!appFolder.exists())
+		if (!appFolder.exists()) {
 			appFolder = null;
+		}
 
 		if (appFolder == null) {
 			file = new SimpleFile ("empty", "empty");

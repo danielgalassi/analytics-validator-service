@@ -47,8 +47,9 @@ class SaxToDomHandler extends DefaultHandler
 		String value;
 		if (attrs.getIndex(returningAttrib) > -1) {
 			value = attrs.getValue(returningAttrib);
-			if (!foundTokensList.contains(value))
+			if (!foundTokensList.contains(value)) {
 				foundTokensList.add(attrs.getValue(returningAttrib));
+			}
 		}
 	}
 
@@ -83,32 +84,37 @@ class SaxToDomHandler extends DefaultHandler
 				//finds list of PresentationCatalog child nodes
 				if (isReallyInteresting && 
 						qName.equals("RefBusinessModel") && 
-						processingNode.equals("PresentationCatalog"))
+						processingNode.equals("PresentationCatalog")) {
 					pickAttrib(attrs);
+				}
 
 				//finds list of PresentationColumn child nodes
 				if (isReallyInteresting && 
 						qName.equals("RefLogicalColumn") && 
-						processingNode.equals("PresentationColumn"))
+						processingNode.equals("PresentationColumn")) {
 					pickAttrib(attrs);
+				}
 
 				//finds list of LTS
 				if (isReallyInteresting && 
 						qName.equals("RefLogicalTableSource") && 
-						processingNode.equals("LogicalTable"))
+						processingNode.equals("LogicalTable")) {
 					pickAttrib(attrs);
+				}
 
 				//finds list of PhysicalTables
 				if (isReallyInteresting && 
 						qName.equals("RefPhysicalTable") && 
-						processingNode.equals("LogicalTableSource"))
+						processingNode.equals("LogicalTableSource")) {
 					pickAttrib(attrs);
+				}
 
 				//need to find a way to pickup aliases...
 				if (isReallyInteresting && 
 						qName.equals("RefPhysicalTable") && 
-						processingNode.equals("PhysicalTable"))
+						processingNode.equals("PhysicalTable")) {
 					pickAttrib(attrs);
+				}
 			}
 			// Actually add it in the tree, and adjust the right place.
 			if (isReallyInteresting && appendToDoc) {
@@ -120,8 +126,9 @@ class SaxToDomHandler extends DefaultHandler
 
 	public void endElement(String uri, String name, String qName) {
 		if (isReallyInteresting) {
-			if (appendToDoc)
+			if (appendToDoc) {
 				currentNode = currentNode.getParentNode();
+			}
 			if (qName.equals(processingNode)) {
 				isInteresting = false;
 				isReallyInteresting = false;
@@ -132,22 +139,25 @@ class SaxToDomHandler extends DefaultHandler
 	public void characters(char[] ch, int start, int length) {
 		String	str  = new String(ch, start, length);
 		Text	text = doc.createTextNode(str);
-		if (isReallyInteresting && appendToDoc)
+		if (isReallyInteresting && appendToDoc) {
 			currentNode.appendChild(text);
+		}
 	}
 
 	//Add a new text node in the DOM tree, at the right place.
 	public void ignorableWhitespace(char[] ch, int start, int length) {
 		String	str  = new String(ch, start, length);
 		Text	text = doc.createTextNode(str);
-		if (isReallyInteresting && appendToDoc)
+		if (isReallyInteresting && appendToDoc) {
 			currentNode.appendChild(text);
+		}
 	}
 
 	//Add a new text PI in the DOM tree, at the right place.
 	public void processingInstruction(String target, String data) {
 		ProcessingInstruction pi = doc.createProcessingInstruction(target, data);
-		if (isReallyInteresting && appendToDoc)
+		if (isReallyInteresting && appendToDoc) {
 			currentNode.appendChild(pi);
+		}
 	}
 }

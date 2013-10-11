@@ -1,2 +1,2 @@
-services
-utils
+org.validator.services
+org.validator.utils

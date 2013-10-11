@@ -37,8 +37,8 @@ public class FileHandler extends HttpServlet {
 		boolean isZipFile = false;
 		File xmlFile = null;
 		HttpSession session = request.getSession(true);
-		System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
-		System.out.println("Session Id: " + request.getRequestedSessionId());
+		//System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
+		//System.out.println("Session Id: " + request.getRequestedSessionId());
 
 		//checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
@@ -71,14 +71,16 @@ public class FileHandler extends HttpServlet {
 			//parses the request content to extract file data
 			List<FileItem> formItems = upload.parseRequest(request);
 
-			if (formItems != null && formItems.size() > 0)
+			if (formItems != null && formItems.size() > 0) {
 				for (FileItem item : formItems) {
 					if (item.isFormField()) {
 						request.setAttribute(item.getFieldName(), item.getString());
 						session.setAttribute(item.getFieldName(), item.getString());
-						if (item.getFieldName().equals("fileFormat"))
-							if (request.getAttribute("fileFormat").equals("zip"))
+						if (item.getFieldName().equals("fileFormat")) {
+							if (request.getAttribute("fileFormat").equals("zip")) {
 								isZipFile = true;
+							}
+						}
 					}
 
 					if (!item.isFormField()) {
@@ -99,13 +101,15 @@ public class FileHandler extends HttpServlet {
 							xmlFile = FileUtils.unZipIt(metadataFile.getAbsolutePath(), uploadPath);
 							metadataFile.delete();
 						}
-						else
+						else {
 							xmlFile = metadataFile;
+						}
 
 						session.setAttribute("workDir", uploadPath);
 						session.setAttribute("metadataFile", xmlFile.getName());
 					}
 				}
+			}
 		} catch (Exception ex) {
 			request.setAttribute("message",
 					"There was an error: " + ex.getMessage());

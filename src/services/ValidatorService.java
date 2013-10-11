@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
@@ -35,25 +36,21 @@ public class ValidatorService extends HttpServlet {
 	private static final String	sTestDir = "/WEB-INF/Tests/";
 	private static final String	viewDir = "/WEB-INF/Views/";
 
-	private void trimRPD(File rpd, 
-			String selectedSubjectArea, 
-			String workDir) {
+	private void trimRPD(File rpd, String selectedSubjectArea, String workDir) {
 		XMLReader		XMLr = FileUtils.getXMLReader();
 		SaxToDom		xml = new SaxToDom(null, XMLr, rpd);
-
 		Vector<String>	vFindSA = new Vector<String> ();
+
 		vFindSA.add(selectedSubjectArea);
 
-		XMLUtils.saveDocument2File(xml.makeDom("PresentationCatalog", vFindSA), 
-				workDir + "metadata.xml");
+		Document doc = xml.makeDom("PresentationCatalog", vFindSA);
+		XMLUtils.saveDocument2File(doc, workDir + "metadata.xml");
 	}
 
 	/**
 	 * 
 	 */
-	private void executeTests(String resultsDir, 
-			File trimmedRPD, 
-			long startTime) {
+	private void executeTests(String resultsDir, File trimmedRPD, long startTime) {
 		String			testName = "";
 		String			resultFile = "";
 		InputStream		inputsXSLTest = null;
@@ -63,24 +60,27 @@ public class ValidatorService extends HttpServlet {
 		Vector<Double>	elapsedTime = null;
 		long			startTimeMs;
 
-		if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
+		Set <String> tests = getServletContext().getResourcePaths(sTestDir);
+		if (tests.size() > 0) {
 			testList	= new Vector<String> ();
 			elapsedTime	= new Vector<Double> ();
 		}
 
-		for (String s : getServletContext().getResourcePaths(sTestDir)) {
+		for (String test : tests) {
 
 			//stopwatch starts
 			startTimeMs		= System.currentTimeMillis();
 
-			inputsXSLTest	= getServletContext().getResourceAsStream(s);
+			inputsXSLTest	= getServletContext().getResourceAsStream(test);
 			docXSLTest		= XMLUtils.loadDocument(inputsXSLTest);
 
 			//setting up test name with a default value
 			testName		= "Test" + System.currentTimeMillis();
 			nlTestName		= docXSLTest.getElementsByTagName("TestName");
-			if (nlTestName.getLength() == 1)
+			if (nlTestName.getLength() == 1) {
 				testName = nlTestName.item(0).getTextContent();
+			}
+
 			//setting up test name with retrieved tag content
 			resultFile = resultsDir + testName + ".xml";
 
@@ -119,7 +119,7 @@ public class ValidatorService extends HttpServlet {
 		File			rpd = null;
 
 		//recover the subject area selected in jsp 
-		if(request.getParameter("SubjectArea") != null)
+		if (request.getParameter("SubjectArea") != null)
 			selectedSubjectArea = request.getParameter("SubjectArea");
 
 		sessionId	= request.getRequestedSessionId();
@@ -137,7 +137,7 @@ public class ValidatorService extends HttpServlet {
 
 		//trimming repository file
 		//keeping only selected subject area objects
-		trimRPD (rpd, selectedSubjectArea, workDir);
+		trimRPD(rpd, selectedSubjectArea, workDir);
 		rpd.delete();
 
 		trimmedRPD = new File(workDir + "metadata.xml");
@@ -154,35 +154,35 @@ public class ValidatorService extends HttpServlet {
 
 				//the results page is created
 				InputStream				xsl2html = null;
-				String					resFormat = (String) session.getAttribute("resultsFormat");
-				HashMap<String, String>	params = new HashMap<String, String> ();
+				String					resultsFormat = (String) session.getAttribute("resultsFormat");
+				HashMap<String, String>	xslParameters = new HashMap<String, String> ();
 				String 					xsl = viewDir + "Summary.xsl";
 				String					errorsOnly = "false";
 				File 					index = new File(resultsDir + "index.xml");
 
 				//setting up stylesheet parameters
-				params.put("SelectedSubjectArea", selectedSubjectArea);
-				if (resFormat.equals("ShowErrorsOnly"))
+				xslParameters.put("SelectedSubjectArea", selectedSubjectArea);
+				if (resultsFormat.equals("ShowErrorsOnly")) {
 					errorsOnly = "true";
-				params.put("ShowErrorsOnly", errorsOnly);
-				params.put("SessionFolder", sessionId);
+				}
+				xslParameters.put("ShowErrorsOnly", errorsOnly);
+				xslParameters.put("SessionFolder", sessionId);
 
 				//generating summary page
 				xsl2html = getServletContext().getResourceAsStream(xsl);
-				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Summary.html", params);
+				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Summary.html", xslParameters);
 
 				//switching to verbose stylesheet
 				xsl = viewDir + "Verbose.xsl";
 				xsl2html = getServletContext().getResourceAsStream(xsl);
 
 				//generating the verbose page
-				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Details.html", params);
-				System.out.println("Results HTML page generated");
+				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Details.html", xslParameters);
+				//System.out.println("Results HTML page generated");
 
 				//results Zip file is created
-				FileUtils.Zip(resultsDir + "Details.html",
-						resultsDir + "Results.zip");
-				System.out.println("Detailed Results ZIP page generated");
+				FileUtils.Zip(resultsDir + "Details.html", resultsDir + "Results.zip");
+				//System.out.println("Detailed Results ZIP page generated");
 
 				//redirects to resutls page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 

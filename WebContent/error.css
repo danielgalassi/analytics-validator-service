@@ -71,7 +71,6 @@ body {
 }
 
 .input {
-	w132idth: 500px;
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 10px;
 	margin: 20px;
@@ -92,14 +91,12 @@ body {
 
 .inputcontent {
 	float: left;
-	wi123dth: 460px;
 	height: 50px;
 }
 
 .inputcontent input {
 	padding: 5px;
 	height: 21px;
-	wi123dth: 460px;
 	line-height: 18px;
 	border: 1px solid #c7c7c7;
 	-moz-border-radius: 6px;

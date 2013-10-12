@@ -130,8 +130,8 @@ public class ValidatorService extends HttpServlet {
 		rpd = new File(workDir + rpdFileName);
 
 		if (!rpd.exists()) {
-			request.setAttribute("message", "Metadata file not found.");
-			getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
+			request.setAttribute("ErrorMessage", "Metadata file not found.");
+			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
 		}
 

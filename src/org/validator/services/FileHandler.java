@@ -37,13 +37,11 @@ public class FileHandler extends HttpServlet {
 		boolean isZipFile = false;
 		File metadata = null;
 		HttpSession session = request.getSession(true);
-		//System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
-		//System.out.println("Session Id: " + request.getRequestedSessionId());
 
 		//checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
-			request.setAttribute("message", "There was an error.");
-			getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
+			request.setAttribute("ErrorMessage", "Something went horribly wrong.");
+			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 
 		//configures upload settings
@@ -89,8 +87,8 @@ public class FileHandler extends HttpServlet {
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
 						if (fileName.equals("")) {
-							request.setAttribute("message", "Please select a file before submitting a request.");
-							getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
+							request.setAttribute("ErrorMessage", "Please select a file before submitting a request.");
+							getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 							return;
 						}
 

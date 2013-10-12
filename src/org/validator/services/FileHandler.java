@@ -35,7 +35,7 @@ public class FileHandler extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		boolean isZipFile = false;
-		File xmlFile = null;
+		File metadata = null;
 		HttpSession session = request.getSession(true);
 		//System.out.println("Temp location: " + System.getProperty("java.io.tmpdir"));
 		//System.out.println("Session Id: " + request.getRequestedSessionId());
@@ -94,22 +94,22 @@ public class FileHandler extends HttpServlet {
 							return;
 						}
 
-						String filePath = uploadPath + fileName;
-						File metadataFile = new File(filePath);
+						String path = uploadPath + fileName;
+						File uploaded = new File(path);
 						//saves the file on disk
-						item.write(metadataFile);
+						item.write(uploaded);
 
 						//unzip if appropriate
-						if (isZipFile && FileUtils.isZipFile(metadataFile)) {
-							xmlFile = FileUtils.unZipIt(metadataFile.getAbsolutePath(), uploadPath);
-							metadataFile.delete();
+						if (isZipFile && FileUtils.isZipFile(uploaded)) {
+							metadata = FileUtils.unZipIt(uploaded.getAbsolutePath(), uploadPath);
+							uploaded.delete();
 						}
 						else {
-							xmlFile = metadataFile;
+							metadata = uploaded;
 						}
 
 						session.setAttribute("workDir", uploadPath);
-						session.setAttribute("metadataFile", xmlFile.getName());
+						session.setAttribute("metadataFile", metadata.getName());
 					}
 				}
 			}

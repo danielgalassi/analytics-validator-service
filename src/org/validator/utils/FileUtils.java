@@ -67,7 +67,6 @@ public class FileUtils {
 			is.setEncoding("UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
 			is = null;
 		}
 
@@ -166,7 +165,7 @@ public class FileUtils {
 		} catch(IOException ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return newFile;
 	}
 }

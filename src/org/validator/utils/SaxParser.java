@@ -60,10 +60,12 @@ public class SaxParser
 				e.printStackTrace();
 			}
 		}
+		//default option if subject areas cannot be found
 		if (listOfValues.size() == 0) {
 			listOfValues.add("No subject areas found");
 		}
 		else {
+			//otherwise, sort and display instruction line at the top
 			Collections.sort(listOfValues);
 			listOfValues.add(0, "Browse Subject Areas");
 		}

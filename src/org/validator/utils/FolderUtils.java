@@ -16,7 +16,6 @@ public class FolderUtils {
 	}
 
 	public Vector<SimpleFile> getContents() {
-System.out.println("PARSING");
 		Vector<SimpleFile> contents = new Vector<SimpleFile>();
 		SimpleFile file = null;
 		File[] folderContents = null;

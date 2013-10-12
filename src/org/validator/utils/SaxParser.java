@@ -50,14 +50,16 @@ public class SaxParser
 			input = FileUtils.getIS(metadata);
 			reader = FileUtils.getXMLReader();
 
-			handlers = new SaxHandler(pickTag, pickAttribute, listOfValues);
-			reader.setContentHandler(handlers);
-			reader.setErrorHandler(handlers);
+			if (input != null) {
+				handlers = new SaxHandler(pickTag, pickAttribute, listOfValues);
+				reader.setContentHandler(handlers);
+				reader.setErrorHandler(handlers);
 
-			try {
-				reader.parse(input);
-			} catch (IOException | SAXException e) {
-				e.printStackTrace();
+				try {
+					reader.parse(input);
+				} catch (IOException | SAXException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		//default option if subject areas cannot be found

@@ -74,12 +74,15 @@ public class FileHandler extends HttpServlet {
 			if (formItems != null && formItems.size() > 0) {
 				for (FileItem item : formItems) {
 					if (item.isFormField()) {
-						request.setAttribute(item.getFieldName(), item.getString());
-						session.setAttribute(item.getFieldName(), item.getString());
-						if (item.getFieldName().equals("fileFormat")) {
-							if (request.getAttribute("fileFormat").equals("zip")) {
-								isZipFile = true;
-							}
+						String name = item.getFieldName();
+						String value = item.getString();
+
+						if (name.equals("fileFormat")) {
+							isZipFile = value.equals("zip");
+						}
+						else {
+							request.setAttribute(name, value);
+							session.setAttribute(name, value);
 						}
 					}
 

@@ -100,7 +100,7 @@ public class FileHandler extends HttpServlet {
 						item.write(metadataFile);
 
 						//unzip if appropriate
-						if (isZipFile) {
+						if (isZipFile && FileUtils.isZipFile(metadataFile)) {
 							xmlFile = FileUtils.unZipIt(metadataFile.getAbsolutePath(), uploadPath);
 							metadataFile.delete();
 						}

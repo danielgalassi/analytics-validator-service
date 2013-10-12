@@ -22,16 +22,28 @@
 			margin: 1px;
 			border-right: 1px solid #DEDEDE;
 			font-family: Helvetica, sans-serif; font-size: 8.5pt;}
-		th {
-			font-family: Helvetica, sans-serif; font-size: 8pt;
-			background: #EFEFEF;
+		th	{
+			font-family: Helvetica, sans-serif;
+			font-size: 9pt;
+			font-weight: bold;
+			text-align:center;
+			background: #ECECEC;
+			color: #555555;
 			border-left: 1px solid #DEDEDE;
 			border-top: 1px solid #DEDEDE;
-			border-bottom: 1px solid #DEDEDE;}
-		tbody td {
-        		font-family: Helvetica, sans-serif; font-size: 8.5pt;
 			border-bottom: 1px solid #DEDEDE;
-			border-left: 1px solid #DEDEDE;}
+			}
+		tbody td {
+				font-family: Helvetica, sans-serif;
+				font-size: 8pt;
+				font-weight: bold;
+				text-align:left;
+				color: #444444;
+				border-bottom: 1px solid #DEDEDE;
+				border-left: 1px solid #DEDEDE;
+				padding-left: 6px;
+				padding-right: 6px;
+				}
 				</style>
 				
 				<title>Oracle Business Intelligence Validator Service Report</title>
@@ -53,25 +65,25 @@
 					<tbody>
 					<!-- Table heading -->
 						<tr>
-							<th width="250px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Test</th>
-							<th width="550px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Description</th>
-							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Objects tested</th>
-							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Errors</th>
-							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Failures</th>
-							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">N/A</th>
-							<th width="130px" height="28px" style="text-align:center; background: #ECECEC; font-family: Helvetica, sans-serif; font-size: 9pt; font-weight: bold; color: #555555;">Success Rate</th>
+							<th width="250px" height="28px" >Test</th>
+							<th width="550px" height="28px" >Description</th>
+							<th width="130px" height="28px" >Objects tested</th>
+							<th width="130px" height="28px" >Errors</th>
+							<th width="130px" height="28px" >Failures</th>
+							<th width="130px" height="28px" >N/A</th>
+							<th width="130px" height="28px" >Success Rate</th>
 						</tr>
 				<!-- Test Results Section -->
 						<xsl:for-each select="document(//results)">
 							<xsl:for-each select=".//Test">
 								<tr>
-									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+									<td height="28px" >
 										<xsl:value-of select="./TestHeader/TestName"/>
 									</td>
-									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:left;">
+									<td height="28px" >
 										<xsl:value-of select="./TestHeader/TestDescription"/>
 									</td>
-									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:60px;">
+									<td height="28px" style="text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object)"/>
 									</td>
 									<td height="28px" style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
@@ -83,7 +95,7 @@
 									<td height="28px" style="background: #F8FCCF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[@result='N/A'])"/>
 									</td>
-									<td height="28px" style="font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #444444; text-align:right; padding-right:48px;">
+									<td height="28px" style="text-align:right; padding-right:48px;">
 										<xsl:value-of select="round(100 * number(count(.//Results/Object[@result='Pass'])) div number(count(.//Results/Object)))"/> %</td>
 								</tr>
 							</xsl:for-each>
@@ -102,4 +114,3 @@
 		</html>
 	</xsl:template>
 </xsl:stylesheet>
-

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,7 +12,8 @@
 </head>
 <body>
 
-	<jsp:useBean id="appFolder" class="org.validator.utils.FolderUtils" scope="page">
+	<jsp:useBean id="appFolder" class="org.validator.utils.FolderUtils"
+		scope="page">
 		<jsp:setProperty name="appFolder" property="folder"
 			value="<%=getServletContext()%>" />
 	</jsp:useBean>
@@ -19,7 +21,13 @@
 	<div class="wrapper">
 		<form class="adminForm" action="Admin" method="POST">
 			<div class="formtitle">Admin Area</div>
-			<div class="inputtext">Tick session to delete</div>
+			<c:if test="${fn:length(appFolder.contents) gt 0}">
+				<div class="inputtext">Tick session to delete</div>
+			</c:if>
+			<c:if test="${fn:length(appFolder.contents) == 0}">
+				<div class="inputtext">No sessions to delete</div>
+			</c:if>
+
 			<div class="input nobottomborder">
 				<table>
 					<tbody>
@@ -37,10 +45,11 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="buttons">
-				<input class="orangebutton" type="submit" value="Delete" />
-			</div>
-
+			<c:if test="${fn:length(appFolder.contents) gt 0}">
+				<div class="buttons">
+					<input class="orangebutton" type="submit" value="Delete" />
+				</div>
+			</c:if>
 		</form>
 	</div>
 </body>

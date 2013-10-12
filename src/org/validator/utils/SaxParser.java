@@ -19,9 +19,8 @@ public class SaxParser
 	private XMLReader		reader;
 	private InputSource		input;
 	private SaxHandler		handlers;
-	private Vector<String>	listOfValues;
-	private String			pickTag = "none";
-	private String			pickAttribute = "id";
+	private String			pickTag = null;
+	private String			pickAttribute = null;
 	private File			metadata;
 	private String			workDir;
 
@@ -42,29 +41,32 @@ public class SaxParser
 	}
 
 	public Vector<String> getListOfValues() {
-		listOfValues = new Vector<String> ();
-		if (metadata == null || 
-				workDir == null || 
-				pickTag == null || 
-				pickAttribute == null) {
+		boolean			metadataOK = (metadata != null && metadata.exists() && metadata.canRead());
+		boolean			tagSet = (pickTag != null && !pickTag.equals(""));
+		boolean			attributeSet = (pickAttribute != null || !pickAttribute.equals(""));
+		Vector<String>	listOfValues = new Vector<String> ();
+
+		if (tagSet && attributeSet && metadataOK) {
+			input = FileUtils.getIS(metadata);
+			reader = FileUtils.getXMLReader();
+
+			handlers = new SaxHandler(pickTag, pickAttribute, listOfValues);
+			reader.setContentHandler(handlers);
+			reader.setErrorHandler(handlers);
+
+			try {
+				reader.parse(input);
+			} catch (IOException | SAXException e) {
+				e.printStackTrace();
+			}
+		}
+		if (listOfValues.size() == 0) {
 			listOfValues.add("No subject areas found");
-			return listOfValues;
 		}
-		input = FileUtils.getIS(metadata);
-		reader = FileUtils.getXMLReader();
-
-		handlers = new SaxHandler(pickTag, pickAttribute, listOfValues);
-		reader.setContentHandler(handlers);
-		reader.setErrorHandler(handlers);
-
-		try {
-			reader.parse(input);
-		} catch (IOException | SAXException e) {
-			e.printStackTrace();
+		else {
+			Collections.sort(listOfValues);
+			listOfValues.add(0, "Browse Subject Areas");
 		}
-
-		Collections.sort(listOfValues);
-		listOfValues.add(0, "Browse Subject Areas");
 		return listOfValues;
 	}
 }

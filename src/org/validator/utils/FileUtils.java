@@ -64,11 +64,13 @@ public class FileUtils {
 		try {
 			in = new FileInputStream(file);
 			is = new InputSource(new InputStreamReader(in));
+			is.setEncoding("UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			is = null;
 		}
 
-		is.setEncoding("UTF-8");
 		return is;
 	}
 

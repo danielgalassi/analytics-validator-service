@@ -21,11 +21,13 @@
 	<div class="wrapper">
 		<form class="adminForm" action="Admin" method="POST">
 			<div class="formtitle">Admin Area</div>
-			<c:if test="${fn:length(appFolder.contents) gt 0}">
+			<c:set var="availableContents" scope="page" value="${fn:length(appFolder.contents) gt 0}"/>
+			
+			<c:if test="${availableContents}">
 				<div class="inputtext">Tick session to delete</div>
 			</c:if>
-			<c:if test="${fn:length(appFolder.contents) == 0}">
-				<div class="inputtext">No sessions to delete</div>
+			<c:if test="${not availableContents}">
+				<div class="inputtext">No sessions to delete, easy day in the office ;)</div>
 			</c:if>
 
 			<div class="input nobottomborder">
@@ -45,7 +47,7 @@
 					</tbody>
 				</table>
 			</div>
-			<c:if test="${fn:length(appFolder.contents) gt 0}">
+			<c:if test="${availableContents}">
 				<div class="buttons">
 					<input class="orangebutton" type="submit" value="Delete" />
 				</div>

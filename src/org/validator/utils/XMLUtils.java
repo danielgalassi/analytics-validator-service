@@ -73,10 +73,10 @@ public class XMLUtils {
 
 	/**
 	 * Creates a DOM document from an InputStream
-	 * @param InputStream
+	 * @param xmlFile
 	 * @return DOM document
 	 */
-	public static Document loadDocument (InputStream inputsFile) {
+	public static Document loadDocument (InputStream xmlFile) {
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = null;
 		Document xml = null;
@@ -88,7 +88,7 @@ public class XMLUtils {
 		}
 
 		try {
-			xml = docBuilder.parse(inputsFile);
+			xml = docBuilder.parse(xmlFile);
 		} catch(Exception e) {
 			publishException(e);
 		}

@@ -9,14 +9,14 @@ import javax.servlet.ServletContext;
 
 public class FolderUtils {
 
-	private File appFolder = null;
+	private File	appFolder = null;
 
 	public void setFolder (ServletContext context) {
 		appFolder = new File (context.getRealPath("/"));
 	}
 
 	public Vector<SimpleFile> getContents() {
-
+System.out.println("PARSING");
 		Vector<SimpleFile> contents = new Vector<SimpleFile>();
 		SimpleFile file = null;
 		File[] folderContents = null;

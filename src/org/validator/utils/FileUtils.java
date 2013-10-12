@@ -73,6 +73,19 @@ public class FileUtils {
 		return is;
 	}
 
+	private static boolean deleteAll(File file) {
+		File[] fileList = file.listFiles();
+		for (File f : fileList) {
+			if (f.isDirectory()) {
+				deleteAll(f);
+			}
+			else {
+				f.delete();
+			}
+		}
+		return file.delete();
+	}
+
 	/**
 	 * Creates a directory with the name of the argument.
 	 * If it already exists, it will be deleted and re-created.
@@ -82,7 +95,7 @@ public class FileUtils {
 	public static boolean setupWorkDir(String newFolder) {
 		File fDir = new File(newFolder); 
 		if (fDir.exists()) {
-			fDir.delete();
+			deleteAll(fDir);
 		}
 		else {
 			fDir.mkdir();

@@ -15,8 +15,8 @@
 			<div class="formtitle">ERROR</div>
 
 			<div class="input nobottomborder">
-				<div class="inputtext">Sorry mate!</div>
-				<div class="inputtext">We could not locate the application you are looking for.</div>
+				<div class="inputtext">Sorry mate! Something went horribly wrong.</div>
+				<div class="inputtext">Drop me an email to danielgalassi@gmail.com and I'll try to fix it.</div>
 				<div class="inputtext">What about testing some OBIEE repository using the validator service?</div>
 			</div>
 

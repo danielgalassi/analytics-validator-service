@@ -35,15 +35,15 @@ public class XMLUtils {
 	 * @return DOM document
 	 */
 	public static Document createDOMDocument() {
-		DocumentBuilder builder = null;
-		Document doc = null;
+		DocumentBuilder docBuilder = null;
+		Document xml = null;
 		try {
-			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			doc = builder.newDocument();
+			docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			xml = docBuilder.newDocument();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return doc;
+		return xml;
 	}
 
 	/**
@@ -52,23 +52,23 @@ public class XMLUtils {
 	 * @return DOM document
 	 */
 	public static Document loadDocument (File filename) {
-		DocumentBuilderFactory dBFXML = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBXML = null;
-		Document docXML = null;
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder documentBuilder = null;
+		Document xml = null;
 
 		try {
-			docBXML = dBFXML.newDocumentBuilder();
+			documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		} catch(Exception e) {
 			publishException(e);
 		}
 
 		try {
-			docXML = docBXML.parse(filename);
+			xml = documentBuilder.parse(filename);
 		} catch(Exception e) {
 			publishException(e);
 		}
 
-		return docXML;
+		return xml;
 	}
 
 	/**
@@ -77,23 +77,23 @@ public class XMLUtils {
 	 * @return DOM document
 	 */
 	public static Document loadDocument (InputStream inputsFile) {
-		DocumentBuilderFactory dBFXML = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBXML = null;
-		Document docXML = null;
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = null;
+		Document xml = null;
 
 		try {
-			docBXML = dBFXML.newDocumentBuilder();
+			docBuilder = documentBuilderFactory.newDocumentBuilder();
 		} catch(Exception e) {
 			publishException(e);
 		}
 
 		try {
-			docXML = docBXML.parse(inputsFile);
+			xml = docBuilder.parse(inputsFile);
 		} catch(Exception e) {
 			publishException(e);
 		}
 
-		return docXML;
+		return xml;
 	}
 
 	/**
@@ -106,8 +106,8 @@ public class XMLUtils {
 		File	targetFile = new File(filename);
 		Result	result = new StreamResult(targetFile);
 		try {
-			Transformer xformer = TransformerFactory.newInstance().newTransformer();
-			xformer.transform(source, result);
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.transform(source, result);
 		} catch (TransformerConfigurationException e) {
 			System.out.println(e);
 		} catch (TransformerException e) {
@@ -130,15 +130,15 @@ public class XMLUtils {
 		Source	xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		Source	xslSource = new javax.xml.transform.stream.StreamSource(xsl);
 		Result	result = new javax.xml.transform.stream.StreamResult(resultingXML);
-		Transformer trans = null;
-		TransformerFactory transFact = javax.xml.transform.TransformerFactory.newInstance();
+		Transformer transformer = null;
+		TransformerFactory transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 		try {
-			trans = transFact.newTransformer(xslSource);
+			transformer = transformerFactory.newTransformer(xslSource);
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3"); publishException(tcE);
 		}
 		try {
-			trans.transform(xmlSource, result);
+			transformer.transform(xmlSource, result);
 		} catch (TransformerException tE) {
 			System.out.println("4"); publishException(tE);
 		}
@@ -158,22 +158,22 @@ public class XMLUtils {
 		Source	xmlSource = null;
 		Source	xslSource = null;
 		Result	result = null;
-		Transformer trans = null;
-		TransformerFactory transFact = null;
+		Transformer transformer = null;
+		TransformerFactory transformerFactory = null;
 
 		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		xslSource = new javax.xml.transform.stream.StreamSource(xsl);
 		result = new javax.xml.transform.stream.StreamResult(resultingXML);
-		transFact = javax.xml.transform.TransformerFactory.newInstance();
+		transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 		try {
-			trans = transFact.newTransformer(xslSource);
-			trans.setParameter("ShowErrorsOnly", "false");
+			transformer = transformerFactory.newTransformer(xslSource);
+			transformer.setParameter("ShowErrorsOnly", "false");
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3");
 			publishException(tcE);
 		}
 		try {
-			trans.transform(xmlSource, result);
+			transformer.transform(xmlSource, result);
 		} catch (TransformerException tE) {
 			System.out.println("4");
 			publishException(tE);
@@ -195,24 +195,24 @@ public class XMLUtils {
 		File				results = new File(resFile);
 		Source				xmlSource = null;
 		Source				xslSource = null;
-		Transformer			trans = null;
-		TransformerFactory	transFact = null;
+		Transformer			transformer = null;
+		TransformerFactory	transformerFactory = null;
 		Result				result = null;
 
 		xmlSource = new javax.xml.transform.stream.StreamSource(xmlFile);
 		xslSource = new javax.xml.transform.stream.StreamSource(xsl);
 		result = new javax.xml.transform.stream.StreamResult(results);
-		transFact = javax.xml.transform.TransformerFactory.newInstance();
+		transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 
 		try {
-			trans = transFact.newTransformer(xslSource);
+			transformer = transformerFactory.newTransformer(xslSource);
 			if (params != null) {
 				if (params.containsKey("ShowErrorsOnly"))
-					trans.setParameter("ShowErrorsOnly", params.get("ShowErrorsOnly"));
+					transformer.setParameter("ShowErrorsOnly", params.get("ShowErrorsOnly"));
 				if (params.containsKey("SelectedSubjectArea"))
-					trans.setParameter("SelectedSubjectArea", params.get("SelectedSubjectArea"));
+					transformer.setParameter("SelectedSubjectArea", params.get("SelectedSubjectArea"));
 				if (params.containsKey("SessionFolder"))
-					trans.setParameter("SessionFolder", params.get("SessionFolder"));
+					transformer.setParameter("SessionFolder", params.get("SessionFolder"));
 			}
 		} catch (TransformerConfigurationException tcE) {
 			System.out.println("3");
@@ -220,7 +220,7 @@ public class XMLUtils {
 		}
 
 		try {
-			trans.transform(xmlSource, result);
+			transformer.transform(xmlSource, result);
 		} catch (TransformerException tE) {
 			System.out.println("4");
 			publishException(tE);
@@ -239,18 +239,18 @@ public class XMLUtils {
 			Vector<Double> elapsedTime, 
 			String targetDir, 
 			long startTime) {
-		Document docIndex = createDOMDocument();
-		Element r = docIndex.createElement("index");
+		Document index = createDOMDocument();
+		Element root = index.createElement("index");
 
 		for (int i=0; i<testList.size(); i++) {
-			Element e = docIndex.createElement("results");
-			e.setTextContent(testList.get(i));
-			e.setAttribute("elapsedTime", elapsedTime.get(i).toString());
-			r.appendChild(e);
+			Element node = index.createElement("results");
+			node.setTextContent(testList.get(i));
+			node.setAttribute("elapsedTime", elapsedTime.get(i).toString());
+			root.appendChild(node);
 		}
 
-		r.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
-		docIndex.appendChild(r);
-		saveDocument2File(docIndex, targetDir + "index.xml");
+		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
+		index.appendChild(root);
+		saveDocument2File(index, targetDir + "index.xml");
 	}
 }

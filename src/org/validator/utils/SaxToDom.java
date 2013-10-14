@@ -35,13 +35,14 @@ public class SaxToDom
 			String			matchingAttrib, 
 			String			returningAttrib, 
 			boolean			append) {
-		InputSource input = FileUtils.getIS(metadata);
+
+		InputSource metadataStream = FileUtils.getStream(metadata);
 		Vector<String> foundIdList = new Vector<String>();
 		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, matchingAttrib, returningAttrib, append);
 		reader.setContentHandler(handlers);
 		reader.setErrorHandler(handlers);
 		try {
-			reader.parse(input);
+			reader.parse(metadataStream);
 		} catch (IOException | SAXException e) {
 			e.printStackTrace();
 		}
@@ -95,13 +96,10 @@ public class SaxToDom
 		//stores the Measure Definition list
 		Vector<String> measureDefs = findElements(pickTag, logicalColumns, "parentId", "id", true);
 
-		pickTag = "LogicalTable";
 		//stores the LTS id
-		Vector<String> tempLogicalTables = findElements(pickTag, logicalTables, "id", "id", false);
 		pickTag = "LogicalTableSource";
 		//stores the LTS and PhysicalTable id list
-		Vector<String> logicalTableSources = findElements(pickTag, tempLogicalTables, "id", "id", true);
-		tempLogicalTables = null;
+		Vector<String> logicalTableSources = findElements(pickTag, logicalTables, "id", "id", true);
 
 		pickTag = "PhysicalTable";
 		//stores the PhysicalTable (Aliases included) list
@@ -126,7 +124,7 @@ public class SaxToDom
 				tempDatabases.add(db);
 			}
 		}
-		//NOT storing the DB list
+		//stores the DB list
 		pickTag = "Database";
 		Vector<String> databases = findElements(pickTag, tempDatabases, "id", "id", true);
 		tempDatabases2 = null;

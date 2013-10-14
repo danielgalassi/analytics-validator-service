@@ -47,7 +47,7 @@ public class SaxParser
 		Vector<String>	listOfValues = new Vector<String> ();
 
 		if (tagSet && attributeSet && metadataOK) {
-			input = FileUtils.getIS(metadata);
+			input = FileUtils.getStream(metadata);
 			reader = FileUtils.getXMLReader();
 
 			if (input != null) {

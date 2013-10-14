@@ -59,7 +59,7 @@ public class FileUtils {
 	 * @param file
 	 * @return InputSource
 	 */
-	public static InputSource getIS(File file) {
+	public static InputSource getStream(File file) {
 		InputStream in = null;
 		InputSource is = null;
 

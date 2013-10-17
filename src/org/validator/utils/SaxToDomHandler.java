@@ -81,40 +81,52 @@ class SaxToDomHandler extends DefaultHandler
 					pickAttrib(attrs);
 				}
 
-				//finds list of PresentationCatalog child nodes
 				if (isReallyInteresting && 
-						qName.equals("RefBusinessModel") && 
-						processingNode.equals("PresentationCatalog")) {
+						(qName.equals("RefBusinessModel") ||
+								qName.equals("RefLogicalColumn") ||
+								qName.equals("RefLogicalTableSource") ||
+								qName.equals("RefPhysicalTable") ||
+								qName.equals("RefBusinessModel") ||
+								qName.equals("RefBusinessModel") ||
+								qName.equals("RefBusinessModel")
+								)) {
 					pickAttrib(attrs);
 				}
+
+				//finds list of PresentationCatalog child nodes
+				//if (isReallyInteresting && 
+				//	qName.equals("RefBusinessModel") && 
+				//	processingNode.equals("PresentationCatalog")) {
+				//		pickAttrib(attrs);
+				//}
 
 				//finds list of PresentationColumn child nodes
-				if (isReallyInteresting && 
-						qName.equals("RefLogicalColumn") && 
-						processingNode.equals("PresentationColumn")) {
-					pickAttrib(attrs);
-				}
+				//if (isReallyInteresting && 
+				//	qName.equals("RefLogicalColumn") && 
+				//	processingNode.equals("PresentationColumn")) {
+				//		pickAttrib(attrs);
+				//}
 
 				//finds list of LTS
-				if (isReallyInteresting && 
-						qName.equals("RefLogicalTableSource") && 
-						processingNode.equals("LogicalTable")) {
-					pickAttrib(attrs);
-				}
+				//if (isReallyInteresting && 
+				//	qName.equals("RefLogicalTableSource") && 
+				//	processingNode.equals("LogicalTable")) {
+				//		pickAttrib(attrs);
+				//}
 
 				//finds list of PhysicalTables
-				if (isReallyInteresting && 
-						qName.equals("RefPhysicalTable") && 
-						processingNode.equals("LogicalTableSource")) {
-					pickAttrib(attrs);
-				}
+				//if (isReallyInteresting && 
+				//	qName.equals("RefPhysicalTable") && 
+				//	processingNode.equals("LogicalTableSource")) {
+				//		pickAttrib(attrs);
+				//}
 
 				//need to find a way to pickup aliases...
-				if (isReallyInteresting && 
-						qName.equals("RefPhysicalTable") && 
-						processingNode.equals("PhysicalTable")) {
-					pickAttrib(attrs);
-				}
+				//if (isReallyInteresting && 
+				//	qName.equals("RefPhysicalTable") && 
+				//	processingNode.equals("PhysicalTable")) {
+				//		pickAttrib(attrs);
+				//}
 			}
 			// Actually add it in the tree, and adjust the right place.
 			if (isReallyInteresting && appendToDoc) {

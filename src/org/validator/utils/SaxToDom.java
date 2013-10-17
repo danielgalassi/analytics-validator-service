@@ -40,7 +40,8 @@ public class SaxToDom
 		Vector<String> foundIdList = new Vector<String>();
 		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, matchingAttrib, returningAttrib, append);
 		reader.setContentHandler(handlers);
-		reader.setErrorHandler(handlers);
+		//recommended but... omitted for the time being
+		//reader.setErrorHandler(handlers);
 		try {
 			reader.parse(metadataStream);
 		} catch (IOException | SAXException e) {
@@ -76,25 +77,18 @@ public class SaxToDom
 		//stores PresentationColumn id and referenced logical column id
 		Vector<String> presentationColumns = findElements(pickTag, presentationTables, "parentId", "id", true);
 
-		pickTag = "BusinessModel";
-		//stores the BM id list
-		Vector<String> businessModels = findElements(pickTag, subjectAreas, "id", "id", true);
-
 		pickTag = "LogicalColumn";
-		//stores the LogicalColumn parentId list 
-		Vector<String> logicalColumns = findElements(pickTag, presentationColumns, "id", "parentId", false);
+		//stores the LogicalColumn parentId list (a list of LogicalTable Ids) 
+		Vector<String> tempLogicalTables = findElements(pickTag, presentationColumns, "id", "parentId", false);
 
 		pickTag = "LogicalTable";
 		//stores the LogicalTable list
-		Vector<String> logicalTables = findElements(pickTag, logicalColumns, "id", "id", true);
+		Vector<String> logicalTables = findElements(pickTag, tempLogicalTables, "id", "id", true);
+		tempLogicalTables = null;
 
 		pickTag = "LogicalColumn";
 		//stores the LogicalColumn list
-		logicalColumns = findElements(pickTag, logicalTables, "parentId", "id", true);
-
-		pickTag = "MeasureDefn";
-		//stores the Measure Definition list
-		Vector<String> measureDefs = findElements(pickTag, logicalColumns, "parentId", "id", true);
+		Vector<String> logicalColumns = findElements(pickTag, logicalTables, "parentId", "id", true);
 
 		//stores the LTS id
 		pickTag = "LogicalTableSource";
@@ -109,6 +103,7 @@ public class SaxToDom
 		//stores the Schema list
 		pickTag = "Schema";
 		Vector<String> schemas = findElements(pickTag, tempSchemas, "id", "id", true);
+		tempSchemas = null;
 
 		Vector<String> tempPhysicalCatalogs = findElements(pickTag, schemas, "id", "parentId", false);
 		//stores the Schema list
@@ -129,6 +124,14 @@ public class SaxToDom
 		Vector<String> databases = findElements(pickTag, tempDatabases, "id", "id", true);
 		tempDatabases2 = null;
 		tempDatabases = null;
+
+		pickTag = "BusinessModel";
+		//stores the BM id list
+		Vector<String> businessModels = findElements(pickTag, subjectAreas, "id", "id", true);
+
+		pickTag = "MeasureDefn";
+		//stores the Measure Definition list
+		Vector<String> measureDefs = findElements(pickTag, logicalColumns, "parentId", "id", true);
 
 		pickTag = "PhysicalColumn";
 		//stores the PhysicalTable list

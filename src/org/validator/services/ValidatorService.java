@@ -181,7 +181,7 @@ public class ValidatorService extends HttpServlet {
 				//System.out.println("Results HTML page generated");
 
 				//results Zip file is created
-				FileUtils.Zip(resultsDir + "Details.html", resultsDir + "Results.zip");
+				//FileUtils.Zip(resultsDir + "Details.html", resultsDir + "Results.zip");
 				//System.out.println("Detailed Results ZIP page generated");
 
 				//redirects to resutls page (summary level)

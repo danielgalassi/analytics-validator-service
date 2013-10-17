@@ -137,26 +137,26 @@ class SaxToDomHandler extends DefaultHandler
 	}
 
 	public void characters(char[] ch, int start, int length) {
-		String	str  = new String(ch, start, length);
-		Text	text = doc.createTextNode(str);
 		if (isReallyInteresting && appendToDoc) {
+			String	str  = new String(ch, start, length);
+			Text	text = doc.createTextNode(str);
 			currentNode.appendChild(text);
 		}
 	}
 
 	//Add a new text node in the DOM tree, at the right place.
 	public void ignorableWhitespace(char[] ch, int start, int length) {
-		String	str  = new String(ch, start, length);
-		Text	text = doc.createTextNode(str);
 		if (isReallyInteresting && appendToDoc) {
+			String	str  = new String(ch, start, length);
+			Text	text = doc.createTextNode(str);
 			currentNode.appendChild(text);
 		}
 	}
 
 	//Add a new text PI in the DOM tree, at the right place.
 	public void processingInstruction(String target, String data) {
-		ProcessingInstruction pi = doc.createProcessingInstruction(target, data);
 		if (isReallyInteresting && appendToDoc) {
+			ProcessingInstruction pi = doc.createProcessingInstruction(target, data);
 			currentNode.appendChild(pi);
 		}
 	}

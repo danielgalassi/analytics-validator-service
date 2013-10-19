@@ -60,6 +60,7 @@ class SaxToDomHandler extends DefaultHandler
 			processingNode = pickTag;
 		}
 
+		//processing top-level node and children
 		if (isInteresting) {
 			//Creates the element
 			Element elem = doc.createElementNS(uri, qName);
@@ -72,52 +73,48 @@ class SaxToDomHandler extends DefaultHandler
 				attr.setValue(value);
 				elem.setAttributeNodeNS(attr);
 
-				//if this is such object and 
+				//if this top-level node is required
 				//the name or id (sParam) matches one we need...
-				if (qName.equals(processingNode) && 
-						qname.equals(matchingAttrib) && 
-						listOfValues.contains(value)) {
+				boolean isTag = qName.equals(processingNode);
+				boolean isAttrib = qname.equals(matchingAttrib);
+				boolean hasValue = listOfValues.contains(value);
+				if (isTag && isAttrib && hasValue) {
 					isReallyInteresting = true;
 					pickAttrib(attrs);
 				}
 
+				boolean isRefBizModel	= qName.equals("RefBusinessModel");
+				boolean isRefLglColumn	= qName.equals("RefLogicalColumn");
+				boolean isRefLTS		= qName.equals("RefLogicalTableSource");
+				boolean isRefPhysTable	= qName.equals("RefPhysicalTable");
 				if (isReallyInteresting && 
-						(qName.equals("RefBusinessModel") 
-								|| qName.equals("RefLogicalColumn") 
-								|| qName.equals("RefLogicalTableSource") 
-								|| qName.equals("RefPhysicalTable") 
-								|| qName.equals("RefBusinessModel")
-								)) {
+						(isRefBizModel || isRefLglColumn || isRefLTS || isRefPhysTable)) {
 					pickAttrib(attrs);
 				}
 
 				//finds list of PresentationCatalog child nodes
 				//if (isReallyInteresting && 
 				//	qName.equals("RefBusinessModel") && 
-				//	processingNode.equals("PresentationCatalog")) {
+				//	processingNode.equals("PresentationCatalog"))
 				//		pickAttrib(attrs);
-				//}
 
 				//finds list of PresentationColumn child nodes
 				//if (isReallyInteresting && 
 				//	qName.equals("RefLogicalColumn") && 
-				//	processingNode.equals("PresentationColumn")) {
+				//	processingNode.equals("PresentationColumn"))
 				//		pickAttrib(attrs);
-				//}
 
 				//finds list of LTS
 				//if (isReallyInteresting && 
 				//	qName.equals("RefLogicalTableSource") && 
-				//	processingNode.equals("LogicalTable")) {
+				//	processingNode.equals("LogicalTable"))
 				//		pickAttrib(attrs);
-				//}
 
 				//finds list of PhysicalTables
 				//if (isReallyInteresting && 
 				//	qName.equals("RefPhysicalTable") && 
-				//	processingNode.equals("LogicalTableSource")) {
+				//	processingNode.equals("LogicalTableSource"))
 				//		pickAttrib(attrs);
-				//}
 
 				//need to find a way to pickup aliases...
 				//if (isReallyInteresting && 

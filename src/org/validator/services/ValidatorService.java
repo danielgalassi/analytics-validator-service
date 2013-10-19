@@ -15,12 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.validator.XMLEngine.XMLProcessorEngine;
 import org.validator.utils.FileUtils;
-import org.validator.utils.SaxToDom;
 import org.validator.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.XMLReader;
 
 
 /**
@@ -36,16 +35,16 @@ public class ValidatorService extends HttpServlet {
 	private static final String	sTestDir = "/WEB-INF/Tests/";
 	private static final String	viewDir = "/WEB-INF/Views/";
 
-	private void trimRPD(File rpd, String selectedSubjectArea, String workDir) {
-		XMLReader		XMLr = FileUtils.getXMLReader();
-		SaxToDom		xml = new SaxToDom(null, XMLr, rpd);
-		Vector<String>	vFindSA = new Vector<String> ();
+//	private void trimRPD(File rpd, String selectedSubjectArea, String workDir) {
+//		XMLReader		reader = FileUtils.getXMLReader();
+//		SaxToDom		xml = new SaxToDom(null, reader, rpd);
+//		Vector<String>	vFindSA = new Vector<String> ();
 
-		vFindSA.add(selectedSubjectArea);
+//		vFindSA.add(selectedSubjectArea);
 
-		Document doc = xml.makeDom("PresentationCatalog", vFindSA);
-		XMLUtils.saveDocument2File(doc, workDir + "metadata.xml");
-	}
+//		Document doc = xml.makeDom("PresentationCatalog", vFindSA);
+//		XMLUtils.saveDocument2File(doc, workDir + "metadata.xml");
+//	}
 
 	/**
 	 * 
@@ -112,7 +111,7 @@ public class ValidatorService extends HttpServlet {
 		String			workDir = null;
 		long			startTime = System.currentTimeMillis();
 
-		String			selectedSubjectArea = "None";
+		String			subjectArea = "None";
 		String			rpdFileName = "";
 		String			sessionId = "";
 		HttpSession		session = null;
@@ -120,7 +119,7 @@ public class ValidatorService extends HttpServlet {
 
 		//recover the subject area selected in jsp 
 		if (request.getParameter("SubjectArea") != null)
-			selectedSubjectArea = request.getParameter("SubjectArea");
+			subjectArea = request.getParameter("SubjectArea");
 
 		sessionId	= request.getRequestedSessionId();
 		session		= request.getSession();
@@ -137,7 +136,8 @@ public class ValidatorService extends HttpServlet {
 
 		//trimming repository file
 		//keeping only selected subject area objects
-		trimRPD(rpd, selectedSubjectArea, workDir);
+//		trimRPD(rpd, selectedSubjectArea, workDir);
+		XMLProcessorEngine engine = new XMLProcessorEngine(workDir, rpd, subjectArea);
 		rpd.delete();
 
 		trimmedRPD = new File(workDir + "metadata.xml");
@@ -161,7 +161,7 @@ public class ValidatorService extends HttpServlet {
 				File 					index = new File(resultsDir + "index.xml");
 
 				//setting up stylesheet parameters
-				xslParameters.put("SelectedSubjectArea", selectedSubjectArea);
+				xslParameters.put("SelectedSubjectArea", subjectArea);
 				if (resultsFormat.equals("ShowErrorsOnly")) {
 					errorsOnly = "true";
 				}

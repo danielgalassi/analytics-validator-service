@@ -16,7 +16,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author danielgalassi
  *
  */
-class XUDMLEventsHandler extends DefaultHandler
+public class XUDMLEventsHandler extends DefaultHandler
 {
 	private Document		doc;
 	private Node			currentNode;

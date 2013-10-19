@@ -44,7 +44,6 @@ public class FileUtils {
 			parser = factory.newSAXParser();
 			reader = parser.getXMLReader();
 		} catch (ParserConfigurationException | SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

@@ -19,7 +19,7 @@ import org.xml.sax.XMLReader;
 public class SaxToDom
 {
 	private XMLReader		reader;
-	private SaxToDomHandler	handlers;
+	private XUDMLEventsHandler	handlers;
 	private Document		doc;
 	private File			metadata;
 
@@ -38,7 +38,7 @@ public class SaxToDom
 
 		InputSource metadataStream = FileUtils.getStream(metadata);
 		Vector<String> foundIdList = new Vector<String>();
-		handlers = new SaxToDomHandler(doc, pickTag, valueList, foundIdList, matchingAttrib, returningAttrib, append);
+		handlers = new XUDMLEventsHandler(doc, pickTag, valueList, foundIdList, matchingAttrib, returningAttrib, append);
 		reader.setContentHandler(handlers);
 		//recommended but... omitted for the time being
 		//reader.setErrorHandler(handlers);

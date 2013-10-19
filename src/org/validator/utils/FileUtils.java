@@ -38,11 +38,8 @@ public class FileUtils {
 			SAXpf.setNamespaceAware(true);
 		}
 
-		//get a SAXParser object
 		SAXParser SAXparser= null;
-		//get the XMLReader
 		XMLReader XMLr = null;
-
 		try {
 			SAXparser = SAXpf.newSAXParser();
 			XMLr = SAXparser.getXMLReader();

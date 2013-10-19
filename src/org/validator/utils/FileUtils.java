@@ -32,23 +32,23 @@ public class FileUtils {
 	 * @return XMLReader object for future SAX parsing operations 
 	 */
 	public static XMLReader getXMLReader() {
-		SAXParserFactory SAXpf = SAXParserFactory.newInstance();
+		SAXParserFactory factory = SAXParserFactory.newInstance();
 		//enabling the namespaces processing
-		if(!SAXpf.isNamespaceAware()) {
-			SAXpf.setNamespaceAware(true);
+		if(!factory.isNamespaceAware()) {
+			factory.setNamespaceAware(true);
 		}
 
-		SAXParser SAXparser= null;
-		XMLReader XMLr = null;
+		SAXParser parser = null;
+		XMLReader reader = null;
 		try {
-			SAXparser = SAXpf.newSAXParser();
-			XMLr = SAXparser.getXMLReader();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
+			parser = factory.newSAXParser();
+			reader = parser.getXMLReader();
+		} catch (ParserConfigurationException | SAXException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return XMLr;
+
+		return reader;
 	}
 
 	/**
@@ -57,20 +57,20 @@ public class FileUtils {
 	 * @return InputSource
 	 */
 	public static InputSource getStream(File file) {
-		InputStream in = null;
-		InputSource is = null;
+		InputStream stream = null;
+		InputSource source = null;
 
 		try {
-			in = new FileInputStream(file);
-			is = new InputSource(new InputStreamReader(in));
-			is.setEncoding("UTF-8");
+			stream = new FileInputStream(file);
+			source = new InputSource(new InputStreamReader(stream));
+			source.setEncoding("UTF-8");
 		} catch (Exception e) {
 			System.out.println("EXCEPTION!");
 			e.printStackTrace();
-			is = null;
+			source = null;
 		}
 
-		return is;
+		return source;
 	}
 
 	public static boolean isZipFile(File zip) {
@@ -89,9 +89,14 @@ public class FileUtils {
 		return (n == 0x504B0304);
 	}
 
+	/**
+	 * Deletes a file (or folder, recursively)
+	 * @param file
+	 * @return
+	 */
 	private static boolean deleteAll(File file) {
-		File[] fileList = file.listFiles();
-		for (File f : fileList) {
+		File[] files = file.listFiles();
+		for (File f : files) {
 			if (f.isDirectory()) {
 				deleteAll(f);
 			}
@@ -111,7 +116,6 @@ public class FileUtils {
 	public static boolean setupWorkDir(String newFolder) {
 		File fDir = new File(newFolder); 
 		if (fDir.exists()) {
-			//System.out.println("Removing session directory");
 			deleteAll(fDir);
 		}
 		fDir.mkdir();

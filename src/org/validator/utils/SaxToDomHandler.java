@@ -22,7 +22,7 @@ class SaxToDomHandler extends DefaultHandler
 	private Vector<String>	listOfValues;
 	private String			matchingAttrib;
 	private String			returningAttrib;
-	private Vector<String>	foundTokensList;
+	private Vector<String>	foundTokenList;
 	private boolean			appendToDoc;
 
 	public SaxToDomHandler(
@@ -37,18 +37,18 @@ class SaxToDomHandler extends DefaultHandler
 		currentNode = doc.getFirstChild().getFirstChild();
 		this.pickTag = pickTag;
 		this.listOfValues = listOfValues;
-		foundTokensList = vLst;
+		foundTokenList = vLst;
 		this.matchingAttrib = matchingAttrib;
 		this.returningAttrib = returningAttrib;
 		this.appendToDoc = appendToDoc;
 	}
 
 	private void pickAttrib (Attributes attrs) {
-		String value;
 		if (attrs.getIndex(returningAttrib) > -1) {
-			value = attrs.getValue(returningAttrib);
-			if (!foundTokensList.contains(value)) {
-				foundTokensList.add(attrs.getValue(returningAttrib));
+			String value = attrs.getValue(returningAttrib);
+
+			if (!foundTokenList.contains(value)) {
+				foundTokenList.add(attrs.getValue(returningAttrib));
 			}
 		}
 	}
@@ -82,13 +82,11 @@ class SaxToDomHandler extends DefaultHandler
 				}
 
 				if (isReallyInteresting && 
-						(qName.equals("RefBusinessModel") ||
-								qName.equals("RefLogicalColumn") ||
-								qName.equals("RefLogicalTableSource") ||
-								qName.equals("RefPhysicalTable") ||
-								qName.equals("RefBusinessModel") ||
-								qName.equals("RefBusinessModel") ||
-								qName.equals("RefBusinessModel")
+						(qName.equals("RefBusinessModel") 
+								|| qName.equals("RefLogicalColumn") 
+								|| qName.equals("RefLogicalTableSource") 
+								|| qName.equals("RefPhysicalTable") 
+								|| qName.equals("RefBusinessModel")
 								)) {
 					pickAttrib(attrs);
 				}

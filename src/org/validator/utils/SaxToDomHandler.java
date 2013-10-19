@@ -11,6 +11,11 @@ import org.w3c.dom.Text;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+/***
+ * Parsing SAX events into a DOM tree
+ * @author danielgalassi
+ *
+ */
 class SaxToDomHandler extends DefaultHandler
 {
 	private Document		doc;

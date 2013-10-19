@@ -61,7 +61,6 @@ public class SaxToDom
 				doc.appendChild(repoTag);
 			}
 		}
-		// For the catch handlers below, use your usual logging facilities.
 		catch (DOMException e) {
 			e.printStackTrace();
 		}
@@ -90,7 +89,6 @@ public class SaxToDom
 		//stores the LogicalColumn list
 		Vector<String> logicalColumns = findElements(pickTag, logicalTables, "parentId", "id", true);
 
-		//stores the LTS id
 		pickTag = "LogicalTableSource";
 		//stores the LTS and PhysicalTable id list
 		Vector<String> logicalTableSources = findElements(pickTag, logicalTables, "id", "id", true);

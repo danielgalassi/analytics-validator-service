@@ -38,8 +38,6 @@ public class Processor implements Runnable {
 		catch (DOMException e) {
 			e.printStackTrace();
 		}
-
-		System.out.println(pickTag + " created.");
 	}
 
 	@Override

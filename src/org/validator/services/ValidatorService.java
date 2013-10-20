@@ -1,6 +1,7 @@
 package org.validator.services;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -34,17 +35,6 @@ public class ValidatorService extends HttpServlet {
 	private static final long	serialVersionUID = 1L;
 	private static final String	sTestDir = "/WEB-INF/Tests/";
 	private static final String	viewDir = "/WEB-INF/Views/";
-
-//	private void trimRPD(File rpd, String selectedSubjectArea, String workDir) {
-//		XMLReader		reader = FileUtils.getXMLReader();
-//		SaxToDom		xml = new SaxToDom(null, reader, rpd);
-//		Vector<String>	vFindSA = new Vector<String> ();
-
-//		vFindSA.add(selectedSubjectArea);
-
-//		Document doc = xml.makeDom("PresentationCatalog", vFindSA);
-//		XMLUtils.saveDocument2File(doc, workDir + "metadata.xml");
-//	}
 
 	/**
 	 * 
@@ -134,10 +124,16 @@ public class ValidatorService extends HttpServlet {
 			return;
 		}
 
-		//trimming repository file
-		//keeping only selected subject area objects
-//		trimRPD(rpd, selectedSubjectArea, workDir);
-		XMLProcessorEngine engine = new XMLProcessorEngine(workDir, rpd, subjectArea);
+		//trimming repository file, keeping only selected subject area objects
+		new XMLProcessorEngine(workDir, rpd, subjectArea);
+		//need to delete the other XML files!!!
+		File directory = new File(workDir);
+		File[] files = directory.listFiles(new FilenameFilter() {
+			public boolean accept(File directory, String fileName) {
+				return fileName.endsWith(".xml");
+			}});
+		for (File xml : files)
+			FileUtils.deleteAll(xml);
 		rpd.delete();
 
 		trimmedRPD = new File(workDir + "metadata.xml");
@@ -178,13 +174,11 @@ public class ValidatorService extends HttpServlet {
 
 				//generating the verbose page
 				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Details.html", xslParameters);
-				//System.out.println("Results HTML page generated");
 
 				//results Zip file is created
 				//FileUtils.Zip(resultsDir + "Details.html", resultsDir + "Results.zip");
-				//System.out.println("Detailed Results ZIP page generated");
 
-				//redirects to resutls page (summary level)
+				//redirects to results page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 
 						sessionId + File.separator + "results" + File.separator + "Summary.html");
 				rd.forward(request, response);

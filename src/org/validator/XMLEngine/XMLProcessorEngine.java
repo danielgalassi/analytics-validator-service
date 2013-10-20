@@ -36,7 +36,6 @@ public class XMLProcessorEngine {
 
 		long start = System.currentTimeMillis();
 		ExecutorService threadPool = Executors.newFixedThreadPool(3);
-		//File metadata = new File (workDir + "output_20130924.xml");
 
 		for (String tagName : events)
 			threadPool.submit(new Processor(tagName, metadata, workDir));
@@ -60,7 +59,6 @@ public class XMLProcessorEngine {
 		XMLUtils.saveDocument2File(doc, workDir + "metadata.xml");
 
 		long end = System.currentTimeMillis();
-		System.out.println("Game over");
 		System.out.println((middle - start) / 1000);
 		System.out.println((end - middle) / 1000);
 

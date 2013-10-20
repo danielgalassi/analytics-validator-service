@@ -93,7 +93,7 @@ public class FileUtils {
 	 * @param file
 	 * @return
 	 */
-	private static boolean deleteAll(File file) {
+	public static boolean deleteAll(File file) {
 		File[] files = file.listFiles();
 		for (File f : files) {
 			if (f.isDirectory()) {

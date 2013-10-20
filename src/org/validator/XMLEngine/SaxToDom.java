@@ -6,7 +6,6 @@ import java.util.Vector;
 
 import org.validator.utils.FileUtils;
 import org.validator.utils.XMLUtils;
-import org.validator.utils.XUDMLEventsHandler;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

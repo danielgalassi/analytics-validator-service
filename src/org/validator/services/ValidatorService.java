@@ -36,8 +36,11 @@ public class ValidatorService extends HttpServlet {
 	private static final String	sTestDir = "/WEB-INF/Tests/";
 	private static final String	viewDir = "/WEB-INF/Views/";
 
-	/**
+	/***
 	 * 
+	 * @param resultsDir
+	 * @param trimmedRPD
+	 * @param startTime
 	 */
 	private void executeTests(String resultsDir, File trimmedRPD, long startTime) {
 		String			testName = "";
@@ -91,21 +94,36 @@ public class ValidatorService extends HttpServlet {
 		XMLUtils.createIndexDocument(testList, elapsedTime, resultsDir, startTime);
 	}
 
+	/***
+	 * 
+	 * @param workDir
+	 */
+	private void cleanup(String workDir) {
+		File directory = new File(workDir);
+		File[] files = directory.listFiles(new FilenameFilter() {
+			public boolean accept(File directory, String fileName) {
+				return (fileName.endsWith(".xml") && !fileName.equals("metadata.xml"));
+			}});
+		for (File xml : files) {
+			xml.delete();
+		}
+	}
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		File			trimmedRPD = null;
-		String			resultsDir = null;
-		String			workDir = null;
-		long			startTime = System.currentTimeMillis();
+		File		trimmedRPD = null;
+		String		resultsDir = null;
+		String		workDir = null;
+		long		startTime = System.currentTimeMillis();
 
-		String			subjectArea = "None";
-		String			rpdFileName = "";
-		String			sessionId = "";
-		HttpSession		session = null;
-		File			rpd = null;
+		String		subjectArea = "None";
+		String		rpdFileName = "";
+		String		sessionId = "";
+		HttpSession	session = null;
+		File		rpd = null;
 
 		//recover the subject area selected in jsp 
 		if (request.getParameter("SubjectArea") != null)
@@ -126,14 +144,7 @@ public class ValidatorService extends HttpServlet {
 
 		//trimming repository file, keeping only selected subject area objects
 		new XMLProcessorEngine(workDir, rpd, subjectArea);
-		//need to delete the other XML files!!!
-		File directory = new File(workDir);
-		File[] files = directory.listFiles(new FilenameFilter() {
-			public boolean accept(File directory, String fileName) {
-				return fileName.endsWith(".xml");
-			}});
-		for (File xml : files)
-			FileUtils.deleteAll(xml);
+		cleanup(workDir);
 		rpd.delete();
 
 		trimmedRPD = new File(workDir + "metadata.xml");

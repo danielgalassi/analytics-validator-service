@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.validator.test.XSLTest;
 import org.validator.utils.FileUtils;
 import org.validator.utils.SaxToDom;
 import org.validator.utils.XMLUtils;
@@ -51,55 +52,38 @@ public class ValidatorService extends HttpServlet {
 	 * 
 	 */
 	private void executeTests(String resultsDir, File trimmedRPD, long startTime) {
-		String			testName = "";
-		String			resultFile = "";
-		InputStream		inputsXSLTest = null;
-		Document		docXSLTest = null;
-		NodeList		nlTestName = null;
-		Vector<String>	testList = null;
+		InputStream		script = null;
+		Vector<String>	testResults = null;
 		Vector<Double>	elapsedTime = null;
+		XSLTest			test = null;
 		long			startTimeMs;
 
-		Set <String> tests = getServletContext().getResourcePaths(sTestDir);
-		if (tests.size() > 0) {
-			testList	= new Vector<String> ();
+		Set <String> testSuite = getServletContext().getResourcePaths(sTestDir);
+		if (testSuite.size() > 0) {
+			testResults	= new Vector<String> ();
 			elapsedTime	= new Vector<Double> ();
 		}
 
-		for (String test : tests) {
+		for (String testCase : testSuite) {
 
 			//stopwatch starts
-			startTimeMs		= System.currentTimeMillis();
+			startTimeMs = System.currentTimeMillis();
 
-			inputsXSLTest	= getServletContext().getResourceAsStream(test);
-			docXSLTest		= XMLUtils.loadDocument(inputsXSLTest);
-
-			//setting up test name with a default value
-			testName		= "Test" + System.currentTimeMillis();
-			nlTestName		= docXSLTest.getElementsByTagName("TestName");
-			if (nlTestName.getLength() == 1) {
-				testName = nlTestName.item(0).getTextContent();
-			}
-
-			//setting up test name with retrieved tag content
-			resultFile = resultsDir + testName + ".xml";
-
-			try {
-				inputsXSLTest.reset();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			//adding results file name created by current test to index list
-			testList.add(resultFile);
+			//initializing the test using a resource stream
+			script = getServletContext().getResourceAsStream(testCase);
+			test = new XSLTest(script, resultsDir);
+			
+			//adding results filename created by current test to index list
+			testResults.add(test.getResultFile());
+			
 			//executing test, generating the results file
-			XMLUtils.xsl4Files(trimmedRPD, inputsXSLTest, resultFile, null);
+			test.execute(trimmedRPD);
 
 			//stopwatch ends
 			elapsedTime.add((double) (System.currentTimeMillis() - startTimeMs) / 1000);
 		}
 
-		XMLUtils.createIndexDocument(testList, elapsedTime, resultsDir, startTime);
+		XMLUtils.createIndexDocument(testResults, elapsedTime, resultsDir, startTime);
 	}
 
 	/**

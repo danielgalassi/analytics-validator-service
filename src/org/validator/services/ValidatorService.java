@@ -20,7 +20,6 @@ import org.validator.utils.FileUtils;
 import org.validator.utils.SaxToDom;
 import org.validator.utils.XMLUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 import org.xml.sax.XMLReader;
 
 

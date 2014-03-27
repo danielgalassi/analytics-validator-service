@@ -119,25 +119,30 @@ public class SaxToDom
 		}
 		//stores the DB list
 		pickTag = "Database";
-		Vector<String> databases = findElements(pickTag, tempDatabases, "id", "id", true);
+		//Vector<String> databases = findElements(pickTag, tempDatabases, "id", "id", true);
+		findElements(pickTag, tempDatabases, "id", "id", true);
 		tempDatabases2 = null;
 		tempDatabases = null;
 
 		pickTag = "BusinessModel";
 		//stores the BM id list
-		Vector<String> businessModels = findElements(pickTag, subjectAreas, "id", "id", true);
+		//Vector<String> businessModels = findElements(pickTag, subjectAreas, "id", "id", true);
+		findElements(pickTag, subjectAreas, "id", "id", true);
 
 		pickTag = "MeasureDefn";
 		//stores the Measure Definition list
-		Vector<String> measureDefs = findElements(pickTag, logicalColumns, "parentId", "id", true);
+		//Vector<String> measureDefs = findElements(pickTag, logicalColumns, "parentId", "id", true);
+		findElements(pickTag, logicalColumns, "parentId", "id", true);
 
 		pickTag = "PhysicalColumn";
 		//stores the PhysicalTable list
-		Vector<String> physicalColumns = findElements(pickTag, physicalTables, "parentId", "id", true);
+		//Vector<String> physicalColumns = findElements(pickTag, physicalTables, "parentId", "id", true);
+		findElements(pickTag, physicalTables, "parentId", "id", true);
 
 		pickTag = "PhysicalKey";
 		//stores the PK list
-		Vector<String> physicalKeys = findElements(pickTag, physicalTables, "parentId", "id", true);
+		//Vector<String> physicalKeys = findElements(pickTag, physicalTables, "parentId", "id", true);
+		findElements(pickTag, physicalTables, "parentId", "id", true);
 
 		return doc;
 	}

@@ -33,56 +33,56 @@ import org.xml.sax.XMLReader;
 public class ValidatorService extends HttpServlet {
 
 	private static final long	serialVersionUID = 1L;
-	private static final String	sTestDir = "/WEB-INF/Tests/";
-	private static final String	viewDir = "/WEB-INF/Views/";
+	private static final String	testCatalogLocation = "/WEB-INF/Tests/";
+	private static final String	viewCatalogLocation = "/WEB-INF/Views/";
 
-	private void trimRPD(File rpd, String selectedSubjectArea, String workDir) {
+	private void trimRPD(File rpd, String selectedSubjectArea, String workDirectory) {
 		XMLReader		XMLr = FileUtils.getXMLReader();
 		SaxToDom		xml = new SaxToDom(null, XMLr, rpd);
-		Vector<String>	vFindSA = new Vector<String> ();
+		Vector<String>	subjecAreas = new Vector<String> ();
 
-		vFindSA.add(selectedSubjectArea);
+		subjecAreas.add(selectedSubjectArea);
 
-		Document doc = xml.makeDom("PresentationCatalog", vFindSA);
-		XMLUtils.saveDocument2File(doc, workDir + "metadata.xml");
+		Document doc = xml.makeDom("PresentationCatalog", subjecAreas);
+		XMLUtils.saveDocument2File(doc, workDirectory + "metadata.xml");
 	}
 
 	/**
 	 * 
 	 */
-	private void executeTests(String resultsDir, File trimmedRPD, long startTime) {
+	private void validate(File trimmedRPD, String resultCatalogLocation, long startTime) {
 		InputStream		script = null;
-		Vector<String>	testResults = null;
+		Vector<String>	resultRefs = null;
 		Vector<Double>	elapsedTime = null;
 		XSLTest			test = null;
-		long			startTimeMs;
+		long			startTimeInMs;
 
-		Set <String> testSuite = getServletContext().getResourcePaths(sTestDir);
+		Set <String> testSuite = getServletContext().getResourcePaths(testCatalogLocation);
 		if (testSuite.size() > 0) {
-			testResults	= new Vector<String> ();
+			resultRefs	= new Vector<String> ();
 			elapsedTime	= new Vector<Double> ();
 		}
 
 		for (String testCase : testSuite) {
 
 			//stopwatch starts
-			startTimeMs = System.currentTimeMillis();
+			startTimeInMs = System.currentTimeMillis();
 
 			//initializing the test using a resource stream
 			script = getServletContext().getResourceAsStream(testCase);
-			test = new XSLTest(script, resultsDir);
+			test = new XSLTest(script, resultCatalogLocation);
 			
 			//adding results filename created by current test to index list
-			testResults.add(test.getResultFile());
+			resultRefs.add(test.getResultFile());
 			
 			//executing test, generating the results file
 			test.execute(trimmedRPD);
 
 			//stopwatch ends
-			elapsedTime.add((double) (System.currentTimeMillis() - startTimeMs) / 1000);
+			elapsedTime.add((double) (System.currentTimeMillis() - startTimeInMs) / 1000);
 		}
 
-		XMLUtils.createIndexDocument(testResults, elapsedTime, resultsDir, startTime);
+		XMLUtils.createIndexDocument(resultRefs, elapsedTime, resultCatalogLocation, startTime);
 	}
 
 	/**
@@ -91,28 +91,28 @@ public class ValidatorService extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		File			trimmedRPD = null;
-		String			resultsDir = null;
-		String			workDir = null;
+		String			resultCatalogLocation = null;
+		String			workDirectory = null;
 		long			startTime = System.currentTimeMillis();
 
 		String			selectedSubjectArea = "None";
-		String			rpdFileName = "";
+		String			repositoryFileName = "";
 		String			sessionId = "";
 		HttpSession		session = null;
-		File			rpd = null;
+		File			repository = null;
 
 		//recover the subject area selected in jsp 
 		if (request.getParameter("SubjectArea") != null)
 			selectedSubjectArea = request.getParameter("SubjectArea");
 
-		sessionId	= request.getRequestedSessionId();
-		session		= request.getSession();
-		workDir		= (String) session.getAttribute("workDir");
-		rpdFileName	= (String) session.getAttribute("metadataFile");
+		sessionId			= request.getRequestedSessionId();
+		session				= request.getSession();
+		workDirectory		= (String) session.getAttribute("workDir");
+		repositoryFileName	= (String) session.getAttribute("metadataFile");
 
-		rpd = new File(workDir + rpdFileName);
+		repository = new File(workDirectory + repositoryFileName);
 
-		if (!rpd.exists()) {
+		if (!repository.exists()) {
 			request.setAttribute("ErrorMessage", "Metadata file not found.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
@@ -120,47 +120,48 @@ public class ValidatorService extends HttpServlet {
 
 		//trimming repository file
 		//keeping only selected subject area objects
-		trimRPD(rpd, selectedSubjectArea, workDir);
-		rpd.delete();
+		trimRPD(repository, selectedSubjectArea, workDirectory);
+		repository.delete();
 
-		trimmedRPD = new File(workDir + "metadata.xml");
+		trimmedRPD = new File(workDirectory + "metadata.xml");
 
 		//validates the repository file can be used
 		if (trimmedRPD.exists() && trimmedRPD.canRead()) {
 			//setup a results directory if tests are found
-			if (getServletContext().getResourcePaths(sTestDir).size() > 0) {
-				resultsDir = workDir + "results" + File.separator;
-				FileUtils.setupWorkDir(resultsDir);
+			if (getServletContext().getResourcePaths(testCatalogLocation).size() > 0) {
+				resultCatalogLocation = workDirectory + "results" + File.separator;
+				FileUtils.setupWorkDir(resultCatalogLocation);
 
-				//it's time to run all tests.
-				executeTests(resultsDir, trimmedRPD, startTime);
+				//it's time to run all tests on this trimmed repository,
+				//save results in that location and time the whole operation
+				validate(trimmedRPD, resultCatalogLocation, startTime);
 
 				//the results page is created
 				InputStream				xsl2html = null;
 				String					resultsFormat = (String) session.getAttribute("resultsFormat");
-				HashMap<String, String>	xslParameters = new HashMap<String, String> ();
-				String 					xsl = viewDir + "Summary.xsl";
-				String					errorsOnly = "false";
-				File 					index = new File(resultsDir + "index.xml");
+				HashMap<String, String>	stylesheetParams = new HashMap<String, String> ();
+				String 					stylesheet = viewCatalogLocation + "Summary.xsl";
+				String					errorsOnlyMode = "false";
+				File 					index = new File(resultCatalogLocation + "index.xml");
 
 				//setting up stylesheet parameters
-				xslParameters.put("SelectedSubjectArea", selectedSubjectArea);
+				stylesheetParams.put("SelectedSubjectArea", selectedSubjectArea);
 				if (resultsFormat.equals("ShowErrorsOnly")) {
-					errorsOnly = "true";
+					errorsOnlyMode = "true";
 				}
-				xslParameters.put("ShowErrorsOnly", errorsOnly);
-				xslParameters.put("SessionFolder", sessionId);
+				stylesheetParams.put("ShowErrorsOnly", errorsOnlyMode);
+				stylesheetParams.put("SessionFolder", sessionId);
 
 				//generating summary page
-				xsl2html = getServletContext().getResourceAsStream(xsl);
-				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Summary.html", xslParameters);
+				xsl2html = getServletContext().getResourceAsStream(stylesheet);
+				XMLUtils.xsl4Files(index, xsl2html, resultCatalogLocation + "Summary.html", stylesheetParams);
 
 				//switching to verbose stylesheet
-				xsl = viewDir + "Verbose.xsl";
-				xsl2html = getServletContext().getResourceAsStream(xsl);
+				stylesheet = viewCatalogLocation + "Verbose.xsl";
+				xsl2html = getServletContext().getResourceAsStream(stylesheet);
 
 				//generating the verbose page
-				XMLUtils.xsl4Files(index, xsl2html, resultsDir + "Details.html", xslParameters);
+				XMLUtils.xsl4Files(index, xsl2html, resultCatalogLocation + "Details.html", stylesheetParams);
 				//System.out.println("Results HTML page generated");
 
 				//results Zip file is created

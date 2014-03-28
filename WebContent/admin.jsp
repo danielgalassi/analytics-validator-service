@@ -12,7 +12,7 @@
 </head>
 <body>
 
-	<jsp:useBean id="appFolder" class="org.validator.utils.FolderUtils"
+	<jsp:useBean id="appFolder" class="org.validator.utils.Folder"
 		scope="page">
 		<jsp:setProperty name="appFolder" property="folder"
 			value="<%=getServletContext()%>" />

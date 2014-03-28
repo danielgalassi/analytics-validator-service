@@ -22,6 +22,9 @@ public class SaxHandler extends DefaultHandler {
 		}
 	}
 
+	/**
+	 * This event finds the tag I need to evaluate
+	 */
 	public void startElement(String uri, String name, String qName, Attributes attrs) {
 		if (qName.equals(pickTag)) {
 			if (attrs.getIndex(pickAttrib) > -1) {

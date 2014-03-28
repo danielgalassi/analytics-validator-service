@@ -26,13 +26,9 @@ import org.w3c.dom.Element;
  */
 public class XMLUtils {
 
-	public static void publishException(Exception errMsg){
-		System.out.println("Error: " + errMsg.getClass() + "\tDescription: " + errMsg.getMessage());
-	}
-
 	/**
 	 * Create an empty DOM document
-	 * @return DOM document
+	 * @return a DOM document
 	 */
 	public static Document createDOMDocument() {
 		DocumentBuilder docBuilder = null;
@@ -48,10 +44,10 @@ public class XMLUtils {
 
 	/**
 	 * Creates a DOM document from a file
-	 * @param filename
-	 * @return DOM document
+	 * @param xmlFile a file in XML format
+	 * @return a DOM document
 	 */
-	public static Document loadDocument (File filename) {
+	public static Document loadDocument (File xmlFile) {
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = null;
 		Document xml = null;
@@ -59,13 +55,13 @@ public class XMLUtils {
 		try {
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		} catch(Exception e) {
-			publishException(e);
+			e.printStackTrace();
 		}
 
 		try {
-			xml = documentBuilder.parse(filename);
+			xml = documentBuilder.parse(xmlFile);
 		} catch(Exception e) {
-			publishException(e);
+			e.printStackTrace();
 		}
 
 		return xml;
@@ -84,13 +80,13 @@ public class XMLUtils {
 		try {
 			docBuilder = documentBuilderFactory.newDocumentBuilder();
 		} catch(Exception e) {
-			publishException(e);
+			e.printStackTrace();
 		}
 
 		try {
 			xml = docBuilder.parse(xmlFile);
 		} catch(Exception e) {
-			publishException(e);
+			e.printStackTrace();
 		}
 
 		return xml;
@@ -118,14 +114,14 @@ public class XMLUtils {
 	/**
 	 * Applies a stylesheet (file) to an XML document
 	 * @param xmlFile
-	 * @param xslFile
+	 * @param stylesheet
 	 * @param resFile
 	 */
 	public static void xsl4Files(String xmlFile,
-			String xslFile,
+			String stylesheet,
 			String resFile){
 		File	xml = new File(xmlFile);
-		File	xsl = new File(xslFile);
+		File	xsl = new File(stylesheet);
 		File	resultingXML = new File(resFile);
 		Source	xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		Source	xslSource = new javax.xml.transform.stream.StreamSource(xsl);
@@ -134,27 +130,27 @@ public class XMLUtils {
 		TransformerFactory transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 		try {
 			transformer = transformerFactory.newTransformer(xslSource);
-		} catch (TransformerConfigurationException tcE) {
-			System.out.println("3"); publishException(tcE);
+		} catch (TransformerConfigurationException configException) {
+			configException.printStackTrace();
 		}
 		try {
 			transformer.transform(xmlSource, result);
-		} catch (TransformerException tE) {
-			System.out.println("4"); publishException(tE);
+		} catch (TransformerException transfException) {
+			transfException.printStackTrace();
 		}
 	}
 
 	/**
 	 * Applies a stylesheet (InputStream) to an XML document
 	 * @param xmlFile
-	 * @param xsl
-	 * @param resFile
+	 * @param stylesheet
+	 * @param transformedResult
 	 */
 	public static void xsl4Files(String xmlFile,
-			InputStream xsl,
-			String resFile){
+			InputStream stylesheet,
+			String transformedResult){
 		File	xml = new File(xmlFile);
-		File	resultingXML = new File(resFile);
+		File	resultingXML = new File(transformedResult);
 		Source	xmlSource = null;
 		Source	xslSource = null;
 		Result	result = null;
@@ -162,45 +158,43 @@ public class XMLUtils {
 		TransformerFactory transformerFactory = null;
 
 		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
-		xslSource = new javax.xml.transform.stream.StreamSource(xsl);
+		xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);
 		result = new javax.xml.transform.stream.StreamResult(resultingXML);
 		transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 		try {
 			transformer = transformerFactory.newTransformer(xslSource);
 			transformer.setParameter("ShowErrorsOnly", "false");
-		} catch (TransformerConfigurationException tcE) {
-			System.out.println("3");
-			publishException(tcE);
+		} catch (TransformerConfigurationException configException) {
+			configException.printStackTrace();
 		}
 		try {
 			transformer.transform(xmlSource, result);
-		} catch (TransformerException tE) {
-			System.out.println("4");
-			publishException(tE);
+		} catch (TransformerException transfException) {
+			transfException.printStackTrace();
 		}
 	}
 
 	/**
-	 * Applies a Stylesheet (InputStream) to an XML document.
+	 * Applies a stylesheet (InputStream) to an XML document.
 	 * This method is configured to set XSL parameters
-	 * @param xmlFile
-	 * @param xsl
-	 * @param resFile
-	 * @param params XSL parameters
+	 * @param xml a file in XML format 
+	 * @param stylesheet transformation rules for XML files
+	 * @param transformedResult resulting file upon application of the stylesheet
+	 * @param params stylesheet parameters
 	 */
-	public static void xsl4Files(File xmlFile, 
-			InputStream xsl, 
-			String resFile, 
+	public static void xsl4Files(File xml, 
+			InputStream stylesheet, 
+			String transformedResult, 
 			HashMap<String, String> params) {
-		File				results = new File(resFile);
+		File				results = new File(transformedResult);
 		Source				xmlSource = null;
 		Source				xslSource = null;
 		Transformer			transformer = null;
 		TransformerFactory	transformerFactory = null;
 		Result				result = null;
 
-		xmlSource = new javax.xml.transform.stream.StreamSource(xmlFile);
-		xslSource = new javax.xml.transform.stream.StreamSource(xsl);
+		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
+		xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);
 		result = new javax.xml.transform.stream.StreamResult(results);
 		transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 
@@ -214,16 +208,14 @@ public class XMLUtils {
 				if (params.containsKey("SessionFolder"))
 					transformer.setParameter("SessionFolder", params.get("SessionFolder"));
 			}
-		} catch (TransformerConfigurationException tcE) {
-			System.out.println("3");
-			publishException(tcE);
+		} catch (TransformerConfigurationException configException) {
+			configException.printStackTrace();
 		}
 
 		try {
 			transformer.transform(xmlSource, result);
-		} catch (TransformerException tE) {
-			System.out.println("4");
-			publishException(tE);
+		} catch (TransformerException transfException) {
+			transfException.printStackTrace();
 		}
 	}
 

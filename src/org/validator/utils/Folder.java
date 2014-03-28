@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import javax.servlet.ServletContext;
 
-public class FolderUtils {
+public class Folder {
 
 	private File	appFolder = null;
 
@@ -15,6 +15,10 @@ public class FolderUtils {
 		appFolder = new File (context.getRealPath("/"));
 	}
 
+	/**
+	 * Filters out files and web server directories (*-INF) 
+	 * @return application directories
+	 */
 	public Vector<SimpleFile> getContents() {
 		Vector<SimpleFile> contents = new Vector<SimpleFile>();
 		SimpleFile file = null;
@@ -31,6 +35,7 @@ public class FolderUtils {
 		}
 
 		SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		//filters out files and web server directories
 		FileFilter filter = new FileFilter() {
 			@Override
 			public boolean accept(File file) {

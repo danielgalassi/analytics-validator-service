@@ -93,9 +93,9 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Stores a DOM document as a file
-	 * @param xml
-	 * @param filename
+	 * Persists a DOM document to a file
+	 * @param xml a DOM document
+	 * @param filename name of target file
 	 */
 	public static void saveDocument2File(Document xml, String filename) {
 		Source	source = new DOMSource(xml);
@@ -121,16 +121,19 @@ public class XMLUtils {
 		File	xml = new File(xmlFile);
 		File	xsl = new File(stylesheet);
 		File	resultingXML = new File(resultFile);
-		Source	xmlSource = new javax.xml.transform.stream.StreamSource(xml);
-		Source	xslSource = new javax.xml.transform.stream.StreamSource(xsl);
-		Result	result = new javax.xml.transform.stream.StreamResult(resultingXML);
-		Transformer transformer = null;
-		TransformerFactory transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
+
+		Source				xmlSource = new javax.xml.transform.stream.StreamSource(xml);
+		Source				xslSource = new javax.xml.transform.stream.StreamSource(xsl);
+		Result				result = new javax.xml.transform.stream.StreamResult(resultingXML);
+		Transformer			transformer = null;
+		TransformerFactory	transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
+
 		try {
 			transformer = transformerFactory.newTransformer(xslSource);
 		} catch (TransformerConfigurationException configException) {
 			configException.printStackTrace();
 		}
+
 		try {
 			transformer.transform(xmlSource, result);
 		} catch (TransformerException transfException) {

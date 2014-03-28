@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -36,6 +37,12 @@ public class ValidatorService extends HttpServlet {
 	private static final String	testCatalogLocation = "/WEB-INF/Tests/";
 	private static final String	viewCatalogLocation = "/WEB-INF/Views/";
 
+	/**
+	 * 
+	 * @param rpd
+	 * @param selectedSubjectArea
+	 * @param workDirectory
+	 */
 	private void trimRPD(File rpd, String selectedSubjectArea, String workDirectory) {
 		XMLReader		XMLr = FileUtils.getXMLReader();
 		SaxToDom		xml = new SaxToDom(null, XMLr, rpd);
@@ -48,19 +55,24 @@ public class ValidatorService extends HttpServlet {
 	}
 
 	/**
-	 * 
+	 * Executes all tests found
+	 * @param trimmedRPD
+	 * @param resultCatalogLocation
+	 * @param startTime
 	 */
 	private void validate(File trimmedRPD, String resultCatalogLocation, long startTime) {
 		InputStream		script = null;
-		Vector<String>	resultRefs = null;
-		Vector<Double>	elapsedTime = null;
+//		Vector<String>	resultRefs = null;
+//		Vector<Double>	elapsedTime = null;
 		XSLTest			test = null;
 		long			startTimeInMs;
+		Map <String, Double> resultRef = null;
 
 		Set <String> testSuite = getServletContext().getResourcePaths(testCatalogLocation);
 		if (testSuite.size() > 0) {
-			resultRefs	= new Vector<String> ();
-			elapsedTime	= new Vector<Double> ();
+			resultRef	= new HashMap<String, Double>();
+//			resultRefs	= new Vector<String> ();
+//			elapsedTime	= new Vector<Double> ();
 		}
 
 		for (String testCase : testSuite) {
@@ -73,16 +85,18 @@ public class ValidatorService extends HttpServlet {
 			test = new XSLTest(script, resultCatalogLocation);
 			
 			//adding results filename created by current test to index list
-			resultRefs.add(test.getResultFile());
+//			resultRefs.add(test.getResultFile());
 			
 			//executing test, generating the results file
 			test.execute(trimmedRPD);
 
-			//stopwatch ends
-			elapsedTime.add((double) (System.currentTimeMillis() - startTimeInMs) / 1000);
+			//stopwatch ends and test results filename is added to index list
+			resultRef.put(test.getResultFile(), (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
+			//elapsedTime.add((double) (System.currentTimeMillis() - startTimeInMs) / 1000);
 		}
 
-		XMLUtils.createIndexDocument(resultRefs, elapsedTime, resultCatalogLocation, startTime);
+		//XMLUtils.createIndexDocument(resultRefs, elapsedTime, resultCatalogLocation, startTime);
+		XMLUtils.createIndexDocument(resultRef, resultCatalogLocation, startTime);
 	}
 
 	/**

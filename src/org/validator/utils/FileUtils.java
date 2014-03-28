@@ -46,7 +46,6 @@ public class FileUtils {
 		} catch (ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
-
 		return reader;
 	}
 
@@ -68,7 +67,6 @@ public class FileUtils {
 			e.printStackTrace();
 			source = null;
 		}
-
 		return source;
 	}
 
@@ -130,8 +128,7 @@ public class FileUtils {
 	public static void Zip(String sSource, String sTarget) {
 		byte[] buffer = new byte[1024];
 
-		try{
-
+		try {
 			FileOutputStream fos = new FileOutputStream(sTarget);
 			ZipOutputStream zipOS = new ZipOutputStream(fos);
 			ZipEntry zipEntry = new ZipEntry("results.html");
@@ -148,8 +145,7 @@ public class FileUtils {
 
 			//remember close it
 			zipOS.close();
-
-		}catch(IOException ex){
+		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 	}

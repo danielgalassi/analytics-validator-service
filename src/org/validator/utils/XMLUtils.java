@@ -3,7 +3,7 @@ package org.validator.utils;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Vector;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -69,10 +69,10 @@ public class XMLUtils {
 
 	/**
 	 * Creates a DOM document from an InputStream
-	 * @param xmlFile
-	 * @return DOM document
+	 * @param xmlStream an InputStream to XML content
+	 * @return a DOM document
 	 */
-	public static Document loadDocument (InputStream xmlFile) {
+	public static Document loadDocument (InputStream xmlStream) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = null;
 		Document xml = null;
@@ -84,7 +84,7 @@ public class XMLUtils {
 		}
 
 		try {
-			xml = builder.parse(xmlFile);
+			xml = builder.parse(xmlStream);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -93,12 +93,12 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Store a DOM document as a file
-	 * @param doc
+	 * Stores a DOM document as a file
+	 * @param xml
 	 * @param filename
 	 */
-	public static void saveDocument2File(Document doc, String filename) {
-		Source	source = new DOMSource(doc);
+	public static void saveDocument2File(Document xml, String filename) {
+		Source	source = new DOMSource(xml);
 		File	targetFile = new File(filename);
 		Result	result = new StreamResult(targetFile);
 		try {
@@ -115,14 +115,12 @@ public class XMLUtils {
 	 * Applies a stylesheet (file) to an XML document
 	 * @param xmlFile
 	 * @param stylesheet
-	 * @param resFile
+	 * @param resultFile
 	 */
-	public static void xsl4Files(String xmlFile,
-			String stylesheet,
-			String resFile){
+	public static void xsl4Files(String xmlFile, String stylesheet, String resultFile){
 		File	xml = new File(xmlFile);
 		File	xsl = new File(stylesheet);
-		File	resultingXML = new File(resFile);
+		File	resultingXML = new File(resultFile);
 		Source	xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		Source	xslSource = new javax.xml.transform.stream.StreamSource(xsl);
 		Result	result = new javax.xml.transform.stream.StreamResult(resultingXML);
@@ -144,13 +142,13 @@ public class XMLUtils {
 	 * Applies a stylesheet (InputStream) to an XML document
 	 * @param xmlFile
 	 * @param stylesheet
-	 * @param transformedResult
+	 * @param resultFile
 	 */
 	public static void xsl4Files(String xmlFile,
 			InputStream stylesheet,
-			String transformedResult){
+			String resultFile){
 		File	xml = new File(xmlFile);
-		File	resultingXML = new File(transformedResult);
+		File	resultingXML = new File(resultFile);
 		Source	xmlSource = null;
 		Source	xslSource = null;
 		Result	result = null;
@@ -179,14 +177,14 @@ public class XMLUtils {
 	 * This method is configured to set XSL parameters
 	 * @param xml a file in XML format 
 	 * @param stylesheet transformation rules for XML files
-	 * @param transformedResult resulting file upon application of the stylesheet
+	 * @param resultFile resulting file upon application of the stylesheet
 	 * @param params stylesheet parameters
 	 */
 	public static void xsl4Files(File xml, 
 			InputStream stylesheet, 
-			String transformedResult, 
+			String resultFile, 
 			HashMap<String, String> params) {
-		File				results = new File(transformedResult);
+		File				results = new File(resultFile);
 		Source				xmlSource = null;
 		Source				xslSource = null;
 		Transformer			transformer = null;
@@ -221,28 +219,24 @@ public class XMLUtils {
 
 	/**
 	 * Generates a catalog file with a list of tests
-	 * @param testList
-	 * @param elapsedTime
-	 * @param targetDir
-	 * @param startTime
+	 * @param resultRefs a Map with a <result file, elapsed time> entry for each test executed
+	 * @param sessionDirectory the location where files for this session are stored
+	 * @param startTime start time of the validation process (from the selection of the subject area) 
 	 */
-	public static void createIndexDocument (
-			Vector<String> testList, 
-			Vector<Double> elapsedTime, 
-			String targetDir, 
-			long startTime) {
+	public static void createIndexDocument (Map <String, Double> resultRefs, String sessionDirectory, long startTime) {
 		Document index = createDOMDocument();
 		Element root = index.createElement("index");
-
-		for (int i=0; i<testList.size(); i++) {
-			Element node = index.createElement("results");
-			node.setTextContent(testList.get(i));
-			node.setAttribute("elapsedTime", elapsedTime.get(i).toString());
+		Element node = null;
+		
+		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
+			node = index.createElement("results");
+			node.setTextContent(ref.getKey());
+			node.setAttribute("elapsedTime", ref.getValue().toString());
 			root.appendChild(node);
 		}
 
 		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
 		index.appendChild(root);
-		saveDocument2File(index, targetDir + "index.xml");
+		saveDocument2File(index, sessionDirectory + "index.xml");
 	}
 }

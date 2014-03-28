@@ -5,12 +5,23 @@ import java.util.Vector;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * 
+ * @author danielgalassi@gmail.com
+ *
+ */
 public class SaxHandler extends DefaultHandler {
 
 	private String			pickTag;
 	private Vector<String>	listOfValues;
 	private String			pickAttrib;
 
+	/**
+	 * 
+	 * @param pickTag
+	 * @param pickAttrib
+	 * @param listOfValues
+	 */
 	public SaxHandler(String pickTag, String pickAttrib, Vector<String> listOfValues) {
 		this.pickTag = pickTag;
 		this.pickAttrib = pickAttrib;

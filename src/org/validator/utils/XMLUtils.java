@@ -147,24 +147,26 @@ public class XMLUtils {
 	public static void xsl4Files(String xmlFile,
 			InputStream stylesheet,
 			String resultFile){
-		File	xml = new File(xmlFile);
-		File	resultingXML = new File(resultFile);
-		Source	xmlSource = null;
-		Source	xslSource = null;
-		Result	result = null;
-		Transformer transformer = null;
-		TransformerFactory factory = null;
+		File				xml = new File(xmlFile);
+		File				resultingXML = new File(resultFile);
+		Source				xmlSource = null;
+		Source				xslSource = null;
+		Result				result = null;
+		Transformer			transformer = null;
+		TransformerFactory	factory = null;
 
-		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
-		xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);
-		result = new javax.xml.transform.stream.StreamResult(resultingXML);
-		factory = javax.xml.transform.TransformerFactory.newInstance();
+		xmlSource	= new javax.xml.transform.stream.StreamSource(xml);
+		xslSource	= new javax.xml.transform.stream.StreamSource(stylesheet);
+		result		= new javax.xml.transform.stream.StreamResult(resultingXML);
+		factory		= javax.xml.transform.TransformerFactory.newInstance();
+
 		try {
 			transformer = factory.newTransformer(xslSource);
 			transformer.setParameter("ShowErrorsOnly", "false");
 		} catch (TransformerConfigurationException configException) {
 			configException.printStackTrace();
 		}
+
 		try {
 			transformer.transform(xmlSource, result);
 		} catch (TransformerException transfException) {

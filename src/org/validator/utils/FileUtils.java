@@ -44,7 +44,6 @@ public class FileUtils {
 			parser = factory.newSAXParser();
 			reader = parser.getXMLReader();
 		} catch (ParserConfigurationException | SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -91,8 +90,8 @@ public class FileUtils {
 
 	/**
 	 * Deletes a file (or folder, recursively)
-	 * @param file
-	 * @return
+	 * @param file a file or directory in the filesystem
+	 * @return true if the file or directory was deleted
 	 */
 	private static boolean deleteAll(File file) {
 		File[] files = file.listFiles();
@@ -113,14 +112,14 @@ public class FileUtils {
 	 * @param newFolder
 	 * @return true if the directory exists
 	 */
-	public static boolean setupWorkDir(String newFolder) {
-		File fDir = new File(newFolder); 
-		if (fDir.exists()) {
-			deleteAll(fDir);
+	public static boolean setupWorkDirectory(String newFolder) {
+		File workDirectory = new File(newFolder); 
+		if (workDirectory.exists()) {
+			deleteAll(workDirectory);
 		}
-		fDir.mkdir();
-		System.out.println("New work directory: " + fDir.getAbsolutePath());
-		return fDir.exists();
+		workDirectory.mkdir();
+		System.out.println("New work directory: " + workDirectory.getAbsolutePath());
+		return workDirectory.exists();
 	}
 
 	/**

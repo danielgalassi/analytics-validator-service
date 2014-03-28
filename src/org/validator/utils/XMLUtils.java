@@ -48,18 +48,18 @@ public class XMLUtils {
 	 * @return a DOM document
 	 */
 	public static Document loadDocument (File xmlFile) {
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = null;
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = null;
 		Document xml = null;
 
 		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			builder = factory.newDocumentBuilder();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 
 		try {
-			xml = documentBuilder.parse(xmlFile);
+			xml = builder.parse(xmlFile);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -73,18 +73,18 @@ public class XMLUtils {
 	 * @return DOM document
 	 */
 	public static Document loadDocument (InputStream xmlFile) {
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = null;
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = null;
 		Document xml = null;
 
 		try {
-			docBuilder = documentBuilderFactory.newDocumentBuilder();
+			builder = factory.newDocumentBuilder();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 
 		try {
-			xml = docBuilder.parse(xmlFile);
+			xml = builder.parse(xmlFile);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -155,14 +155,14 @@ public class XMLUtils {
 		Source	xslSource = null;
 		Result	result = null;
 		Transformer transformer = null;
-		TransformerFactory transformerFactory = null;
+		TransformerFactory factory = null;
 
 		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);
 		result = new javax.xml.transform.stream.StreamResult(resultingXML);
-		transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
+		factory = javax.xml.transform.TransformerFactory.newInstance();
 		try {
-			transformer = transformerFactory.newTransformer(xslSource);
+			transformer = factory.newTransformer(xslSource);
 			transformer.setParameter("ShowErrorsOnly", "false");
 		} catch (TransformerConfigurationException configException) {
 			configException.printStackTrace();

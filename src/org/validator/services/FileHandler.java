@@ -63,7 +63,7 @@ public class FileHandler extends HttpServlet {
 		String sSessionId = request.getRequestedSessionId();
 		String uploadPath = getServletContext().getRealPath("")
 				+ File.separator + sSessionId + File.separator;
-		FileUtils.setupWorkDir(uploadPath);
+		FileUtils.setupWorkDirectory(uploadPath);
 
 		try {
 			//parses the request content to extract file data

@@ -101,7 +101,7 @@ public class ValidatorService extends HttpServlet {
 		HttpSession		session = null;
 		File			repository = null;
 
-		//recover the subject area selected in jsp 
+		//recover the subject area selected in jsp
 		if (request.getParameter("SubjectArea") != null)
 			selectedSubjectArea = request.getParameter("SubjectArea");
 
@@ -130,7 +130,7 @@ public class ValidatorService extends HttpServlet {
 			//setup a results directory if tests are found
 			if (getServletContext().getResourcePaths(testCatalogLocation).size() > 0) {
 				resultCatalogLocation = workDirectory + "results" + File.separator;
-				FileUtils.setupWorkDir(resultCatalogLocation);
+				FileUtils.setupWorkDirectory(resultCatalogLocation);
 
 				//it's time to run all tests on this trimmed repository,
 				//save results in that location and time the whole operation

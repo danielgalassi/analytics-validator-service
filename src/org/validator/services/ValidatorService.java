@@ -45,7 +45,7 @@ public class ValidatorService extends HttpServlet {
 		String			repositoryFilename = "";
 		String			sessionId = "";
 		HttpSession		session = null;
-		Repository		rpd = null;
+		Repository		repository = null;
 
 		//recover the subject area selected in jsp
 		if (request.getParameter("SubjectArea") != null)
@@ -56,9 +56,9 @@ public class ValidatorService extends HttpServlet {
 		workDirectory		= (String) session.getAttribute("workDir");
 		repositoryFilename	= (String) session.getAttribute("metadataFile");
 
-		rpd = new Repository(workDirectory, repositoryFilename);
+		repository = new Repository(workDirectory, repositoryFilename);
 
-		if (!rpd.available()) {
+		if (!repository.available()) {
 			request.setAttribute("ErrorMessage", "Metadata file not found.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
@@ -66,10 +66,10 @@ public class ValidatorService extends HttpServlet {
 
 		//trimming repository file
 		//keeping only selected subject area objects
-		rpd.trim(selectedSubjectArea);
+		repository.trim(selectedSubjectArea);
 
 		//validates the repository file can be used
-		if (rpd.available()) {
+		if (repository.available()) {
 			//setup a results directory if tests are found
 			boolean testsFound = (getServletContext().getResourcePaths(testCatalogLocation).size() > 0);
 			if (testsFound) {
@@ -77,14 +77,15 @@ public class ValidatorService extends HttpServlet {
 				resultCatalogLocation = workDirectory + "results" + File.separator;
 
 				//setting up the validator engine with a repository and tests
-				ValidatorEngine engine = new ValidatorEngine(rpd, startTime);
+				ValidatorEngine engine = new ValidatorEngine();
+				engine.setRepository(repository);
+				engine.setStartTime(startTime);
 				engine.setResultCatalogLocation(resultCatalogLocation);
 
 				//adding tests to the validator engine
 				Set <String> testSuite = getServletContext().getResourcePaths(testCatalogLocation);
 				for (String testCase : testSuite) {
-					InputStream script = getServletContext().getResourceAsStream(testCase);
-					engine.addTest(script);
+					engine.addTest(getServletContext().getResourceAsStream(testCase));
 				}
 
 				//it's time to run all tests on this trimmed repository,

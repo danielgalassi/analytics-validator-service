@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,12 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.validator.test.XSLTest;
-import org.validator.utils.FileUtils;
-import org.validator.utils.SaxToDom;
+import org.validator.engine.ValidatorEngine;
+import org.validator.metadata.Repository;
 import org.validator.utils.XMLUtils;
-import org.w3c.dom.Document;
-import org.xml.sax.XMLReader;
 
 
 /**
@@ -38,82 +33,19 @@ public class ValidatorService extends HttpServlet {
 	private static final String	viewCatalogLocation = "/WEB-INF/Views/";
 
 	/**
-	 * 
-	 * @param rpd
-	 * @param selectedSubjectArea
-	 * @param workDirectory
-	 */
-	private void trimRPD(File rpd, String selectedSubjectArea, String workDirectory) {
-		XMLReader		XMLr = FileUtils.getXMLReader();
-		SaxToDom		xml = new SaxToDom(null, XMLr, rpd);
-		Vector<String>	subjecAreas = new Vector<String> ();
-
-		subjecAreas.add(selectedSubjectArea);
-
-		Document doc = xml.makeDom("PresentationCatalog", subjecAreas);
-		XMLUtils.saveDocument2File(doc, workDirectory + "metadata.xml");
-	}
-
-	/**
-	 * Executes all tests found
-	 * @param trimmedRPD
-	 * @param resultCatalogLocation
-	 * @param startTime
-	 */
-	private void validate(File trimmedRPD, String resultCatalogLocation, long startTime) {
-		InputStream		script = null;
-//		Vector<String>	resultRefs = null;
-//		Vector<Double>	elapsedTime = null;
-		XSLTest			test = null;
-		long			startTimeInMs;
-		Map <String, Double> resultRef = null;
-
-		Set <String> testSuite = getServletContext().getResourcePaths(testCatalogLocation);
-		if (testSuite.size() > 0) {
-			resultRef	= new HashMap<String, Double>();
-//			resultRefs	= new Vector<String> ();
-//			elapsedTime	= new Vector<Double> ();
-		}
-
-		for (String testCase : testSuite) {
-
-			//stopwatch starts
-			startTimeInMs = System.currentTimeMillis();
-
-			//initializing the test using a resource stream
-			script = getServletContext().getResourceAsStream(testCase);
-			test = new XSLTest(script, resultCatalogLocation);
-			
-			//adding results filename created by current test to index list
-//			resultRefs.add(test.getResultFile());
-			
-			//executing test, generating the results file
-			test.execute(trimmedRPD);
-
-			//stopwatch ends and test results filename is added to index list
-			resultRef.put(test.getResultFile(), (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
-			//elapsedTime.add((double) (System.currentTimeMillis() - startTimeInMs) / 1000);
-		}
-
-		//XMLUtils.createIndexDocument(resultRefs, elapsedTime, resultCatalogLocation, startTime);
-		XMLUtils.createIndexDocument(resultRef, resultCatalogLocation, startTime);
-	}
-
-	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		File			trimmedRPD = null;
 		String			resultCatalogLocation = null;
 		String			workDirectory = null;
 		long			startTime = System.currentTimeMillis();
 
 		String			selectedSubjectArea = "None";
-		String			repositoryFileName = "";
+		String			repositoryFilename = "";
 		String			sessionId = "";
 		HttpSession		session = null;
-		File			repository = null;
+		Repository		rpd = null;
 
 		//recover the subject area selected in jsp
 		if (request.getParameter("SubjectArea") != null)
@@ -122,11 +54,11 @@ public class ValidatorService extends HttpServlet {
 		sessionId			= request.getRequestedSessionId();
 		session				= request.getSession();
 		workDirectory		= (String) session.getAttribute("workDir");
-		repositoryFileName	= (String) session.getAttribute("metadataFile");
+		repositoryFilename	= (String) session.getAttribute("metadataFile");
 
-		repository = new File(workDirectory + repositoryFileName);
+		rpd = new Repository(workDirectory, repositoryFilename);
 
-		if (!repository.exists()) {
+		if (!rpd.available()) {
 			request.setAttribute("ErrorMessage", "Metadata file not found.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
@@ -134,21 +66,31 @@ public class ValidatorService extends HttpServlet {
 
 		//trimming repository file
 		//keeping only selected subject area objects
-		trimRPD(repository, selectedSubjectArea, workDirectory);
-		repository.delete();
-
-		trimmedRPD = new File(workDirectory + "metadata.xml");
+		rpd.trim(selectedSubjectArea);
 
 		//validates the repository file can be used
-		if (trimmedRPD.exists() && trimmedRPD.canRead()) {
+		if (rpd.available()) {
 			//setup a results directory if tests are found
-			if (getServletContext().getResourcePaths(testCatalogLocation).size() > 0) {
+			boolean testsFound = (getServletContext().getResourcePaths(testCatalogLocation).size() > 0);
+			if (testsFound) {
+
 				resultCatalogLocation = workDirectory + "results" + File.separator;
-				FileUtils.setupWorkDirectory(resultCatalogLocation);
+
+				//setting up the validator engine with a repository and tests
+				ValidatorEngine engine = new ValidatorEngine(rpd, startTime);
+				engine.setResultCatalogLocation(resultCatalogLocation);
+
+				//adding tests to the validator engine
+				Set <String> testSuite = getServletContext().getResourcePaths(testCatalogLocation);
+				for (String testCase : testSuite) {
+					InputStream script = getServletContext().getResourceAsStream(testCase);
+					engine.addTest(script);
+				}
 
 				//it's time to run all tests on this trimmed repository,
 				//save results in that location and time the whole operation
-				validate(trimmedRPD, resultCatalogLocation, startTime);
+				if (engine.ready())
+					engine.run();
 
 				//the results page is created
 				InputStream				xsl2html = null;

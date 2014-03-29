@@ -97,7 +97,7 @@ public class XMLUtils {
 	 * @param xml a DOM document
 	 * @param filename name of target file
 	 */
-	public static void saveDocument2File(Document xml, String filename) {
+	public static void saveDOM2File(Document xml, String filename) {
 		Source	source = new DOMSource(xml);
 		File	targetFile = new File(filename);
 		Result	result = new StreamResult(targetFile);
@@ -199,6 +199,7 @@ public class XMLUtils {
 		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);
 		result = new javax.xml.transform.stream.StreamResult(results);
+
 		transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 
 		try {
@@ -232,7 +233,7 @@ public class XMLUtils {
 		Document index = createDOMDocument();
 		Element root = index.createElement("index");
 		Element node = null;
-		
+
 		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
 			node = index.createElement("results");
 			node.setTextContent(ref.getKey());
@@ -242,6 +243,6 @@ public class XMLUtils {
 
 		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
 		index.appendChild(root);
-		saveDocument2File(index, sessionDirectory + "index.xml");
+		saveDOM2File(index, sessionDirectory + "index.xml");
 	}
 }

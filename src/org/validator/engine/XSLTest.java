@@ -39,7 +39,7 @@ public class XSLTest implements Test {
 	@Override
 	public void execute(File rpd) {
 		reset();
-		XMLUtils.xsl4Files(rpd, script, resultFile, null);
+		XMLUtils.applyStylesheetWithParams(rpd, script, resultFile, null);
 	}
 
 	@Override

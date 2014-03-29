@@ -52,7 +52,7 @@ public class ValidatorEngine {
 
 			//executing test, generating the results file
 			test.reset();
-			XMLUtils.xsl4Files(repository.toFile(), test.toStream(), test.getResultFile(), null);
+			XMLUtils.applyStylesheetWithParams(repository.toFile(), test.toStream(), test.getResultFile(), null);
 
 			//stopwatch ends and test results filename is added to index list
 			resultRef.put(test.getResultFile(), (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
@@ -67,7 +67,6 @@ public class ValidatorEngine {
 			if (testSuite.size() > 0)
 				testSuiteReady = true;
 		return (repository != null && testSuiteReady);
-
 	}
 
 	public void setResultCatalogLocation(String resultCatalogLocation) {

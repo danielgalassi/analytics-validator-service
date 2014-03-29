@@ -25,10 +25,16 @@ public class ValidatorEngine {
 	String			resultCatalogLocation;
 	Repository		repository = null;
 	Vector<XSLTest>	testSuite = null;
-	long			serviceStartTime;
+	long			serviceStartTime = 0;
 
-	public ValidatorEngine(Repository repository, long serviceStartTime) {
+	public ValidatorEngine() {
+	}
+
+	public void setRepository(Repository repository) {
 		this.repository = repository;
+	}
+
+	public void setStartTime(long serviceStartTime) {
 		this.serviceStartTime = serviceStartTime;
 	}
 
@@ -51,26 +57,34 @@ public class ValidatorEngine {
 			//stopwatch starts
 			startTimeInMs = System.currentTimeMillis();
 
-			test.setResultFile(resultCatalogLocation);
-
 			//executing test, generating the results file
 			test.reset();
-			XMLUtils.applyStylesheetWithParams(repository.toFile(), test.toStream(), test.getResultFile(), null);
+			String resultFile = resultCatalogLocation + test.getName() + ".xml";
+			XMLUtils.applyStylesheetWithParams(repository.toFile(), test.toStream(), resultFile, null);
 
 			//stopwatch ends and test results filename is added to index list
-			resultRef.put(test.getResultFile(), (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
+			resultRef.put(resultFile, (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
 		}
 
-		//XMLUtils.createIndexDocument(resultRef, resultCatalogLocation, serviceStartTime);
 		createIndexDocument(resultRef);
 	}
 
 	public boolean ready() {
-		boolean testSuiteReady = false;
+		boolean istestSuiteSet	= false;
+		boolean isRepositorySet	= false;
+		boolean isResultDirSet	= false;
+
 		if (testSuite != null)
 			if (testSuite.size() > 0)
-				testSuiteReady = true;
-		return (repository != null && testSuiteReady);
+				istestSuiteSet = true;
+
+		if (repository != null)
+			isRepositorySet = true;
+
+		if (!resultCatalogLocation.equals(""))
+			isResultDirSet = true;
+
+		return (isRepositorySet && istestSuiteSet && isResultDirSet && serviceStartTime != 0);
 	}
 
 	public void setResultCatalogLocation(String resultCatalogLocation) {

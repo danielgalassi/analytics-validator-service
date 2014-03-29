@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.validator.metadata.Repository;
+import org.validator.metadata.XSLTest;
 import org.validator.utils.FileUtils;
 import org.validator.utils.XMLUtils;
 

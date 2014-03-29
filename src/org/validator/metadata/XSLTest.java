@@ -13,7 +13,6 @@ import org.w3c.dom.NodeList;
 /**
  * Orchestration of XSL stylesheets to be used as tests
  * @author danielgalassi@gmail.com
- * @see Test
  */
 public class XSLTest {
 

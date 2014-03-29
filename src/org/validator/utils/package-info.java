@@ -1,5 +1,5 @@
 /**
- * All POJO's invoked by Servlets and Java Server Pages
+ * All POJO's invoked by high level objects
  * @author danielgalassi@gmail.com
  * 
  */

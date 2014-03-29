@@ -108,7 +108,7 @@ public class FileUtils {
 	 * Creates a directory with the name of the argument.
 	 * If it already exists, it will be deleted and re-created.
 	 * @param newFolder
-	 * @return true if the directory exists
+	 * @return true if the directory has been created
 	 */
 	public static boolean setupWorkDirectory(String newFolder) {
 		File workDirectory = new File(newFolder); 
@@ -116,7 +116,7 @@ public class FileUtils {
 			deleteAll(workDirectory);
 		}
 		workDirectory.mkdir();
-		System.out.println("New work directory: " + workDirectory.getAbsolutePath());
+		//System.out.println("New work directory: " + workDirectory.getAbsolutePath());
 		return workDirectory.exists();
 	}
 

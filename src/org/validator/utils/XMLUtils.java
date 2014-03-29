@@ -3,7 +3,6 @@ package org.validator.utils;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +16,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * XML Utilities
@@ -97,7 +95,7 @@ public class XMLUtils {
 	 * @param xml a DOM document
 	 * @param filename name of target file
 	 */
-	public static void saveDOM2File(Document xml, String filename) {
+	public static void saveDocument (Document xml, String filename) {
 		Source	source = new DOMSource(xml);
 		File	targetFile = new File(filename);
 		Result	result = new StreamResult(targetFile);
@@ -112,15 +110,15 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Applies a stylesheet (file) to an XML document
-	 * @param xmlFile
-	 * @param stylesheet
-	 * @param resultFile
+	 * Applies a stylesheet to XML document
+	 * @param xmlLocation path to XML file
+	 * @param stylesheet path to stylesheet (XSL) file
+	 * @param resultLocation path where to save the resulting file
 	 */
-	public static void xsl4Files(String xmlFile, String stylesheet, String resultFile){
-		File	xml = new File(xmlFile);
+	public static void applyStylesheet(String xmlLocation, String stylesheet, String resultLocation){
+		File	xml = new File(xmlLocation);
 		File	xsl = new File(stylesheet);
-		File	resultingXML = new File(resultFile);
+		File	resultingXML = new File(resultLocation);
 
 		Source				xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		Source				xslSource = new javax.xml.transform.stream.StreamSource(xsl);
@@ -143,15 +141,13 @@ public class XMLUtils {
 
 	/**
 	 * Applies a stylesheet (InputStream) to an XML document
-	 * @param xmlFile
-	 * @param stylesheet
-	 * @param resultFile
+	 * @param xmlLocation path to XML file
+	 * @param stylesheet InputStream to the stylesheet (XSL)
+	 * @param resultLocation path where to save the resulting file
 	 */
-	public static void xsl4Files(String xmlFile,
-			InputStream stylesheet,
-			String resultFile){
-		File				xml = new File(xmlFile);
-		File				resultingXML = new File(resultFile);
+	public static void applyStylesheet(String xmlLocation, InputStream stylesheet, String resultLocation){
+		File				xml = new File(xmlLocation);
+		File				resultingXML = new File(resultLocation);
 		Source				xmlSource = null;
 		Source				xslSource = null;
 		Result				result = null;
@@ -181,15 +177,12 @@ public class XMLUtils {
 	 * Applies a stylesheet (InputStream) to an XML document.
 	 * This method is configured to set XSL parameters
 	 * @param xml a file in XML format 
-	 * @param stylesheet transformation rules for XML files
-	 * @param resultFile resulting file upon application of the stylesheet
+	 * @param stylesheet InputStream to the stylesheet (XSL)
+	 * @param resultLocation path where to save the resulting file
 	 * @param params stylesheet parameters
 	 */
-	public static void applyStylesheetWithParams(File xml, 
-			InputStream stylesheet, 
-			String resultFile, 
-			HashMap<String, String> params) {
-		File				results = new File(resultFile);
+	public static void applyStylesheetWithParams(File xml, InputStream stylesheet, String resultLocation, HashMap<String, String> params) {
+		File				results = new File(resultLocation);
 		Source				xmlSource = null;
 		Source				xslSource = null;
 		Transformer			transformer = null;
@@ -229,20 +222,20 @@ public class XMLUtils {
 	 * @param sessionDirectory the location where files for this session are stored
 	 * @param startTime start time of the validation process (from the selection of the subject area) 
 	 */
-	public static void createIndexDocument (Map <String, Double> resultRefs, String sessionDirectory, long startTime) {
-		Document index = createDOMDocument();
-		Element root = index.createElement("index");
-		Element node = null;
-
-		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
-			node = index.createElement("results");
-			node.setTextContent(ref.getKey());
-			node.setAttribute("elapsedTime", ref.getValue().toString());
-			root.appendChild(node);
-		}
-
-		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
-		index.appendChild(root);
-		saveDOM2File(index, sessionDirectory + "index.xml");
-	}
+	//	public static void createIndexDocument (Map <String, Double> resultRefs, String sessionDirectory, long startTime) {
+	//		Document index = createDOMDocument();
+	//		Element root = index.createElement("index");
+	//		Element node = null;
+	//
+	//		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
+	//			node = index.createElement("results");
+	//			node.setTextContent(ref.getKey());
+	//			node.setAttribute("elapsedTime", ref.getValue().toString());
+	//			root.appendChild(node);
+	//		}
+	//
+	//		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
+	//		index.appendChild(root);
+	//		saveDocument(index, sessionDirectory + "index.xml");
+	//	}
 }

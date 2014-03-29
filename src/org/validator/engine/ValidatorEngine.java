@@ -12,6 +12,8 @@ import org.validator.metadata.Repository;
 import org.validator.metadata.XSLTest;
 import org.validator.utils.FileUtils;
 import org.validator.utils.XMLUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 
 /**
@@ -59,7 +61,8 @@ public class ValidatorEngine {
 			resultRef.put(test.getResultFile(), (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
 		}
 
-		XMLUtils.createIndexDocument(resultRef, resultCatalogLocation, serviceStartTime);
+		//XMLUtils.createIndexDocument(resultRef, resultCatalogLocation, serviceStartTime);
+		createIndexDocument(resultRef);
 	}
 
 	public boolean ready() {
@@ -73,5 +76,26 @@ public class ValidatorEngine {
 	public void setResultCatalogLocation(String resultCatalogLocation) {
 		this.resultCatalogLocation = resultCatalogLocation;
 		FileUtils.setupWorkDirectory(resultCatalogLocation);		
+	}
+
+	/**
+	 * Generates a catalog file with a list of tests
+	 * @param resultRefs a Map with a <result file, elapsed time> entry for each test executed
+	 */
+	private void createIndexDocument (Map <String, Double> resultRefs) {
+		Document index = XMLUtils.createDOMDocument();
+		Element root = index.createElement("index");
+		Element node = null;
+
+		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
+			node = index.createElement("results");
+			node.setTextContent(ref.getKey());
+			node.setAttribute("elapsedTime", ref.getValue().toString());
+			root.appendChild(node);
+		}
+
+		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - serviceStartTime) / 1000));
+		index.appendChild(root);
+		XMLUtils.saveDocument(index, resultCatalogLocation + "index.xml");
 	}
 }

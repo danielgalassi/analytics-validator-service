@@ -1,5 +1,5 @@
 /**
- * Test cases implementing interface Test
+ * Classes to orchestrate the validation process (running tests)
  * @author danielgalassi@gmail.com
  *
  */

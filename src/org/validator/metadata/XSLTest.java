@@ -24,17 +24,9 @@ public class XSLTest implements Test {
 
 	public XSLTest(InputStream script) {
 		this.script = script;
-		System.out.println(script == null);
 		test = XMLUtils.loadDocument(script);
 		setName();
 	}
-
-//	public XSLTest(InputStream script, String resultsDir) {
-//		this.script = script;
-//		test = XMLUtils.loadDocument(script);
-//		setName();
-//		setResultFile(resultsDir);
-//	}
 
 	@Override
 	public void execute(File rpd) {

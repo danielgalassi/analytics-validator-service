@@ -185,7 +185,7 @@ public class XMLUtils {
 	 * @param resultFile resulting file upon application of the stylesheet
 	 * @param params stylesheet parameters
 	 */
-	public static void xsl4Files(File xml, 
+	public static void applyStylesheetWithParams(File xml, 
 			InputStream stylesheet, 
 			String resultFile, 
 			HashMap<String, String> params) {

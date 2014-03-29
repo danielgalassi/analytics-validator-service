@@ -110,14 +110,14 @@ public class ValidatorService extends HttpServlet {
 
 				//generating summary page
 				xsl2html = getServletContext().getResourceAsStream(stylesheet);
-				XMLUtils.xsl4Files(index, xsl2html, resultCatalogLocation + "Summary.html", stylesheetParams);
+				XMLUtils.applyStylesheetWithParams(index, xsl2html, resultCatalogLocation + "Summary.html", stylesheetParams);
 
 				//switching to verbose stylesheet
 				stylesheet = viewCatalogLocation + "Verbose.xsl";
 				xsl2html = getServletContext().getResourceAsStream(stylesheet);
 
 				//generating the verbose page
-				XMLUtils.xsl4Files(index, xsl2html, resultCatalogLocation + "Details.html", stylesheetParams);
+				XMLUtils.applyStylesheetWithParams(index, xsl2html, resultCatalogLocation + "Details.html", stylesheetParams);
 				//System.out.println("Results HTML page generated");
 
 				//results Zip file is created

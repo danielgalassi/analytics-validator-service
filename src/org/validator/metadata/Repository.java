@@ -13,6 +13,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.XMLReader;
 
 /**
+ * A Wrapper class to handle a few calls.
+ * Repository files were handled through File calls, making the code in the Validator Service and Engine too verbose and difficult to follow. 
  * @author danielgalassi@gmail.com
  *
  */
@@ -52,6 +54,10 @@ public class Repository {
 		repository = new File (directory + "metadata.xml");
 	}
 	
+	/**
+	 * 
+	 * @return a File reference to the repository file
+	 */
 	public File toFile() {
 		return repository;
 	}

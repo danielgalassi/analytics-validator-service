@@ -3,7 +3,6 @@
  */
 package org.validator.metadata;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,13 +11,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
+ * Orchestration of XSL stylesheets to be used as tests
  * @author danielgalassi@gmail.com
- *
+ * @see Test
  */
-public class XSLTest implements Test {
+public class XSLTest {
 
 	private String		name = "";
-	private String		resultFile = "";
 	private Document	test = null;
 	private InputStream	script = null;
 
@@ -28,13 +27,6 @@ public class XSLTest implements Test {
 		setName();
 	}
 
-	@Override
-	public void execute(File rpd) {
-		reset();
-		XMLUtils.applyStylesheetWithParams(rpd, script, resultFile, null);
-	}
-
-	@Override
 	public void reset() {
 		try {
 			script.reset();
@@ -43,7 +35,6 @@ public class XSLTest implements Test {
 		}
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
@@ -58,15 +49,6 @@ public class XSLTest implements Test {
 
 	private void setDefaultName() {
 		name = "Test" + System.currentTimeMillis();
-	}
-
-	public void setResultFile(String resultsDir) {
-		resultFile = resultsDir + name + ".xml";
-	}
-
-	@Override
-	public String getResultFile() {
-		return resultFile;
 	}
 
 	public InputStream toStream() {

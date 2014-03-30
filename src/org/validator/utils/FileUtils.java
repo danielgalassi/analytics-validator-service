@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -194,5 +195,37 @@ public class FileUtils {
 		}
 
 		return newFile;
+	}
+
+	/**
+	 * Generates a ZIP file with one or more entries
+	 * @param resultCatalogLocation source and target location in the filesystem
+	 * @param pages entries to compress
+	 * @param zipFilename name of the ZIP file
+	 */
+	public static void Zip(String resultCatalogLocation, Vector<String> pages, String zipFilename) {
+		byte[] buffer = new byte[1024];
+
+		try {
+			FileOutputStream fos = new FileOutputStream(resultCatalogLocation + zipFilename);
+			ZipOutputStream zipOS = new ZipOutputStream(fos);
+			for (String page : pages) {
+				ZipEntry zipEntry = new ZipEntry(page + ".html");
+				zipOS.putNextEntry(zipEntry);
+				FileInputStream in = new FileInputStream(resultCatalogLocation + page + ".html");
+
+				int len;
+				while ((len = in.read(buffer)) > 0) {
+					zipOS.write(buffer, 0, len);
+				}
+
+				in.close();
+				zipOS.closeEntry();
+			}
+			//remember close it
+			zipOS.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

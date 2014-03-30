@@ -2,7 +2,7 @@ package org.validator.utils;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -110,7 +110,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Applies a stylesheet to XML document
+	 * Applies a stylesheet to XML content
 	 * @param xmlLocation path to XML file
 	 * @param stylesheet path to stylesheet (XSL) file
 	 * @param resultLocation path where to save the resulting file
@@ -140,7 +140,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Applies a stylesheet (InputStream) to an XML document
+	 * Applies a stylesheet (InputStream) to XML content
 	 * @param xmlLocation path to XML file
 	 * @param stylesheet InputStream to the stylesheet (XSL)
 	 * @param resultLocation path where to save the resulting file
@@ -174,14 +174,14 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Applies a stylesheet (InputStream) to an XML document.
+	 * Applies a stylesheet (InputStream) to XML content
 	 * This method is configured to set XSL parameters
 	 * @param xml a file in XML format 
 	 * @param stylesheet InputStream to the stylesheet (XSL)
 	 * @param resultLocation path where to save the resulting file
 	 * @param params stylesheet parameters
 	 */
-	public static void applyStylesheetWithParams(File xml, InputStream stylesheet, String resultLocation, HashMap<String, String> params) {
+	public static void applyStylesheet(File xml, InputStream stylesheet, String resultLocation, Map<String, String> params) {
 		File				results = new File(resultLocation);
 		Source				xmlSource = null;
 		Source				xslSource = null;
@@ -197,13 +197,13 @@ public class XMLUtils {
 
 		try {
 			transformer = transformerFactory.newTransformer(xslSource);
+			//adding XSL parameters such as ShowErrorsOnly, SelectedSubjectArea and SessionFolder
 			if (params != null) {
-				if (params.containsKey("ShowErrorsOnly"))
-					transformer.setParameter("ShowErrorsOnly", params.get("ShowErrorsOnly"));
-				if (params.containsKey("SelectedSubjectArea"))
-					transformer.setParameter("SelectedSubjectArea", params.get("SelectedSubjectArea"));
-				if (params.containsKey("SessionFolder"))
-					transformer.setParameter("SessionFolder", params.get("SessionFolder"));
+				if (!params.isEmpty()) {
+					for (Map.Entry<String, String> param : params.entrySet()) {
+						transformer.setParameter(param.getKey(), param.getValue());
+					}
+				}
 			}
 		} catch (TransformerConfigurationException configException) {
 			configException.printStackTrace();
@@ -215,27 +215,4 @@ public class XMLUtils {
 			transfException.printStackTrace();
 		}
 	}
-
-	/**
-	 * Generates a catalog file with a list of tests
-	 * @param resultRefs a Map with a <result file, elapsed time> entry for each test executed
-	 * @param sessionDirectory the location where files for this session are stored
-	 * @param startTime start time of the validation process (from the selection of the subject area) 
-	 */
-	//	public static void createIndexDocument (Map <String, Double> resultRefs, String sessionDirectory, long startTime) {
-	//		Document index = createDOMDocument();
-	//		Element root = index.createElement("index");
-	//		Element node = null;
-	//
-	//		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
-	//			node = index.createElement("results");
-	//			node.setTextContent(ref.getKey());
-	//			node.setAttribute("elapsedTime", ref.getValue().toString());
-	//			root.appendChild(node);
-	//		}
-	//
-	//		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - startTime) / 1000));
-	//		index.appendChild(root);
-	//		saveDocument(index, sessionDirectory + "index.xml");
-	//	}
 }

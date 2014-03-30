@@ -103,9 +103,9 @@ public class XMLUtils {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
 		} catch (TransformerConfigurationException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		} catch (TransformerException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 

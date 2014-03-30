@@ -49,9 +49,9 @@ public class Repository {
 		subjectAreas.add(keepSubjectArea);
 
 		dom = xml.makeDom("PresentationCatalog",  subjectAreas);
-		XMLUtils.saveDocument(dom,  directory + "metadata.xml");
+		XMLUtils.saveDocument(dom,  directory + File.separator + "metadata.xml");
 		repository.delete();
-		repository = new File (directory + "metadata.xml");
+		repository = new File (directory + File.separator + "metadata.xml");
 	}
 	
 	/**

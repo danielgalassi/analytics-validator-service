@@ -93,8 +93,9 @@ public class ValidatorService extends HttpServlet {
 
 				//it's time to run all tests on this trimmed repository,
 				//save results in that location and time the whole operation
-				if (engine.ready())
+				if (engine.ready()) {
 					engine.run();
+				}
 
 				//the results page is created
 				InputStream			xsl2html = null;

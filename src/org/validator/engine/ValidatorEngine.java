@@ -60,7 +60,7 @@ public class ValidatorEngine {
 			//executing test, generating the results file
 			test.reset();
 			String resultFile = resultCatalogLocation + test.getName() + ".xml";
-			XMLUtils.applyStylesheetWithParams(repository.toFile(), test.toStream(), resultFile, null);
+			XMLUtils.applyStylesheet(repository.toFile(), test.toStream(), resultFile, null);
 
 			//stopwatch ends and test results filename is added to index list
 			resultRef.put(resultFile, (double) (System.currentTimeMillis() - startTimeInMs) / 1000);

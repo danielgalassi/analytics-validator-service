@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.validator.engine.ValidatorEngine;
 import org.validator.metadata.Repository;
+import org.validator.utils.FileUtils;
 import org.validator.utils.XMLUtils;
 
 
@@ -94,12 +97,12 @@ public class ValidatorService extends HttpServlet {
 					engine.run();
 
 				//the results page is created
-				InputStream				xsl2html = null;
-				String					resultsFormat = (String) session.getAttribute("resultsFormat");
-				HashMap<String, String>	stylesheetParams = new HashMap<String, String> ();
-				String 					stylesheet = viewCatalogLocation + "Summary.xsl";
-				String					errorsOnlyMode = "false";
-				File 					index = new File(resultCatalogLocation + "index.xml");
+				InputStream			xsl2html = null;
+				String				resultsFormat = (String) session.getAttribute("resultsFormat");
+				Map<String, String>	stylesheetParams = new HashMap<String, String> ();
+				String 				stylesheet = "";
+				String				errorsOnlyMode = "false";
+				File 				index = new File(resultCatalogLocation + "index.xml");
 
 				//setting up stylesheet parameters
 				stylesheetParams.put("SelectedSubjectArea", selectedSubjectArea);
@@ -109,21 +112,19 @@ public class ValidatorService extends HttpServlet {
 				stylesheetParams.put("ShowErrorsOnly", errorsOnlyMode);
 				stylesheetParams.put("SessionFolder", sessionId);
 
-				//generating summary page
-				xsl2html = getServletContext().getResourceAsStream(stylesheet);
-				XMLUtils.applyStylesheetWithParams(index, xsl2html, resultCatalogLocation + "Summary.html", stylesheetParams);
-
-				//switching to verbose stylesheet
-				stylesheet = viewCatalogLocation + "Verbose.xsl";
-				xsl2html = getServletContext().getResourceAsStream(stylesheet);
-
-				//generating the verbose page
-				XMLUtils.applyStylesheetWithParams(index, xsl2html, resultCatalogLocation + "Details.html", stylesheetParams);
-				//System.out.println("Results HTML page generated");
+				//creating both HTML pages (Summary and Details views)
+				Vector<String> pages = new Vector<String>();
+				pages.add("Summary");
+				pages.add("Details");
+				for (String page : pages) {
+					stylesheet = viewCatalogLocation + page + ".xsl";
+					xsl2html = getServletContext().getResourceAsStream(stylesheet);
+					XMLUtils.applyStylesheet(index, xsl2html, resultCatalogLocation + page + ".html", stylesheetParams);
+				}
 
 				//results Zip file is created
-				//FileUtils.Zip(resultsDir + "Details.html", resultsDir + "Results.zip");
-				//System.out.println("Detailed Results ZIP page generated");
+				//TODO: fix link to detailed view for downloaded zip
+				FileUtils.Zip(resultCatalogLocation,  pages, "Results.zip");
 
 				//redirects to resutls page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 

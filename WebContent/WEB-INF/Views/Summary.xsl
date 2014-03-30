@@ -52,7 +52,7 @@
 				<!-- Validator Service headings -->
 				<h1>OBIEE Validator Service Report</h1>
 				<br/>
-				<h2>Summary results <a href="{$SessionFolder}/results/Details.html" target="_blank">(see detailed results)</a></h2>
+				<h2>Summary results <a href="{$SessionFolder}/results/Details.html" target="_blank">(see detailed results)</a> <a href="{$SessionFolder}/results/Results.zip" target="_blank">(download results)</a></h2>
 				
 				<br/>
 				<h3>Subject Area: <xsl:value-of select="$SelectedSubjectArea"/> </h3>

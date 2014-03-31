@@ -92,7 +92,7 @@ public class FileUtils {
 	 * @param file a file or directory in the filesystem
 	 * @return true if the file or directory was deleted
 	 */
-	private static boolean deleteAll(File file) {
+	public static boolean deleteAll(File file) {
 		File[] files = file.listFiles();
 		for (File f : files) {
 			if (f.isDirectory()) {

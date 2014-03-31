@@ -54,4 +54,17 @@ public class Folder {
 
 		return contents;
 	}
+	
+	public boolean delete(File file) {
+		File[] fileList = file.listFiles();
+		for (File f : fileList) {
+			if (f.isDirectory()) {
+				delete(f);
+			}
+			else {
+				f.delete();
+			}
+		}
+		return file.delete();
+	}
 }

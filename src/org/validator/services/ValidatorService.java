@@ -32,7 +32,13 @@ import org.validator.utils.XMLUtils;
 public class ValidatorService extends HttpServlet {
 
 	private static final long	serialVersionUID = 1L;
+	/**
+	 * Application directory where all test cases reside.
+	 */
 	private static final String	testCatalogLocation = "/WEB-INF/Tests/";
+	/**
+	 * Application directory where UI-generating code for test results reside.
+	 */
 	private static final String	viewCatalogLocation = "/WEB-INF/Views/";
 
 	/**

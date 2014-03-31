@@ -20,7 +20,13 @@ import org.xml.sax.XMLReader;
  */
 public class Repository {
 
+	/**
+	 * The metadata file in XUDML (XML) format stored in the filesystem under the session directory. 
+	 */
 	private File repository = null;
+	/**
+	 * The session directory where the XUDML file is stored.
+	 */
 	private File directory = null;
 
 	/**

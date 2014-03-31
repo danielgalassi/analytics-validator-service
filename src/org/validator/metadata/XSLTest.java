@@ -16,8 +16,17 @@ import org.w3c.dom.NodeList;
  */
 public class XSLTest {
 
+	/**
+	 * Name of the test case.
+	 */
 	private String		name = "";
+	/**
+	 * A DOM <code>Document</code> of the Stylesheet (XSL).
+	 */
 	private Document	test = null;
+	/**
+	 * Another representation (<code>InputStream</code>) of the Stylesheet (XSL).
+	 */
 	private InputStream	script = null;
 
 	/**

@@ -8,7 +8,13 @@ package org.validator.utils;
  */
 public class SimpleFile {
 
+	/**
+	 * Name of the file in the filesystem.
+	 */
 	private String name;
+	/**
+	 * Date and time when the file was last modified.
+	 */
 	private String lastModified;
 
 	/**

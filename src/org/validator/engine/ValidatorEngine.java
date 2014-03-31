@@ -23,9 +23,21 @@ import org.w3c.dom.Element;
  */
 public class ValidatorEngine {
 
+	/**
+	 * The target directory where validation results will be saved.
+	 */
 	private String			resultCatalogLocation;
+	/**
+	 * An OBIEE metadata repository object.
+	 */
 	private Repository		repository = null;
+	/**
+	 * The test suite consists of one or more <code>XSLTest</code> instances.
+	 */
 	private Vector<XSLTest>	testSuite = null;
+	/**
+	 * The time in milliseconds when the <code>ValidatorService</code> was triggered.
+	 */
 	private long			serviceStartTime = 0;
 
 	/**

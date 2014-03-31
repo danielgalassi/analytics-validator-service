@@ -9,6 +9,9 @@ import javax.servlet.ServletContext;
 
 public class Folder {
 
+	/**
+	 * Application folder represented by objects of this class.
+	 */
 	private File appFolder = null;
 
 	/**
@@ -52,7 +55,8 @@ public class Folder {
 		folderContents = appFolder.listFiles(filter);
 
 		for (int i=0; i<folderContents.length; i++) {
-			file = new SimpleFile (folderContents[i].getName(), date.format(folderContents[i].lastModified()));
+			File content = folderContents[i];
+			file = new SimpleFile (content.getName(), date.format(content.lastModified()));
 			contents.add(file);
 		}
 

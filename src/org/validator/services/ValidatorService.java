@@ -136,8 +136,7 @@ public class ValidatorService extends HttpServlet {
 				FileUtils.Zip(resultCatalogLocation,  pages, "Results.zip");
 
 				//redirects to results page (summary level)
-				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 
-						sessionId + File.separator + "results" + File.separator + "Summary.html");
+				RequestDispatcher rd = request.getRequestDispatcher(File.separator + sessionId + File.separator + "results" + File.separator + "Summary.html");
 				rd.forward(request, response);
 			}
 		}

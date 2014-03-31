@@ -116,12 +116,14 @@ public class ValidatorService extends HttpServlet {
 				//creating both HTML pages (Summary and Details views)
 				Vector<String> pages = new Vector<String>();
 				pages.add("Summary");
+				pages.add("Compact");
 				pages.add("Details");
 				for (String page : pages) {
 					stylesheet = viewCatalogLocation + page + ".xsl";
 					xsl2html = getServletContext().getResourceAsStream(stylesheet);
 					XMLUtils.applyStylesheet(index, xsl2html, resultCatalogLocation + page + ".html", stylesheetParams);
 				}
+				pages.remove("Summary");
 
 				//results Zip file is created
 				//TODO: fix link to detailed view for downloaded zip

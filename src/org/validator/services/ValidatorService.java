@@ -46,15 +46,14 @@ public class ValidatorService extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String			resultCatalogLocation = null;
-		String			workDirectory = null;
-		long			startTime = System.currentTimeMillis();
-
-		String			selectedSubjectArea = "None";
-		String			repositoryFilename = "";
-		String			sessionId = "";
-		HttpSession		session = null;
-		Repository		repository = null;
+		String		resultCatalogLocation = null;
+		String		workDirectory = null;
+		long		startTime = System.currentTimeMillis();
+		String		selectedSubjectArea = "None";
+		String		repositoryFilename = "";
+		String		sessionId = "";
+		HttpSession	session = null;
+		Repository	repository = null;
 
 		//recover the subject area selected in jsp
 		if (request.getParameter("SubjectArea") != null)

@@ -128,12 +128,14 @@ public class ValidatorService extends HttpServlet {
 					xsl2html = getServletContext().getResourceAsStream(stylesheet);
 					XMLUtils.applyStylesheet(index, xsl2html, resultCatalogLocation + page + ".html", stylesheetParams);
 				}
+				//Summary contains links suitable to the Servlet Container environment
+				//No need to include it, it is replaced by Compact in the ZIP 
 				pages.remove("Summary");
 
 				//results Zip file is created
 				FileUtils.Zip(resultCatalogLocation,  pages, "Results.zip");
 
-				//redirects to resutls page (summary level)
+				//redirects to results page (summary level)
 				RequestDispatcher rd = request.getRequestDispatcher(File.separator + 
 						sessionId + File.separator + "results" + File.separator + "Summary.html");
 				rd.forward(request, response);

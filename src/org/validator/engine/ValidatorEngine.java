@@ -23,10 +23,10 @@ import org.w3c.dom.Element;
  */
 public class ValidatorEngine {
 
-	String			resultCatalogLocation;
-	Repository		repository = null;
-	Vector<XSLTest>	testSuite = null;
-	long			serviceStartTime = 0;
+	private String			resultCatalogLocation;
+	private Repository		repository = null;
+	private Vector<XSLTest>	testSuite = null;
+	private long			serviceStartTime = 0;
 
 	/**
 	 * Validator Engine constructor. Repository, Test Suite and Session Directory are set using independent methods.
@@ -36,8 +36,8 @@ public class ValidatorEngine {
 	}
 
 	/**
-	 * 
-	 * @param repository
+	 * Sets the repository file to assess in this validator engine
+	 * @param repository metadata repository object
 	 */
 	public void setRepository(Repository repository) {
 		this.repository = repository;
@@ -45,7 +45,7 @@ public class ValidatorEngine {
 
 	/**
 	 * Sets the stopwatch to measure the time taken to validate the repository.
-	 * @param serviceStartTime
+	 * @param serviceStartTime start time of the validator service in milliseconds
 	 */
 	public void setStartTime(long serviceStartTime) {
 		this.serviceStartTime = serviceStartTime;
@@ -53,7 +53,7 @@ public class ValidatorEngine {
 
 	/**
 	 * Appends one test script to internal test suite
-	 * @param testStream
+	 * @param testStream a test case
 	 */
 	public void addTest(InputStream testStream) {
 		if (testSuite == null) {

@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.XMLReader;
 
 /**
- * A Wrapper class to handle a few calls.
+ * A basic class to handle the metadata repository file
  * Repository files were handled through File calls, making the code in the Validator Service and Engine too verbose and difficult to follow. 
  * @author danielgalassi@gmail.com
  *
@@ -22,7 +22,12 @@ public class Repository {
 
 	private File repository = null;
 	private File directory = null;
-	
+
+	/**
+	 * Instantiates a metadata file
+	 * @param directory path to the repository metadata file
+	 * @param repository name and extension of the metadata repository file
+	 */
 	public Repository(String directory, String repository) {
 		this.directory  = new File(directory);
 		this.repository = new File(directory + repository);
@@ -37,7 +42,7 @@ public class Repository {
 	}
 
 	/**
-	 * 
+	 * Creates a smaller repository file discarding all objects not used for the selected Subject Area
 	 * @param keepSubjectArea the name of the subject area to evaluate 
 	 */
 	public void trim(String keepSubjectArea) {
@@ -55,7 +60,7 @@ public class Repository {
 	}
 	
 	/**
-	 * 
+	 * Returns a file representing the repository file
 	 * @return a File reference to the repository file
 	 */
 	public File toFile() {

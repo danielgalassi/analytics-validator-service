@@ -20,12 +20,19 @@ public class XSLTest {
 	private Document	test = null;
 	private InputStream	script = null;
 
+	/**
+	 * Instantiates a test case
+	 * @param script InputStream pointing to the stylesheet
+	 */
 	public XSLTest(InputStream script) {
 		this.script = script;
 		test = XMLUtils.loadDocument(script);
 		setName();
 	}
 
+	/**
+	 * Resets the script
+	 */
 	public void reset() {
 		try {
 			script.reset();
@@ -34,10 +41,17 @@ public class XSLTest {
 		}
 	}
 
+	/**
+	 * Getter method for the name of the test
+	 * @return name of the test
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Setter method for the name of the test
+	 */
 	private void setName() {
 		setDefaultName();
 		NodeList nameList = test.getElementsByTagName("TestName");
@@ -46,10 +60,17 @@ public class XSLTest {
 		}
 	}
 
+	/**
+	 * Setter method to initialise the name of the test case
+	 */
 	private void setDefaultName() {
 		name = "Test" + System.currentTimeMillis();
 	}
 
+	/**
+	 * Returns an InputStream pointing to the stylesheet
+	 * @return script for the test case
+	 */
 	public InputStream toStream() {
 		return script;
 	}

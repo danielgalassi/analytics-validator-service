@@ -123,7 +123,7 @@ public class ValidatorEngine {
 
 	/**
 	 * Generates a catalog file with a list of tests.
-	 * @param resultRefs a Map with a result file, elapsed time> entry for each test executed
+	 * @param resultRefs a Map with a (result file, elapsed time) entry for each test executed
 	 */
 	private void createIndexDocument (Map <String, Double> resultRefs) {
 		Document index = XMLUtils.createDOMDocument();

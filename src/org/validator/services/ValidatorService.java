@@ -28,7 +28,7 @@ import org.validator.utils.XMLUtils;
  * @author danielgalassi@gmail.com
  *
  */
-@WebServlet(description = "This controller provides test runner services.", urlPatterns = { "/ValidatorService" })
+@WebServlet(description = "This controller orchestrates repository metadata validation services.", urlPatterns = { "/ValidatorService" })
 public class ValidatorService extends HttpServlet {
 
 	private static final long	serialVersionUID = 1L;
@@ -126,7 +126,6 @@ public class ValidatorService extends HttpServlet {
 				pages.remove("Summary");
 
 				//results Zip file is created
-				//TODO: fix link to detailed view for downloaded zip
 				FileUtils.Zip(resultCatalogLocation,  pages, "Results.zip");
 
 				//redirects to resutls page (summary level)

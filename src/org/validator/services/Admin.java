@@ -13,6 +13,7 @@ import org.validator.utils.FileUtils;
 
 /**
  * Servlet implementation class Admin
+ * @author danielgalassi@gmail.com
  */
 @WebServlet("/Admin")
 public class Admin extends HttpServlet {

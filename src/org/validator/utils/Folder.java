@@ -11,6 +11,10 @@ public class Folder {
 
 	private File appFolder = null;
 
+	/**
+	 * Sets the path to a directory using a ServletContext
+	 * @param context
+	 */
 	public void setFolder (ServletContext context) {
 		appFolder = new File (context.getRealPath("/"));
 	}
@@ -46,25 +50,12 @@ public class Folder {
 		};
 
 		folderContents = appFolder.listFiles(filter);
-		
+
 		for (int i=0; i<folderContents.length; i++) {
 			file = new SimpleFile (folderContents[i].getName(), date.format(folderContents[i].lastModified()));
 			contents.add(file);
 		}
 
 		return contents;
-	}
-	
-	public boolean delete(File file) {
-		File[] fileList = file.listFiles();
-		for (File f : fileList) {
-			if (f.isDirectory()) {
-				delete(f);
-			}
-			else {
-				f.delete();
-			}
-		}
-		return file.delete();
 	}
 }

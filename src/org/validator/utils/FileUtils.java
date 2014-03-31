@@ -71,6 +71,11 @@ public class FileUtils {
 		return source;
 	}
 
+	/**
+	 * Validates an argument is a ZIP file
+	 * @param zip potential ZIP file to assess
+	 * @return true if the file is in ZIP format
+	 */
 	public static boolean isZipFile(File zip) {
 		RandomAccessFile raf = null;
 		long n = 0;

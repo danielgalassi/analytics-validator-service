@@ -17,6 +17,7 @@ import org.w3c.dom.Element;
 
 
 /**
+ * The validator engine orchestrates and controls the execution of the test suite.
  * @author danielgalassi@gmail.com
  *
  */
@@ -27,17 +28,33 @@ public class ValidatorEngine {
 	Vector<XSLTest>	testSuite = null;
 	long			serviceStartTime = 0;
 
+	/**
+	 * Validator Engine constructor. Repository, Test Suite and Session Directory are set using independent methods.
+	 */
 	public ValidatorEngine() {
+		System.out.println("Initialising Validator Engine");
 	}
 
+	/**
+	 * 
+	 * @param repository
+	 */
 	public void setRepository(Repository repository) {
 		this.repository = repository;
 	}
 
+	/**
+	 * Sets the stopwatch to measure the time taken to validate the repository.
+	 * @param serviceStartTime
+	 */
 	public void setStartTime(long serviceStartTime) {
 		this.serviceStartTime = serviceStartTime;
 	}
 
+	/**
+	 * Appends one test script to internal test suite
+	 * @param testStream
+	 */
 	public void addTest(InputStream testStream) {
 		if (testSuite == null) {
 			testSuite = new Vector<XSLTest>();
@@ -45,6 +62,10 @@ public class ValidatorEngine {
 		testSuite.add(new XSLTest(testStream));
 	}
 
+	/**
+	 * Executes the validation of the repository metadata using all test scripts loaded.
+	 * Upon completion, an index document is created. Each entry in this document points to a result file.
+	 */
 	public void run() {
 		Map <String, Double>	resultRef = null;
 		long					startTimeInMs;
@@ -69,6 +90,10 @@ public class ValidatorEngine {
 		createIndexDocument(resultRef);
 	}
 
+	/**
+	 * Validates the repository and test suite have been setup and are available.
+	 * @return true if all dependencies are met
+	 */
 	public boolean ready() {
 		boolean istestSuiteSet	= false;
 		boolean isRepositorySet	= false;
@@ -87,14 +112,18 @@ public class ValidatorEngine {
 		return (isRepositorySet && istestSuiteSet && isResultDirSet && serviceStartTime != 0);
 	}
 
+	/**
+	 * Sets the internal directory all results will be saved to.
+	 * @param resultCatalogLocation path to the target directory
+	 */
 	public void setResultCatalogLocation(String resultCatalogLocation) {
 		this.resultCatalogLocation = resultCatalogLocation;
 		FileUtils.setupWorkDirectory(resultCatalogLocation);		
 	}
 
 	/**
-	 * Generates a catalog file with a list of tests
-	 * @param resultRefs a Map with a <result file, elapsed time> entry for each test executed
+	 * Generates a catalog file with a list of tests.
+	 * @param resultRefs a Map with a result file, elapsed time> entry for each test executed
 	 */
 	private void createIndexDocument (Map <String, Double> resultRefs) {
 		Document index = XMLUtils.createDOMDocument();

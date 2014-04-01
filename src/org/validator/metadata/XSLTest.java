@@ -14,16 +14,12 @@ import org.w3c.dom.NodeList;
  * Orchestration of XSL stylesheets to be used as tests
  * @author danielgalassi@gmail.com
  */
-public class XSLTest {
+public class XSLTest implements Test{
 
 	/**
 	 * Name of the test case.
 	 */
 	private String		name = "";
-	/**
-	 * A DOM <code>Document</code> of the Stylesheet (XSL).
-	 */
-	private Document	test = null;
 	/**
 	 * Another representation (<code>InputStream</code>) of the Stylesheet (XSL).
 	 */
@@ -35,7 +31,6 @@ public class XSLTest {
 	 */
 	public XSLTest(InputStream script) {
 		this.script = script;
-		test = XMLUtils.loadDocument(script);
 		setName();
 	}
 
@@ -63,10 +58,12 @@ public class XSLTest {
 	 */
 	private void setName() {
 		setDefaultName();
+		Document test = XMLUtils.loadDocument(script);
 		NodeList nameList = test.getElementsByTagName("TestName");
 		if (nameList.getLength() == 1) {
 			name = nameList.item(0).getTextContent();
 		}
+		reset();
 	}
 
 	/**
@@ -82,5 +79,12 @@ public class XSLTest {
 	 */
 	public InputStream toStream() {
 		return script;
+	}
+
+	/**
+	 * Validates the repository
+	 */
+	public void assertMetadata(Repository repository, String result) {
+		XMLUtils.applyStylesheet(repository.toFile(), script, result, null);
 	}
 }

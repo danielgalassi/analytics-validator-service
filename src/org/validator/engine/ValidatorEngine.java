@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.validator.metadata.Repository;
+import org.validator.metadata.Test;
 import org.validator.metadata.XSLTest;
 import org.validator.utils.FileUtils;
 import org.validator.utils.XMLUtils;
@@ -32,9 +33,9 @@ public class ValidatorEngine {
 	 */
 	private Repository		repository = null;
 	/**
-	 * The test suite consists of one or more <code>XSLTest</code> instances.
+	 * The test suite consists of one or more <code>Test</code> implementations.
 	 */
-	private Vector<XSLTest>	testSuite = null;
+	private Vector<Test>	testSuite = new Vector<Test>();
 	/**
 	 * The time in milliseconds when the <code>ValidatorService</code> was triggered.
 	 */
@@ -67,11 +68,15 @@ public class ValidatorEngine {
 	 * Appends one test script to internal test suite
 	 * @param testStream a test case
 	 */
-	public void addTest(InputStream testStream) {
-		if (testSuite == null) {
-			testSuite = new Vector<XSLTest>();
-		}
+	public void addXSLTest(InputStream testStream) {
 		testSuite.add(new XSLTest(testStream));
+	}
+	
+	/**
+	 * Appends a test script implemented in a Java class
+	 */
+	public void addJavaTest() {
+		//TODO: implement method to invoke Java classes containing assertions
 	}
 
 	/**
@@ -82,21 +87,23 @@ public class ValidatorEngine {
 		Map <String, Double>	resultRef = null;
 		long					startTimeInMs;
 
-		if (testSuite.size() > 0) {
-			resultRef	= new HashMap<String, Double>();
+		if (!ready()) {
+			return;
 		}
 
-		for (XSLTest test : testSuite) {
+		resultRef	= new HashMap<String, Double>();
+
+		for (Test test : testSuite) {
 			//stopwatch starts
 			startTimeInMs = System.currentTimeMillis();
 
 			//executing test, generating the results file
-			test.reset();
-			String resultFile = resultCatalogLocation + test.getName() + ".xml";
-			XMLUtils.applyStylesheet(repository.toFile(), test.toStream(), resultFile, null);
+			String result = resultCatalogLocation + test.getName() + ".xml";
+			test.assertMetadata(repository, result);
+			//XMLUtils.applyStylesheet(repository.toFile(), test.toStream(), result, null);
 
 			//stopwatch ends and test results filename is added to index list
-			resultRef.put(resultFile, (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
+			resultRef.put(result, (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
 		}
 
 		createIndexDocument(resultRef);
@@ -107,21 +114,11 @@ public class ValidatorEngine {
 	 * @return true if all dependencies are met
 	 */
 	public boolean ready() {
-		boolean istestSuiteSet	= false;
-		boolean isRepositorySet	= false;
-		boolean isResultDirSet	= false;
+		boolean isTestSuiteSet	= (testSuite.size() > 0);
+		boolean isRepositorySet = (repository != null);
+		boolean isResultDirSet	= (!resultCatalogLocation.equals(""));
 
-		if (testSuite != null)
-			if (testSuite.size() > 0)
-				istestSuiteSet = true;
-
-		if (repository != null)
-			isRepositorySet = true;
-
-		if (!resultCatalogLocation.equals(""))
-			isResultDirSet = true;
-
-		return (isRepositorySet && istestSuiteSet && isResultDirSet && serviceStartTime != 0);
+		return (isRepositorySet && isTestSuiteSet && isResultDirSet && serviceStartTime != 0);
 	}
 
 	/**

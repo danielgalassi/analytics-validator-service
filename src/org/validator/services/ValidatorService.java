@@ -104,14 +104,12 @@ public class ValidatorService extends HttpServlet {
 			//adding tests to the validator engine
 			Set <String> testSuite = getServletContext().getResourcePaths(testCatalogLocation);
 			for (String testCase : testSuite) {
-				engine.addTest(getServletContext().getResourceAsStream(testCase));
+				engine.addXSLTest(getServletContext().getResourceAsStream(testCase));
 			}
 
 			//it's time to run all tests on this trimmed repository,
 			//save results in that location and time the whole operation
-			if (engine.ready()) {
-				engine.run();
-			}
+			engine.run();
 
 			//the results page is created
 			InputStream			xsl2html = null;

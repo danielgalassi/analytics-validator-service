@@ -7,21 +7,21 @@
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<style type="text/css">
-		h1 {font-family: Helvetica, sans-serif; font-weight: bold; font-size: 24pt; color: #676767;}
-		h2 {font-family: Helvetica, sans-serif; font-weight: bold; font-size: 20pt; color: #777777;}
-		h3 {font-family: Helvetica, sans-serif; font-size: 16pt; color: #777777;}
-		h4 {font-family: Helvetica, sans-serif; font-size: 12pt; color: #888888;}
-		li {font-family: Helvetica, sans-serif; font-size: 10pt; color: #474747;}
-		a  {font-family: Helvetica, sans-serif; font-size: 10pt; color: #444444;}
-		*  {font-family: Helvetica, sans-serif; font-size:  8pt; color: #333333;}
-		p  {font-family: Helvetica, sans-serif; font-size:10pt; color: rgb(128, 128, 128);}
+		h1 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-weight: bold; font-size: 24pt; color: #676767;}
+		h2 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-weight: bold; font-size: 20pt; color: #777777;}
+		h3 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-size: 16pt; color: #777777;}
+		h4 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-size: 12pt; color: #888888;}
+		li {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; color: #474747;}
+		a  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; color: #444444;}
+		*  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size:  8pt; color: #333333;}
+		p  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size:10pt; color: rgb(128, 128, 128);}
 		tr {height:30; font-size: 8.5pt;}
 		tr:hover {background: rgb(248,248,248);}
 		table {
 			border-spacing: 0 0;
 			margin: 1px;
 			border-right: 1px solid #DEDEDE;
-			font-family: Helvetica, sans-serif; font-size: 8.5pt;}
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 8.5pt;}
 		th	{
 			font-family: Helvetica, sans-serif;
 			font-size: 9pt;
@@ -86,13 +86,13 @@
 									<td height="28px" style="text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object)"/>
 									</td>
-									<td height="28px" style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
+									<td height="28px" style="background: #FFF1BF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[not(@result)])"/>
 									</td>
-									<td height="28px" style="background: #FFF1BF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
+									<td height="28px" style="background: #FFF1BF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[@result='Fail'])"/>
 									</td>
-									<td height="28px" style="background: #F8FCCF; font-family: Helvetica, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:60px;">
+									<td height="28px" style="background: #F8FCCF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:60px;">
 										<xsl:value-of select="count(.//Results/Object[@result='N/A'])"/>
 									</td>
 									<td height="28px" style="text-align:right; padding-right:48px;">
@@ -111,7 +111,7 @@
 				<hr style="height: 1px; border: 0; background-color: #AAAAAA; width: 70%;"/>
 				<div style="padding-top: 20px;">
 					<p style="color: rgb(128, 128, 128); float: left;">Mozilla Firefox or Google Chrome are strongly recommended for best results.</p>
-					<p style="color: rgb(128, 128, 128); float: right;">Generated using <a href="http://code.google.com/p/analytics-validator-service/" style="font-family: Helvetica, sans-serif; font-size: 8pt;color: rgb(128, 128, 128);" target="_blank">OBIEE Validator Service</a>.</p>
+					<p style="color: rgb(128, 128, 128); float: right;">Generated using <a href="http://code.google.com/p/analytics-validator-service/" style="font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt;color: rgb(128, 128, 128);" target="_blank">OBIEE Validator Service</a>.</p>
 				</div>
 				<p style="color: rgb(0, 0, 255); float: center;"> This HTML page is W3C compliant.</p>
 			</body>

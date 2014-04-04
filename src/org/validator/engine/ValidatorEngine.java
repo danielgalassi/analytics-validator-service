@@ -70,7 +70,6 @@ public class ValidatorEngine {
 	 * Loads all tests creating a suite
 	 * @param context the scope of the current session
 	 * @param testCatalog directory where all tests are stored
-	 * @return the number of tests loaded
 	 */
 	public void setTestSuite(ServletContext context, String testCatalog) {
 

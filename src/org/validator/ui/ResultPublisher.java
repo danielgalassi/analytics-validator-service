@@ -15,6 +15,7 @@ import org.validator.utils.FileUtils;
 import org.validator.utils.XMLUtils;
 
 /**
+ * This class transforms the XML result files into user-friendly web pages.
  * @author danielgalassi@gmail.com
  *
  */

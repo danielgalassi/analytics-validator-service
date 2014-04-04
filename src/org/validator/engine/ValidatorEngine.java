@@ -21,6 +21,9 @@ import org.w3c.dom.Element;
 
 /**
  * The validator engine orchestrates and controls the execution of the test suite.
+ * A <code>ValidatorEngine</code> consists of two main components, the repository metadata and a collection of tests.
+ * The metadata in the <code>Repository</code> will be validated using <code>Test</code> instances.
+ * Each time the engine runs, the execution of each test is timed.
  * @author danielgalassi@gmail.com
  *
  */
@@ -29,7 +32,7 @@ public class ValidatorEngine {
 	/**
 	 * The target directory where validation results will be saved.
 	 */
-	private String			resultCatalogLocation;
+	private String			resultCatalogue = "";
 	/**
 	 * An OBIEE metadata repository object.
 	 */
@@ -51,7 +54,7 @@ public class ValidatorEngine {
 	}
 
 	/**
-	 * Sets the repository file to assess in this validator engine
+	 * Sets the repository file to assess in this validator engine.
 	 * @param repository metadata repository object
 	 */
 	public void setRepository(Repository repository) {
@@ -67,7 +70,7 @@ public class ValidatorEngine {
 	}
 
 	/**
-	 * Loads all tests creating a suite
+	 * Loads all tests creating a suite.
 	 * @param context the scope of the current session
 	 * @param testCatalog directory where all tests are stored
 	 */
@@ -91,7 +94,16 @@ public class ValidatorEngine {
 	}
 
 	/**
-	 * Getter method to make public the number of tests in the suite
+	 * Sets the internal directory all results will be saved to.
+	 * @param resultCatalogLocation path to the target directory
+	 */
+	public void setResultCatalogLocation(String resultCatalogLocation) {
+		this.resultCatalogue = resultCatalogLocation;
+		FileUtils.setupWorkDirectory(resultCatalogLocation);		
+	}
+
+	/**
+	 * Getter method to make public the number of tests in the suite.
 	 * @return the number of tests loaded
 	 */
 	public int getTestSuiteSize() {
@@ -108,7 +120,7 @@ public class ValidatorEngine {
 
 	/**
 	 * Executes the validation of the repository metadata using all test scripts loaded.
-	 * Upon completion, an index document is created. Each entry in this document points to a result file.
+	 * Upon completion, an index document (catalogue) is created. Each entry in this catalogue points to a result file.
 	 */
 	public void run() {
 		Map <String, Double>	resultRef = new HashMap<String, Double>();
@@ -121,7 +133,7 @@ public class ValidatorEngine {
 		//executes all scripts in test suite and times them
 		for (Test test : testSuite) {
 			startTimer = System.currentTimeMillis();
-			String result = resultCatalogLocation + test.getName() + ".xml";
+			String result = resultCatalogue + test.getName() + ".xml";
 			test.assertMetadata(repository, result);
 			resultRef.put(result, (double) (System.currentTimeMillis() - startTimer) / 1000);
 		}
@@ -133,21 +145,12 @@ public class ValidatorEngine {
 	 * Validates the repository and test suite have been setup and are available.
 	 * @return true if all dependencies are met
 	 */
-	public boolean ready() {
+	private boolean ready() {
 		boolean isTestSuiteSet	= (testSuite.size() > 0);
 		boolean isRepositorySet = (repository != null);
-		boolean isResultDirSet	= (!resultCatalogLocation.equals(""));
+		boolean isResultDirSet	= (!resultCatalogue.equals(""));
 
 		return (isRepositorySet && isTestSuiteSet && isResultDirSet && serviceStartTime != 0);
-	}
-
-	/**
-	 * Sets the internal directory all results will be saved to.
-	 * @param resultCatalogLocation path to the target directory
-	 */
-	public void setResultCatalogLocation(String resultCatalogLocation) {
-		this.resultCatalogLocation = resultCatalogLocation;
-		FileUtils.setupWorkDirectory(resultCatalogLocation);		
 	}
 
 	/**
@@ -168,6 +171,6 @@ public class ValidatorEngine {
 
 		root.setAttribute("totalElapsedTime", ""+((double) (System.currentTimeMillis() - serviceStartTime) / 1000));
 		index.appendChild(root);
-		XMLUtils.saveDocument(index, resultCatalogLocation + "index.xml");
+		XMLUtils.saveDocument(index, resultCatalogue + "index.xml");
 	}
 }

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.validator.utils.FileUtils;
 
 /**
- * Servlet to cleanup stale entries from the result catalog
+ * Servlet to cleanup stale entries from the result catalogue.
  * @author danielgalassi@gmail.com
  */
 @WebServlet(description = "This servlet can be used to cleanup old results", urlPatterns = { "/Admin" })
@@ -33,5 +33,4 @@ public class Admin extends HttpServlet {
 
 		getServletContext().getRequestDispatcher("/admin.jsp").forward(request, response);
 	}
-
 }

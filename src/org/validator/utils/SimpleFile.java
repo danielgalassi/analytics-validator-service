@@ -2,7 +2,8 @@ package org.validator.utils;
 
 
 /**
- * Lightweight file implementation
+ * Lightweight file implementation.
+ * This class has limited functionality but it's main purpose it's to make it easy to list filesystem contents.
  * @author danielgalassi@gmail.com
  *
  */
@@ -18,7 +19,7 @@ public class SimpleFile {
 	private String lastModified;
 
 	/**
-	 * Instantiates a lightweight file object with a name and the last modified date
+	 * Instantiates a lightweight file object with a name and the last modified date.
 	 * @param name name of the file
 	 * @param lastModified last modified date
 	 */
@@ -28,7 +29,7 @@ public class SimpleFile {
 	}
 
 	/**
-	 * Getter method for the name of the file
+	 * Getter method for the name of the file.
 	 * @return name of the file
 	 */
 	public String getName() {
@@ -36,7 +37,7 @@ public class SimpleFile {
 	}
 
 	/**
-	 * Getter method for the last modified date
+	 * Getter method for the last modified date.
 	 * @return last modified date
 	 */
 	public String getLastModified() {

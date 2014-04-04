@@ -17,8 +17,9 @@ import org.validator.ui.ResultPublisher;
 
 
 /**
- * Manages the trimming of the metadata file and tests execution.
- * All result files are generated here.
+ * This service sets up the <code>ValidatorEngine</code> and the <code>ResultPublisher</code>.
+ * The <code>ValidatorEngine</code> executes all tests on the uploaded repository.
+ * The <code>ResultPublisher</code> generates the user-friendly web pages featuring results.
  * @author danielgalassi@gmail.com
  *
  */
@@ -29,11 +30,11 @@ public class ValidatorService extends HttpServlet {
 	/**
 	 * Application directory where all test cases reside.
 	 */
-	private static final String	testCatalog = "/WEB-INF/Tests/";
+	private static final String	testCatalogue = "/WEB-INF/Tests/";
 	/**
 	 * Application directory where UI-generating code for test results reside.
 	 */
-	private static final String	viewCatalog = "/WEB-INF/Views/";
+	private static final String	viewCatalogue = "/WEB-INF/Views/";
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -45,13 +46,14 @@ public class ValidatorService extends HttpServlet {
 		String subjectArea		= request.getParameter("SubjectArea");
 		String sessionId		= request.getRequestedSessionId();
 		HttpSession session		= request.getSession();
+
 		String workDirectory	= (String) session.getAttribute("workDir");
-		String uploadedRPD		= (String) session.getAttribute("metadataFile");
-		boolean errorsOnlyMode	= ((String) session.getAttribute("resultsFormat")).equals("ShowErrorsOnly");
-		String resultCatalog	= workDirectory + "results" + File.separator;
+		String metadata			= (String) session.getAttribute("metadataFile");
+		boolean errorsOnly		= ((String) session.getAttribute("resultsFormat")).equals("ShowErrorsOnly");
+		String resultCatalogue	= workDirectory + "results" + File.separator;
 
 		//setting the repository (tags are discarded if not related to the selected subject area)
-		Repository repository	= new Repository(workDirectory, uploadedRPD, subjectArea);
+		Repository repository	= new Repository(workDirectory, metadata, subjectArea);
 
 		if (!repository.available()) {
 			request.setAttribute("ErrorMessage", "Metadata file not found.");
@@ -63,8 +65,8 @@ public class ValidatorService extends HttpServlet {
 		ValidatorEngine engine = new ValidatorEngine();
 		engine.setRepository(repository);
 		engine.setStartTime(startTime);
-		engine.setResultCatalogLocation(resultCatalog);
-		engine.setTestSuite(getServletContext(), testCatalog);
+		engine.setResultCatalogLocation(resultCatalogue);
+		engine.setTestSuite(getServletContext(), testCatalogue);
 
 		//forwards to the error page if the test suite is empty 
 		if (engine.getTestSuiteSize() == 0) {
@@ -77,11 +79,11 @@ public class ValidatorService extends HttpServlet {
 
 		//publishes HTML pages featuring results to the session folder
 		ResultPublisher publisher = new ResultPublisher();
-		publisher.setCatalogs(resultCatalog, viewCatalog);
+		publisher.setCatalogs(resultCatalogue, viewCatalogue);
 		publisher.setContext(getServletContext());
 		publisher.setParameters("SelectedSubjectArea", subjectArea);
 		publisher.setParameters("SessionFolder", sessionId);
-		publisher.setParameters("ShowErrorsOnly", errorsOnlyMode + "");
+		publisher.setParameters("ShowErrorsOnly", errorsOnly + "");
 
 		publisher.publishResults();
 

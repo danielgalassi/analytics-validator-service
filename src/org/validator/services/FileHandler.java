@@ -29,12 +29,15 @@ public class FileHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
+	/**
+	 * Maximum file size. Default value: 200MB
+	 */
 	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
 	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		boolean isZipFile = false;
+		boolean isZipFormat = false;
 		File metadata = null;
 		HttpSession session = request.getSession(true);
 
@@ -76,7 +79,7 @@ public class FileHandler extends HttpServlet {
 						String value = item.getString();
 
 						if (name.equals("fileFormat")) {
-							isZipFile = value.equals("zip");
+							isZipFormat = value.equals("zip");
 						}
 						else {
 							request.setAttribute(name, value);
@@ -86,6 +89,7 @@ public class FileHandler extends HttpServlet {
 
 					if (!item.isFormField()) {
 						String fileName = new File(item.getName()).getName();
+
 						if (fileName.equals("")) {
 							request.setAttribute("ErrorMessage", "Please select a file before submitting a request.");
 							getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
@@ -98,7 +102,7 @@ public class FileHandler extends HttpServlet {
 						item.write(uploaded);
 
 						//unzip if appropriate
-						if (isZipFile && FileUtils.isZipFile(uploaded)) {
+						if (isZipFormat && FileUtils.isZipFile(uploaded)) {
 							metadata = FileUtils.unZipIt(uploaded.getAbsolutePath(), uploadPath);
 							uploaded.delete();
 						}
@@ -111,9 +115,8 @@ public class FileHandler extends HttpServlet {
 					}
 				}
 			}
-		} catch (Exception ex) {
-			request.setAttribute("message",
-					"There was an error: " + ex.getMessage());
+		} catch (Exception e) {
+			request.setAttribute("message", "There was an error: " + e.getMessage());
 		}
 		//redirects client to message page
 		getServletContext().getRequestDispatcher("/SubjectAreaSelector").forward(request, response);

@@ -12,6 +12,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -25,7 +26,7 @@ import org.w3c.dom.Document;
 public class XMLUtils {
 
 	/**
-	 * Create an empty DOM document
+	 * Create an empty DOM document.
 	 * @return a DOM document
 	 */
 	public static Document createDOMDocument() {
@@ -41,7 +42,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Creates a DOM document from a file
+	 * Creates a DOM document from a file.
 	 * @param xmlFile a file in XML format
 	 * @return a DOM document
 	 */
@@ -66,7 +67,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Creates a DOM document from an InputStream
+	 * Creates a DOM document from an InputStream.
 	 * @param xmlStream an InputStream to XML content
 	 * @return a DOM document
 	 */
@@ -91,7 +92,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Persists a DOM document to a file
+	 * Persists a DOM document to a file.
 	 * @param xml a DOM document
 	 * @param filename name of target file
 	 */
@@ -99,18 +100,18 @@ public class XMLUtils {
 		Source	source = new DOMSource(xml);
 		File	targetFile = new File(filename);
 		Result	result = new StreamResult(targetFile);
+		Transformer transformer;
 		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.transform(source, result);
-		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-		} catch (TransformerException e) {
+		} catch (TransformerException
+				| TransformerFactoryConfigurationError e) {
 			e.printStackTrace();
 		}
 	}
 
 	/**
-	 * Applies a stylesheet to XML content
+	 * Applies a stylesheet to XML content.
 	 * @param xmlLocation path to XML file
 	 * @param stylesheet path to stylesheet (XSL) file
 	 * @param resultLocation path where to save the resulting file
@@ -140,7 +141,7 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Applies a stylesheet (InputStream) to XML content
+	 * Applies a stylesheet (InputStream) to XML content.
 	 * @param xmlLocation path to XML file
 	 * @param stylesheet InputStream to the stylesheet (XSL)
 	 * @param resultLocation path where to save the resulting file
@@ -174,8 +175,8 @@ public class XMLUtils {
 	}
 
 	/**
-	 * Applies a stylesheet (InputStream) to XML content
-	 * This method is configured to set XSL parameters
+	 * Applies a stylesheet (InputStream) to XML content.
+	 * This method is configured to set XSL parameters.
 	 * @param xml a file in XML format 
 	 * @param stylesheet InputStream to the stylesheet (XSL)
 	 * @param resultLocation path where to save the resulting file

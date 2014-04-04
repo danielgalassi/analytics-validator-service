@@ -2,7 +2,6 @@ package org.validator.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +28,7 @@ import org.xml.sax.XMLReader;
 public class FileUtils {
 
 	/**
-	 * XMLReader factory
+	 * XMLReader factory.
 	 * @return XMLReader object for future SAX parsing operations 
 	 */
 	public static XMLReader getXMLReader() {
@@ -51,7 +50,7 @@ public class FileUtils {
 	}
 
 	/**
-	 * Generates an InputSource of the argument
+	 * A SAX reference for a file.
 	 * @param file
 	 * @return InputSource
 	 */
@@ -64,7 +63,6 @@ public class FileUtils {
 			source = new InputSource(new InputStreamReader(stream));
 			source.setEncoding("UTF-8");
 		} catch (Exception e) {
-			System.out.println("EXCEPTION!");
 			e.printStackTrace();
 			source = null;
 		}
@@ -72,9 +70,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Validates an argument is a ZIP file
-	 * @param zip potential ZIP file to assess
-	 * @return true if the file is in ZIP format
+	 * Validates an argument is a Zip file using a "magic" number.
+	 * @param zip potential Zip file to assess
+	 * @return true if the file is in Zip format
 	 */
 	public static boolean isZipFile(File zip) {
 		RandomAccessFile raf = null;
@@ -82,18 +80,17 @@ public class FileUtils {
 
 		try {
 			raf = new RandomAccessFile(zip, "r");
-			n = raf.readInt();  
+			n = raf.readInt();
 			raf.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return (n == 0x504B0304);
 	}
 
 	/**
-	 * Deletes a file (or folder, recursively)
+	 * Deletes a file (or folder, recursively).
 	 * @param file a file or directory in the filesystem
 	 * @return true if the file or directory was deleted
 	 */
@@ -127,7 +124,7 @@ public class FileUtils {
 	}
 
 	/**
-	 * Generates a ZIP archive
+	 * Generates a Zip archive.
 	 * @param sSource
 	 * @param sTarget
 	 */
@@ -157,7 +154,7 @@ public class FileUtils {
 	}
 
 	/**
-	 * Extracts a file from ZIP archives to the folder specified in the argument
+	 * Extracts a file from Zip archives to the folder specified in the argument.
 	 * @param zipFile
 	 * @param outputFolder
 	 * @return reference of the extracted file
@@ -203,10 +200,10 @@ public class FileUtils {
 	}
 
 	/**
-	 * Generates a ZIP file with one or more entries
+	 * Generates a Zip file with one or more entries.
 	 * @param resultCatalogLocation source and target location in the filesystem
 	 * @param pages entries to compress
-	 * @param zipFilename name of the ZIP file
+	 * @param zipFilename name of the Zip file
 	 */
 	public static void Zip(String resultCatalogLocation, Vector<String> pages, String zipFilename) {
 		byte[] buffer = new byte[1024];

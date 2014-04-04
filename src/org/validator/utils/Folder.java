@@ -7,6 +7,12 @@ import java.util.Vector;
 
 import javax.servlet.ServletContext;
 
+/**
+ * This is a lightweight implementation of a directory in the filesystem.
+ * It extensively reuses <code>SimpleFile</code>.
+ * @author danielgalassi@gmail.com
+ *
+ */
 public class Folder {
 
 	/**
@@ -15,7 +21,7 @@ public class Folder {
 	private File appFolder = null;
 
 	/**
-	 * Sets the path to a directory using a ServletContext
+	 * Sets the path to a directory using a ServletContext.
 	 * @param context
 	 */
 	public void setFolder (ServletContext context) {
@@ -23,7 +29,7 @@ public class Folder {
 	}
 
 	/**
-	 * Filters out files and web server directories (*-INF) 
+	 * Filters out files and web server directories (*-INF). 
 	 * @return application directories
 	 */
 	public Vector<SimpleFile> getContents() {

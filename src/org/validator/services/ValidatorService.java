@@ -40,23 +40,18 @@ public class ValidatorService extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		long		startTime = System.currentTimeMillis();
-		String		selectedSubjectArea = "None";
+		long startTime			= System.currentTimeMillis();
 
-		//recover the subject area selected in jsp
-		if (request.getParameter("SubjectArea") != null) {
-			selectedSubjectArea = request.getParameter("SubjectArea");
-		}
-
-		String sessionId			= request.getRequestedSessionId();
-		HttpSession session			= request.getSession();
-		String workDirectory		= (String) session.getAttribute("workDir");
-		String repositoryFilename	= (String) session.getAttribute("metadataFile");
-		String resultsFormat		= (String) session.getAttribute("resultsFormat");
-		String resultCatalog		= workDirectory + "results" + File.separator;
+		String subjectArea		= request.getParameter("SubjectArea");
+		String sessionId		= request.getRequestedSessionId();
+		HttpSession session		= request.getSession();
+		String workDirectory	= (String) session.getAttribute("workDir");
+		String uploadedRPD		= (String) session.getAttribute("metadataFile");
+		boolean errorsOnlyMode	= ((String) session.getAttribute("resultsFormat")).equals("ShowErrorsOnly");
+		String resultCatalog	= workDirectory + "results" + File.separator;
 
 		//setting the repository (tags are discarded if not related to the selected subject area)
-		Repository repository		= new Repository(workDirectory, repositoryFilename, selectedSubjectArea);
+		Repository repository	= new Repository(workDirectory, uploadedRPD, subjectArea);
 
 		if (!repository.available()) {
 			request.setAttribute("ErrorMessage", "Metadata file not found.");
@@ -80,23 +75,17 @@ public class ValidatorService extends HttpServlet {
 
 		engine.run();
 
-		//Creation of the UI featuring results
+		//publishes HTML pages featuring results to the session folder
 		ResultPublisher publisher = new ResultPublisher();
 		publisher.setCatalogs(resultCatalog, viewCatalog);
 		publisher.setContext(getServletContext());
-
-		//setting up stylesheet parameters
-		String errorsOnlyMode = "false";
-		if (resultsFormat.equals("ShowErrorsOnly")) {
-			errorsOnlyMode = "true";
-		}
-		publisher.setParameters("SelectedSubjectArea", selectedSubjectArea);
-		publisher.setParameters("SessionFolder", sessionId);		
-		publisher.setParameters("ShowErrorsOnly", errorsOnlyMode);
+		publisher.setParameters("SelectedSubjectArea", subjectArea);
+		publisher.setParameters("SessionFolder", sessionId);
+		publisher.setParameters("ShowErrorsOnly", errorsOnlyMode + "");
 
 		publisher.publishResults();
 
-		//redirects to results page (summary level)
+		//redirects to summary view
 		RequestDispatcher rd = request.getRequestDispatcher(publisher.getSummaryPage());
 		rd.forward(request, response);
 	}

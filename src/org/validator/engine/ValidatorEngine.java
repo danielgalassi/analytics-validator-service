@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.ServletContext;
+
+import org.validator.metadata.JavaTest;
 import org.validator.metadata.Repository;
 import org.validator.metadata.Test;
 import org.validator.metadata.XSLTest;
@@ -68,15 +71,15 @@ public class ValidatorEngine {
 	 * Appends one test script to internal test suite
 	 * @param testStream a test case
 	 */
-	public void addXSLTest(InputStream testStream) {
+	public void addTest(InputStream testStream) {
 		testSuite.add(new XSLTest(testStream));
 	}
-	
+
 	/**
 	 * Appends a test script implemented in a Java class
 	 */
-	public void addJavaTest() {
-		//TODO: implement method to invoke Java classes containing assertions
+	public void addJavaTest(InputStream x) {
+		testSuite.add(new JavaTest(x));
 	}
 
 	/**

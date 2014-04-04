@@ -18,7 +18,7 @@ import org.xml.sax.XMLReader;
  * @author danielgalassi@gmail.com
  *
  */
-public class Repository {
+public class Repository implements Metadata {
 
 	/**
 	 * The metadata file in XUDML (XML) format stored in the filesystem under the session directory. 

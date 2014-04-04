@@ -3,6 +3,7 @@
  */
 package org.validator.metadata;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -84,7 +85,7 @@ public class XSLTest implements Test{
 	/**
 	 * Validates the repository
 	 */
-	public void assertMetadata(Repository repository, String result) {
+	public void assertMetadata(Metadata repository, String result) {
 		XMLUtils.applyStylesheet(repository.toFile(), script, result, null);
 	}
 }

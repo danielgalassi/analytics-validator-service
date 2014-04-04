@@ -51,9 +51,9 @@ public class ValidatorService extends HttpServlet {
 		String sessionId			= request.getRequestedSessionId();
 		HttpSession session			= request.getSession();
 		String workDirectory		= (String) session.getAttribute("workDir");
-		String resultCatalog		= workDirectory + "results" + File.separator;
 		String repositoryFilename	= (String) session.getAttribute("metadataFile");
 		String resultsFormat		= (String) session.getAttribute("resultsFormat");
+		String resultCatalog		= workDirectory + "results" + File.separator;
 
 		//setting the repository (tags are discarded if not related to the selected subject area)
 		Repository repository		= new Repository(workDirectory, repositoryFilename, selectedSubjectArea);
@@ -84,7 +84,6 @@ public class ValidatorService extends HttpServlet {
 		ResultPublisher publisher = new ResultPublisher();
 		publisher.setCatalogs(resultCatalog, viewCatalog);
 		publisher.setContext(getServletContext());
-		publisher.setIndex(new File(resultCatalog + "index.xml"));
 
 		//setting up stylesheet parameters
 		String errorsOnlyMode = "false";
@@ -94,11 +93,11 @@ public class ValidatorService extends HttpServlet {
 		publisher.setParameters("SelectedSubjectArea", selectedSubjectArea);
 		publisher.setParameters("SessionFolder", sessionId);		
 		publisher.setParameters("ShowErrorsOnly", errorsOnlyMode);
-		
+
 		publisher.publishResults();
 
 		//redirects to results page (summary level)
-		RequestDispatcher rd = request.getRequestDispatcher(File.separator + sessionId + File.separator + "results" + File.separator + "Summary.html");
+		RequestDispatcher rd = request.getRequestDispatcher(publisher.getSummaryPage());
 		rd.forward(request, response);
 	}
 }

@@ -111,25 +111,19 @@ public class ValidatorEngine {
 	 * Upon completion, an index document is created. Each entry in this document points to a result file.
 	 */
 	public void run() {
-		Map <String, Double>	resultRef = null;
-		long					startTimeInMs;
+		Map <String, Double>	resultRef = new HashMap<String, Double>();
+		long					startTimer;
 
 		if (!ready()) {
 			return;
 		}
 
-		resultRef	= new HashMap<String, Double>();
-
+		//executes all scripts in test suite and times them
 		for (Test test : testSuite) {
-			//stopwatch starts
-			startTimeInMs = System.currentTimeMillis();
-
-			//executing test, generating the results file
+			startTimer = System.currentTimeMillis();
 			String result = resultCatalogLocation + test.getName() + ".xml";
 			test.assertMetadata(repository, result);
-
-			//stopwatch ends and test results filename is added to index list
-			resultRef.put(result, (double) (System.currentTimeMillis() - startTimeInMs) / 1000);
+			resultRef.put(result, (double) (System.currentTimeMillis() - startTimer) / 1000);
 		}
 
 		createIndexDocument(resultRef);

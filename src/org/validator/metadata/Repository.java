@@ -63,10 +63,11 @@ public class Repository {
 
 		dom = xml.makeDom("PresentationCatalog",  subjectAreas);
 		XMLUtils.saveDocument(dom,  directory + File.separator + "metadata.xml");
+		//original file cleanup and file swap
 		repository.delete();
 		repository = new File (directory + File.separator + "metadata.xml");
 	}
-	
+
 	/**
 	 * Returns a file representing the repository
 	 * @return a File reference to the repository file

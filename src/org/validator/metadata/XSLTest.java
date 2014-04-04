@@ -74,17 +74,17 @@ public class XSLTest implements Test{
 	}
 
 	/**
+	 * Validates metadata
+	 */
+	public void assertMetadata(Repository repository, String result) {
+		XMLUtils.applyStylesheet(repository.toFile(), script, result, null);
+	}
+
+	/**
 	 * Returns an InputStream pointing to the stylesheet
 	 * @return script for the test case
 	 */
 	public InputStream toStream() {
 		return script;
-	}
-
-	/**
-	 * Validates the repository
-	 */
-	public void assertMetadata(Repository repository, String result) {
-		XMLUtils.applyStylesheet(repository.toFile(), script, result, null);
 	}
 }

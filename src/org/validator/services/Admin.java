@@ -12,10 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.validator.utils.FileUtils;
 
 /**
- * Servlet implementation class Admin
+ * Servlet to cleanup stale entries from the result catalog
  * @author danielgalassi@gmail.com
  */
-@WebServlet("/Admin")
+@WebServlet(description = "This servlet can be used to cleanup old results", urlPatterns = { "/Admin" })
 public class Admin extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;

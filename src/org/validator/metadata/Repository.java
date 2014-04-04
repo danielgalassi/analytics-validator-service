@@ -14,7 +14,7 @@ import org.xml.sax.XMLReader;
 
 /**
  * A basic class to handle the metadata repository file.
- * Repository files were handled through File calls, making the code in the <code>ValidatorService<code> and <code>ValidatorEngine<code> too verbose and difficult to follow. 
+ * Repository files were handled through File calls, making the code in the <code>ValidatorService</code> and <code>ValidatorEngine</code> too verbose and difficult to follow. 
  * @author danielgalassi@gmail.com
  *
  */

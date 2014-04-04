@@ -13,7 +13,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.XMLReader;
 
 /**
- * A basic class to handle the metadata repository file
+ * A basic class to handle the metadata repository file.
  * Repository files were handled through File calls, making the code in the Validator Service and Engine too verbose and difficult to follow. 
  * @author danielgalassi@gmail.com
  *
@@ -42,7 +42,7 @@ public class Repository {
 	}
 
 	/**
-	 * Evaluates the status of the file
+	 * Evaluates the status of the file.
 	 * @return true if the file if found and can be read
 	 */
 	public boolean available() {
@@ -50,7 +50,7 @@ public class Repository {
 	}
 
 	/**
-	 * Creates a smaller repository file discarding all objects not used for the selected Subject Area
+	 * Creates a smaller repository file discarding all objects not used for the selected Subject Area.
 	 * @param keepSubjectArea the name of the subject area to evaluate 
 	 */
 	public void trim(String keepSubjectArea) {
@@ -69,7 +69,7 @@ public class Repository {
 	}
 
 	/**
-	 * Returns a file representing the repository
+	 * Returns a file representing the repository.
 	 * @return a File reference to the repository file
 	 */
 	public File toFile() {

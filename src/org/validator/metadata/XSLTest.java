@@ -11,7 +11,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 /**
- * Orchestration of XSL stylesheets to be used as tests
+ * Orchestration of XSL stylesheets to be used as tests.
  * @author danielgalassi@gmail.com
  */
 public class XSLTest implements Test{
@@ -26,7 +26,7 @@ public class XSLTest implements Test{
 	private InputStream	script = null;
 
 	/**
-	 * Instantiates a test case
+	 * Instantiates a test case.
 	 * @param script InputStream pointing to the stylesheet
 	 */
 	public XSLTest(InputStream script) {
@@ -35,7 +35,7 @@ public class XSLTest implements Test{
 	}
 
 	/**
-	 * Resets the script
+	 * Resets the script.
 	 */
 	public void reset() {
 		try {
@@ -46,7 +46,7 @@ public class XSLTest implements Test{
 	}
 
 	/**
-	 * Getter method for the name of the test
+	 * Getter method for the name of the test.
 	 * @return name of the test
 	 */
 	public String getName() {
@@ -54,7 +54,7 @@ public class XSLTest implements Test{
 	}
 
 	/**
-	 * Setter method for the name of the test
+	 * Setter method for the name of the test.
 	 */
 	private void setName() {
 		setDefaultName();
@@ -67,21 +67,21 @@ public class XSLTest implements Test{
 	}
 
 	/**
-	 * Setter method to initialise the name of the test case
+	 * Setter method to initialise the name of the test case.
 	 */
 	private void setDefaultName() {
 		name = "Test" + System.currentTimeMillis();
 	}
 
 	/**
-	 * Validates metadata
+	 * Validates metadata, executing the test script.
 	 */
 	public void assertMetadata(Repository repository, String result) {
 		XMLUtils.applyStylesheet(repository.toFile(), script, result, null);
 	}
 
 	/**
-	 * Returns an InputStream pointing to the stylesheet
+	 * Returns an InputStream pointing to the stylesheet.
 	 * @return script for the test case
 	 */
 	public InputStream toStream() {

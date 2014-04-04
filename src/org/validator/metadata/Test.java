@@ -12,13 +12,13 @@ package org.validator.metadata;
 public interface Test {
 
 	/**
-	 * Getter method for the test name
+	 * Getter method for the test name.
 	 * @return the name of the test
 	 */
 	public String getName();
 
 	/**
-	 * Asserts metadata status
+	 * Asserts metadata status.
 	 * @param repository a trimmed OBIEE repository file in XUML format
 	 * @param result path where test results are saved to
 	 */

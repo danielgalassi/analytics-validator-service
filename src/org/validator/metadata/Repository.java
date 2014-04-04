@@ -33,10 +33,12 @@ public class Repository {
 	 * Instantiates a metadata file
 	 * @param directory path to the repository metadata file
 	 * @param repository name and extension of the metadata repository file
+	 * @param selectedSubjectArea 
 	 */
-	public Repository(String directory, String repository) {
+	public Repository(String directory, String repository, String selectedSubjectArea) {
 		this.directory  = new File(directory);
 		this.repository = new File(directory + repository);
+		trim(selectedSubjectArea);
 	}
 
 	/**
@@ -66,7 +68,7 @@ public class Repository {
 	}
 	
 	/**
-	 * Returns a file representing the repository file
+	 * Returns a file representing the repository
 	 * @return a File reference to the repository file
 	 */
 	public File toFile() {

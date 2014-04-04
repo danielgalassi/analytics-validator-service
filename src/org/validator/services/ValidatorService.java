@@ -2,11 +2,6 @@ package org.validator.services;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,8 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.validator.engine.ValidatorEngine;
 import org.validator.metadata.Repository;
-import org.validator.utils.FileUtils;
-import org.validator.utils.XMLUtils;
+import org.validator.ui.ResultPublisher;
 
 
 /**
@@ -35,36 +29,34 @@ public class ValidatorService extends HttpServlet {
 	/**
 	 * Application directory where all test cases reside.
 	 */
-	private static final String	testCatalogLocation = "/WEB-INF/Tests/";
+	private static final String	testCatalog = "/WEB-INF/Tests/";
 	/**
 	 * Application directory where UI-generating code for test results reside.
 	 */
-	private static final String	viewCatalogLocation = "/WEB-INF/Views/";
+	private static final String	viewCatalog = "/WEB-INF/Views/";
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String		resultCatalogLocation = null;
-		String		workDirectory = null;
 		long		startTime = System.currentTimeMillis();
 		String		selectedSubjectArea = "None";
-		String		repositoryFilename = "";
-		String		sessionId = "";
-		HttpSession	session = null;
-		Repository	repository = null;
 
 		//recover the subject area selected in jsp
-		if (request.getParameter("SubjectArea") != null)
+		if (request.getParameter("SubjectArea") != null) {
 			selectedSubjectArea = request.getParameter("SubjectArea");
+		}
 
-		sessionId			= request.getRequestedSessionId();
-		session				= request.getSession();
-		workDirectory		= (String) session.getAttribute("workDir");
-		repositoryFilename	= (String) session.getAttribute("metadataFile");
+		String sessionId			= request.getRequestedSessionId();
+		HttpSession session			= request.getSession();
+		String workDirectory		= (String) session.getAttribute("workDir");
+		String resultCatalog		= workDirectory + "results" + File.separator;
+		String repositoryFilename	= (String) session.getAttribute("metadataFile");
+		String resultsFormat		= (String) session.getAttribute("resultsFormat");
 
-		repository = new Repository(workDirectory, repositoryFilename);
+		//setting the repository (tags are discarded if not related to the selected subject area)
+		Repository repository		= new Repository(workDirectory, repositoryFilename, selectedSubjectArea);
 
 		if (!repository.available()) {
 			request.setAttribute("ErrorMessage", "Metadata file not found.");
@@ -72,81 +64,41 @@ public class ValidatorService extends HttpServlet {
 			return;
 		}
 
-		//trimming repository file, keeping only selected subject area objects
-		repository.trim(selectedSubjectArea);
+		//setting up the validator engine with a repository and tests
+		ValidatorEngine engine = new ValidatorEngine();
+		engine.setRepository(repository);
+		engine.setStartTime(startTime);
+		engine.setResultCatalogLocation(resultCatalog);
+		engine.setTestSuite(getServletContext(), testCatalog);
 
-		//validates the repository file can be used
-		if (repository.available()) {
-			//if there are tests available, set up the validator engine
-			boolean testsFound = false;
-			try {
-				testsFound = (getServletContext().getResourcePaths(testCatalogLocation).size() > 0);
-			} catch (Exception e) {
-				//a NullPointerException is thrown if the /WEB-INF/Tests directory is not found
-				e.printStackTrace();
-			}
-
-			//forwards to the error page if tests or /WEB-INF/Tests directory are missing 
-			if (!testsFound) {
-				request.setAttribute("ErrorMessage", "Tests not found.");
-				getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
-				return;
-			}
-
-			resultCatalogLocation = workDirectory + "results" + File.separator;
-
-			//setting up the validator engine with a repository and tests
-			ValidatorEngine engine = new ValidatorEngine();
-			engine.setRepository(repository);
-			engine.setStartTime(startTime);
-			engine.setResultCatalogLocation(resultCatalogLocation);
-
-			//adding tests to the validator engine
-			Set <String> testSuite = getServletContext().getResourcePaths(testCatalogLocation);
-			for (String testCase : testSuite) {
-				engine.addXSLTest(getServletContext().getResourceAsStream(testCase));
-			}
-
-			//it's time to run all tests on this trimmed repository,
-			//save results in that location and time the whole operation
-			engine.run();
-
-			//the results page is created
-			InputStream			xsl2html = null;
-			String				resultsFormat = (String) session.getAttribute("resultsFormat");
-			Map<String, String>	stylesheetParams = new HashMap<String, String> ();
-			String 				stylesheet = "";
-			String				errorsOnlyMode = "false";
-			File 				index = new File(resultCatalogLocation + "index.xml");
-
-			//setting up stylesheet parameters
-			stylesheetParams.put("SelectedSubjectArea", selectedSubjectArea);
-			if (resultsFormat.equals("ShowErrorsOnly")) {
-				errorsOnlyMode = "true";
-			}
-			stylesheetParams.put("ShowErrorsOnly", errorsOnlyMode);
-			stylesheetParams.put("SessionFolder", sessionId);
-
-			//creating both HTML pages (Summary and Details views)
-			Vector<String> pages = new Vector<String>();
-			pages.add("Summary");
-			pages.add("Compact");
-			pages.add("Details");
-			for (String page : pages) {
-				stylesheet = viewCatalogLocation + page + ".xsl";
-				xsl2html = getServletContext().getResourceAsStream(stylesheet);
-				XMLUtils.applyStylesheet(index, xsl2html, resultCatalogLocation + page + ".html", stylesheetParams);
-			}
-			//Summary contains links suitable to the Servlet Container environment
-			//No need to include it, it is replaced by Compact in the ZIP 
-			pages.remove("Summary");
-
-			//results Zip file is created
-			FileUtils.Zip(resultCatalogLocation,  pages, "Results.zip");
-
-			//redirects to results page (summary level)
-			RequestDispatcher rd = request.getRequestDispatcher(File.separator + sessionId + File.separator + "results" + File.separator + "Summary.html");
-			rd.forward(request, response);
+		//forwards to the error page if the test suite is empty 
+		if (engine.getTestSuiteSize() == 0) {
+			request.setAttribute("ErrorMessage", "Tests not found.");
+			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
+			return;
 		}
+
+		engine.run();
+
+		//Creation of the UI featuring results
+		ResultPublisher publisher = new ResultPublisher();
+		publisher.setCatalogs(resultCatalog, viewCatalog);
+		publisher.setContext(getServletContext());
+		publisher.setIndex(new File(resultCatalog + "index.xml"));
+
+		//setting up stylesheet parameters
+		String errorsOnlyMode = "false";
+		if (resultsFormat.equals("ShowErrorsOnly")) {
+			errorsOnlyMode = "true";
+		}
+		publisher.setParameters("SelectedSubjectArea", selectedSubjectArea);
+		publisher.setParameters("SessionFolder", sessionId);		
+		publisher.setParameters("ShowErrorsOnly", errorsOnlyMode);
+		
+		publisher.publishResults();
+
+		//redirects to results page (summary level)
+		RequestDispatcher rd = request.getRequestDispatcher(File.separator + sessionId + File.separator + "results" + File.separator + "Summary.html");
+		rd.forward(request, response);
 	}
 }

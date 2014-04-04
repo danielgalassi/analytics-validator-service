@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.ServletContext;
+
 import org.validator.metadata.Repository;
 import org.validator.metadata.Test;
 import org.validator.metadata.XSLTest;
@@ -62,6 +64,39 @@ public class ValidatorEngine {
 	 */
 	public void setStartTime(long serviceStartTime) {
 		this.serviceStartTime = serviceStartTime;
+	}
+
+	/**
+	 * Loads all tests creating a suite
+	 * @param context the scope of the current session
+	 * @param testCatalog directory where all tests are stored
+	 * @return the number of tests loaded
+	 */
+	public void setTestSuite(ServletContext context, String testCatalog) {
+
+		boolean testsFound = false;
+		try {
+			testsFound = (context.getResourcePaths(testCatalog).size() > 0);
+		} catch (Exception e) {
+			//a NullPointerException is thrown if the directory is not found
+			e.printStackTrace();
+		}
+
+		if (!testsFound) {
+			return;
+		}
+
+		for (String testCase : context.getResourcePaths(testCatalog)) {
+			addTest(context.getResourceAsStream(testCase));
+		}
+	}
+
+	/**
+	 * Getter method to make public the number of tests in the suite
+	 * @return the number of tests loaded
+	 */
+	public int getTestSuiteSize() {
+		return testSuite.size();
 	}
 
 	/**

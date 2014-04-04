@@ -96,7 +96,11 @@
 										<xsl:value-of select="count(.//Results/Object[@result='N/A'])"/>
 									</td>
 									<td height="28px" style="text-align:right; padding-right:48px;">
-										<xsl:value-of select="round(100 * number(count(.//Results/Object[@result='Pass'])) div number(count(.//Results/Object)))"/> %</td>
+										<xsl:if test="number(count(.//Results/Object)) &gt; 0">
+											<xsl:value-of select="round(100 * number(count(.//Results/Object[@result='Pass'])) div number(count(.//Results/Object)))"/> %
+										</xsl:if>
+										<xsl:if test="number(count(.//Results/Object)) = 0">-</xsl:if>
+									</td>
 								</tr>
 							</xsl:for-each>
 						</xsl:for-each>

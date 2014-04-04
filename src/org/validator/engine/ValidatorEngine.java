@@ -68,15 +68,8 @@ public class ValidatorEngine {
 	 * Appends one test script to internal test suite
 	 * @param testStream a test case
 	 */
-	public void addXSLTest(InputStream testStream) {
+	public void addTest(InputStream testStream) {
 		testSuite.add(new XSLTest(testStream));
-	}
-	
-	/**
-	 * Appends a test script implemented in a Java class
-	 */
-	public void addJavaTest() {
-		//TODO: implement method to invoke Java classes containing assertions
 	}
 
 	/**
@@ -100,7 +93,6 @@ public class ValidatorEngine {
 			//executing test, generating the results file
 			String result = resultCatalogLocation + test.getName() + ".xml";
 			test.assertMetadata(repository, result);
-			//XMLUtils.applyStylesheet(repository.toFile(), test.toStream(), result, null);
 
 			//stopwatch ends and test results filename is added to index list
 			resultRef.put(result, (double) (System.currentTimeMillis() - startTimeInMs) / 1000);

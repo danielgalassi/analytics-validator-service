@@ -60,14 +60,24 @@
 				<br/>
 				
 				<xsl:for-each select="document(//results)">
+					<xsl:variable name="testCount" select="position()"/>
 					<xsl:for-each select=".//Test">
 					<!-- Results Section -->
-						<h3>Test: <xsl:value-of select="./TestHeader/TestName"/>
+						<h3>Test: <xsl:value-of select="./TestHeader/TestName"/> (<xsl:value-of select="format-number(//results[$testCount]/@elapsedTime, '0.000')"></xsl:value-of>s)
 						</h3>
 						<p>Description: <xsl:value-of select="./TestHeader/TestDescription"/>
 						</p>
 						<br/>
+						<!-- No objects to validate -->
+						<xsl:if test="count(./Results/Object) = 0">
+							<p style="font-weight: bold;">No objects assessed.</p>
+						</xsl:if>
+						<!-- No errors found (failed or N/A results) -->
+						<xsl:if test="$ShowErrorsOnly='true' and count(./Results/Object[@result='Fail']) = 0  and count(./Results/Object[@result='N/A']) = 0 and count(./Results/Object) > 0">
+							<p style="font-weight: bold;">No failed or inconclusive results.</p>
+						</xsl:if>
 						<!-- Table Section -->
+						<xsl:if test="($ShowErrorsOnly='false' and count(./Results/Object) > 0) or ($ShowErrorsOnly='true' and (count(./Results/Object[@result='Fail']) > 0  or count(./Results/Object[@result='N/A']) > 0))">
 						<table>
 							<tbody>
 							<!-- Object Hierarchy across table heading -->
@@ -171,6 +181,7 @@
 								</xsl:for-each>
 							</tbody>
 						</table>
+						</xsl:if>
 					</xsl:for-each>
 					<br/>
 					<br/>

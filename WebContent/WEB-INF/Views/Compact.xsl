@@ -7,10 +7,10 @@
 		<html xmlns="http://www.w3.org/1999/xhtml">
 			<head>
 				<style type="text/css">
-		h1 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-weight: bold; font-size: 24pt; color: #676767;}
-		h2 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-weight: bold; font-size: 20pt; color: #777777;}
-		h3 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-size: 16pt; color: #777777;}
-		h4 {font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; font-size: 12pt; color: #888888;}
+		h1 {font-family: Futura, "Trebuchet MS", Arial, sans-serif; font-size: 24pt; color: #676767;}
+		h2 {font-family: Futura, "Trebuchet MS", Arial, sans-serif; font-size: 20pt; color: #777777;}
+		h3 {font-family: Futura, "Trebuchet MS", Arial, sans-serif; font-size: 16pt; color: #777777;}
+		h4 {font-family: Futura, "Trebuchet MS", Arial, sans-serif; font-size: 12pt; color: #888888;}
 		li {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 10pt; color: #474747;}
 		a  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-size: 10pt; color: #444444;}
 		*  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-size:  8pt; color: #333333;}

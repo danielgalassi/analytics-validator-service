@@ -134,7 +134,7 @@
 											</td>
 										</xsl:if>
 										<!-- AMBER, 75-85% -->
-										<xsl:if test="$successPct &gt;= 75 and successPct &lt; 85">
+										<xsl:if test="$successPct &gt;= 75 and $successPct &lt; 85">
 											<td height="28px" style="background: #F8FCCF; color: #93948E; text-align:right; padding-right:45px;">
 												<xsl:value-of select="$successPct"/> %
 											</td>

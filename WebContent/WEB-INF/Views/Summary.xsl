@@ -68,13 +68,14 @@
 							<th width="250px" height="28px" >Test</th>
 							<th width="550px" height="28px" >Description</th>
 							<th width="130px" height="28px" >Objects tested</th>
-							<th width="130px" height="28px" >Errors</th>
+							<th width="130px" height="28px" >Elapsed time</th>
 							<th width="130px" height="28px" >Failures</th>
 							<th width="130px" height="28px" >N/A</th>
 							<th width="130px" height="28px" >Success Rate</th>
 						</tr>
 				<!-- Test Results Section -->
 						<xsl:for-each select="document(//results)">
+							<xsl:variable name="testCount" select="position()"/>
 							<xsl:for-each select=".//Test">
 								<tr>
 									<td height="28px" >
@@ -83,24 +84,68 @@
 									<td height="28px" >
 										<xsl:value-of select="./TestHeader/TestDescription"/>
 									</td>
-									<td height="28px" style="text-align:right; padding-right:60px;">
+									<td height="28px" style="text-align:right; padding-right:50px;">
 										<xsl:value-of select="count(.//Results/Object)"/>
 									</td>
-									<td height="28px" style="background: #FFF1BF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
+									<td height="28px" style="text-align:right; padding-right:45px;">
+										<xsl:value-of select="format-number(//results[$testCount]/@elapsedTime, '0.000')"></xsl:value-of>s
+									</td>
+									<!-- Deprecated cell tag, previously used for the Error column -->
+									<!--td height="28px" style="background: #FFF1BF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:55px;">
 										<xsl:value-of select="count(.//Results/Object[not(@result)])"/>
-									</td>
-									<td height="28px" style="background: #FFF1BF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:60px;">
-										<xsl:value-of select="count(.//Results/Object[@result='Fail'])"/>
-									</td>
-									<td height="28px" style="background: #F8FCCF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:60px;">
-										<xsl:value-of select="count(.//Results/Object[@result='N/A'])"/>
-									</td>
-									<td height="28px" style="text-align:right; padding-right:48px;">
-										<xsl:if test="number(count(.//Results/Object)) &gt; 0">
-											<xsl:value-of select="round(100 * number(count(.//Results/Object[@result='Pass'])) div number(count(.//Results/Object)))"/> %
+									</td-->
+									<!-- Fail column cell -->
+									<xsl:if test="count(.//Results/Object[@result='Fail']) > 0">
+										<td height="28px" style="background: #FFF1BF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: red; text-align:right; padding-right:55px;">
+											<xsl:value-of select="count(.//Results/Object[@result='Fail'])"/>
+										</td>
+									</xsl:if>
+									<xsl:if test="count(.//Results/Object[@result='Fail']) = 0">
+										<td height="28px" style="text-align:right; padding-right:55px;">
+											<xsl:value-of select="count(.//Results/Object[@result='Fail'])"/>
+										</td>
+									</xsl:if>
+									<!-- Inconclusive results (N/A) column cell -->
+									<xsl:if test="count(.//Results/Object[@result='N/A']) > 0">
+										<td height="28px" style="background: #F8FCCF; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold; color: #93948E; text-align:right; padding-right:55px;">
+											<xsl:value-of select="count(.//Results/Object[@result='N/A'])"/>
+										</td>
+									</xsl:if>
+									<xsl:if test="count(.//Results/Object[@result='N/A']) = 0">
+										<td height="28px" style="text-align:right; padding-right:55px;">
+											<xsl:value-of select="count(.//Results/Object[@result='N/A'])"/>
+										</td>
+									</xsl:if>
+									<!-- Success Rate -->
+									<!-- If no objects were tested, display a hyphen and don't calculate the success rate -->
+									<xsl:if test="number(count(.//Results/Object)) = 0">
+										<!--td height="28px" style="text-align:right; padding-right:45px;"-->
+										<td height="28px" style="text-align:right; padding-right:45px;">
+											<xsl:if test="number(count(.//Results/Object)) = 0">-</xsl:if>
+										</td>
+									</xsl:if>
+									<!-- If objects were tested, display the success rate calculated and stored in the variable successPct -->
+									<xsl:if test="number(count(.//Results/Object)) > 0">
+										<xsl:variable name="successPct" select="round(100 * number(count(.//Results/Object[@result='Pass'])) div number(count(.//Results/Object)))"/>
+										<!-- RED, less than 75% -->
+										<xsl:if test="$successPct &lt; 75">
+											<td height="28px" style="background: #FFF1BF; color: red; text-align:right; padding-right:45px;">
+												<xsl:value-of select="$successPct"/> %
+											</td>
 										</xsl:if>
-										<xsl:if test="number(count(.//Results/Object)) = 0">-</xsl:if>
-									</td>
+										<!-- AMBER, 75-85% -->
+										<xsl:if test="$successPct &gt;= 75 and successPct &lt; 85">
+											<td height="28px" style="background: #F8FCCF; color: #93948E; text-align:right; padding-right:45px;">
+												<xsl:value-of select="$successPct"/> %
+											</td>
+										</xsl:if>
+										<!-- GREEN, over 85% -->
+										<xsl:if test="$successPct &gt;= 85">
+											<td height="28px" style="background: #CCFF99; color: green; text-align:right; padding-right:45px;">
+												<xsl:value-of select="$successPct"/> %
+											</td>
+										</xsl:if>
+									</xsl:if>
 								</tr>
 							</xsl:for-each>
 						</xsl:for-each>

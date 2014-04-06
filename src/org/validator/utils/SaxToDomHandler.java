@@ -96,37 +96,6 @@ class SaxToDomHandler extends DefaultHandler
 						(isRefBizModel || isRefLglColumn || isRefLTS || isRefPhysTable)) {
 					pickAttrib(attrs);
 				}
-
-				//finds list of PresentationCatalog child nodes
-				//if (isReallyInteresting && 
-				//	qName.equals("RefBusinessModel") && 
-				//	processingNode.equals("PresentationCatalog"))
-				//		pickAttrib(attrs);
-
-				//finds list of PresentationColumn child nodes
-				//if (isReallyInteresting && 
-				//	qName.equals("RefLogicalColumn") && 
-				//	processingNode.equals("PresentationColumn"))
-				//		pickAttrib(attrs);
-
-				//finds list of LTS
-				//if (isReallyInteresting && 
-				//	qName.equals("RefLogicalTableSource") && 
-				//	processingNode.equals("LogicalTable"))
-				//		pickAttrib(attrs);
-
-				//finds list of PhysicalTables
-				//if (isReallyInteresting && 
-				//	qName.equals("RefPhysicalTable") && 
-				//	processingNode.equals("LogicalTableSource"))
-				//		pickAttrib(attrs);
-
-				//need to find a way to pickup aliases...
-				//if (isReallyInteresting && 
-				//	qName.equals("RefPhysicalTable") && 
-				//	processingNode.equals("PhysicalTable")) {
-				//		pickAttrib(attrs);
-				//}
 			}
 			// Actually add it in the tree, and adjust the right place.
 			if (isReallyInteresting && appendToDoc) {

@@ -160,10 +160,9 @@ public class ValidatorEngine {
 	private void createIndexDocument (Map <String, Double> resultRefs) {
 		Document index = XMLUtils.createDOMDocument();
 		Element root = index.createElement("index");
-		Element node = null;
 
 		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
-			node = index.createElement("results");
+			Element node = index.createElement("results");
 			node.setTextContent(ref.getKey());
 			node.setAttribute("elapsedTime", ref.getValue().toString());
 			root.appendChild(node);

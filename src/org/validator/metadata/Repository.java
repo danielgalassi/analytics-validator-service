@@ -57,11 +57,10 @@ public class Repository {
 		XMLReader		reader = FileUtils.getXMLReader();
 		SaxToDom		xml = new SaxToDom(null, reader, repository);
 		Vector<String>	subjectAreas = new Vector<String>();
-		Document		dom = null;
 
 		subjectAreas.add(keepSubjectArea);
 
-		dom = xml.makeDom("PresentationCatalog",  subjectAreas);
+		Document dom = xml.makeDom("PresentationCatalog",  subjectAreas);
 		XMLUtils.saveDocument(dom,  directory + File.separator + "metadata.xml");
 		//original file cleanup and file swap
 		repository.delete();

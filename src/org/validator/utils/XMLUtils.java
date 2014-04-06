@@ -53,11 +53,6 @@ public class XMLUtils {
 
 		try {
 			builder = factory.newDocumentBuilder();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		try {
 			xml = builder.parse(xmlFile);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -78,11 +73,6 @@ public class XMLUtils {
 
 		try {
 			builder = factory.newDocumentBuilder();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		try {
 			xml = builder.parse(xmlStream);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -184,15 +174,12 @@ public class XMLUtils {
 	 */
 	public static void applyStylesheet(File xml, InputStream stylesheet, String resultLocation, Map<String, String> params) {
 		File				results = new File(resultLocation);
-		Source				xmlSource = null;
-		Source				xslSource = null;
 		Transformer			transformer = null;
 		TransformerFactory	transformerFactory = null;
-		Result				result = null;
 
-		xmlSource = new javax.xml.transform.stream.StreamSource(xml);
-		xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);
-		result = new javax.xml.transform.stream.StreamResult(results);
+		Source	xmlSource = new javax.xml.transform.stream.StreamSource(xml);
+		Source	xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);
+		Result	result = new javax.xml.transform.stream.StreamResult(results);
 
 		transformerFactory = javax.xml.transform.TransformerFactory.newInstance();
 

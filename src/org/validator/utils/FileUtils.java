@@ -119,7 +119,6 @@ public class FileUtils {
 			deleteAll(workDirectory);
 		}
 		workDirectory.mkdir();
-		//System.out.println("New work directory: " + workDirectory.getAbsolutePath());
 		return workDirectory.exists();
 	}
 

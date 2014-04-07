@@ -6,7 +6,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * 
+ * Utility class to quickly traverse a (metadata) file and return a list of values
  * @author danielgalassi@gmail.com
  *
  */

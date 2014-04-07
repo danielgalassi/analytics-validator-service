@@ -10,7 +10,7 @@
 </head>
 <body>
 
-	<jsp:useBean id="obj" class="org.validator.utils.SaxParser" scope="page">
+	<jsp:useBean id="obj" class="org.validator.utils.TagSelector" scope="page">
 		<jsp:setProperty name="obj" property="workDir" value="${workDir}" />
 		<jsp:setProperty name="obj" property="metadata" value="${metadataFile}" />
 		<jsp:setProperty name="obj" property="tag" value="PresentationCatalog" />

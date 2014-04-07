@@ -46,7 +46,11 @@ public class Repository {
 	 * @return true if the file if found and can be read
 	 */
 	public boolean available() {
-		return repository.exists() && repository.canRead();
+		boolean isAvailable = false;
+		if (repository != null) {
+			isAvailable = (repository.exists() && repository.canRead());
+		}
+		return isAvailable;
 	}
 
 	/**

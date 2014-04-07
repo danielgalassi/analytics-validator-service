@@ -14,7 +14,7 @@
 		li {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; color: #474747;}
 		a  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; color: #444444;}
 		*  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size:  8pt; color: #333333;}
-		p  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size:10pt; color: rgb(128, 128, 128);}
+		p  {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; color: rgb(128, 128, 128);}
 		tr {height:30; font-size: 8.5pt;}
 		tr:hover {background: rgb(248,248,248);}
 		table {

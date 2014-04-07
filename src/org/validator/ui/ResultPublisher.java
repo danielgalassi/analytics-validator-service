@@ -42,9 +42,9 @@ public class ResultPublisher {
 	 */
 	Vector<String>		pages = new Vector<String>();
 	/**
-	 * Parameters passed to stylesheets. This make the process of generating HTML pages more flexible.
+	 * Parameters passed to stylesheets. This makes the process of generating HTML pages more flexible.
 	 */
-	Map<String, String>	stylesheetParams = new HashMap<String, String> ();
+	Map<String, String>	params = new HashMap<String, String> ();
 
 	/**
 	 * Sets the directories where results and stylesheets are stored
@@ -71,7 +71,7 @@ public class ResultPublisher {
 	 * @param value literal evaluated during the transformation
 	 */
 	public void setParameters(String name, String value) {
-		stylesheetParams.put(name, value);
+		params.put(name, value);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class ResultPublisher {
 		for (String page : pages) {
 			String stylesheet = viewCatalog + page + ".xsl";
 			InputStream xsl2html = context.getResourceAsStream(stylesheet);
-			XMLUtils.applyStylesheet(index, xsl2html, resultCatalog + page + ".html", stylesheetParams);
+			XMLUtils.applyStylesheet(index, xsl2html, resultCatalog + page + ".html", params);
 		}
 		pages.remove("Summary");
 	}
@@ -105,6 +105,6 @@ public class ResultPublisher {
 	}
 
 	public String getSummaryPage() {
-		return File.separator + stylesheetParams.get("SessionFolder") + File.separator + "results" + File.separator + "Summary.html";
+		return File.separator + params.get("SessionFolder") + File.separator + "results" + File.separator + "Summary.html";
 	}
 }

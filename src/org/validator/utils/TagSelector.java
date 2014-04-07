@@ -10,11 +10,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 /**
- * Utility class to quickly traverse a (metadata) file and return a list of values
+ * Utility class to quickly traverse a (metadata) file and return a list of values.
+ * While I experimented with XPath, SAX seems to be a (~66%) quicker way of retrieving a value from XUDML.
  * @author danielgalassi@gmail.com
  *
  */
-public class SaxParser
+public class TagSelector
 {
 	private XMLReader		reader;
 	private InputSource		input;
@@ -40,6 +41,10 @@ public class SaxParser
 		this.metadata = new File (workDir + metadata);
 	}
 
+	/**
+	 * Retrieves the requested attribute from all found nodes matching a tag name
+	 * @return a set of attribute values
+	 */
 	public Vector<String> getListOfValues() {
 		boolean			metadataOK = (metadata != null && metadata.exists() && metadata.canRead());
 		boolean			tagSet = (pickTag != null && !pickTag.equals(""));

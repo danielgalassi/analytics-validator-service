@@ -6,25 +6,34 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * 
+ * Handler for <code>TagSelector</code> 
  * @author danielgalassi@gmail.com
  *
  */
 public class SaxHandler extends DefaultHandler {
 
-	private String			pickTag;
+	/**
+	 * Name of the XML tag to be evaluated, its value is then added to the result set.
+	 */
+	private String			tag;
+	/**
+	 * Tag to be evaluated.
+	 */
+	private String			attribute;
+	/**
+	 * Set of results (attribute values).
+	 */
 	private Vector<String>	listOfValues;
-	private String			pickAttrib;
 
 	/**
-	 * 
-	 * @param pickTag
-	 * @param pickAttrib
-	 * @param listOfValues
+	 * Constructor for the handler
+	 * @param pickTag name of the tag to be evaluated
+	 * @param pickAttrib name of the atribute to be picked up
+	 * @param listOfValues set of results
 	 */
 	public SaxHandler(String pickTag, String pickAttrib, Vector<String> listOfValues) {
-		this.pickTag = pickTag;
-		this.pickAttrib = pickAttrib;
+		this.tag = pickTag;
+		this.attribute = pickAttrib;
 		if (listOfValues == null) {
 			this.listOfValues = new Vector<String> ();
 		}
@@ -37,9 +46,9 @@ public class SaxHandler extends DefaultHandler {
 	 * This event finds the tag I need to evaluate
 	 */
 	public void startElement(String uri, String name, String qName, Attributes attrs) {
-		if (qName.equals(pickTag)) {
-			if (attrs.getIndex(pickAttrib) > -1) {
-				listOfValues.add(attrs.getValue(pickAttrib));
+		if (qName.equals(tag)) {
+			if (attrs.getIndex(attribute) > -1) {
+				listOfValues.add(attrs.getValue(attribute));
 			}
 		}
 	}

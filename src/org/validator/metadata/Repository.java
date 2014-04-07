@@ -109,9 +109,10 @@ public class Repository {
 			}
 
 			//finding presentation columns
+			//Vector<String> presentationColumns = findElements(pickTag, presentationTables, "parentId", "id", true);
 			NodeList presentationCol = null;
+			Vector<String> presentationColIDs = new Vector<String>();
 			for (int j = 0; j < presentationTableIDs.size(); j++) {
-				Vector<String> presentationColIDs = new Vector<String>();
 				expr = xpath.compile("//PresentationColumn[@parentId='" + presentationTableIDs.get(j) + "']");
 				result = expr.evaluate(doc, XPathConstants.NODESET);
 				presentationCol = (NodeList) result;
@@ -120,6 +121,24 @@ public class Repository {
 					presentationColIDs.add(y.getNamedItem("id").getNodeValue());
 
 					Node node = presentationCol.item(i);
+					Node copyNode = newMD.importNode(node, true);
+					repoTag.appendChild(copyNode);
+				}
+			}
+
+			//finding logical tables
+			//Vector<String> tempLogicalTables = findElements(pickTag, presentationColumns, "id", "parentId", false);
+			NodeList logicalTables = null;
+			Vector<String> logicalColIDs = new Vector<String>();
+			for (int j = 0; j < presentationColIDs.size(); j++) {
+				expr = xpath.compile("//LogicalColumn[@id='" + presentationColIDs.get(j) + "']");
+				result = expr.evaluate(doc, XPathConstants.NODESET);
+				logicalTables = (NodeList) result;
+				for (int i = 0; i < logicalTables.getLength(); i++) {
+					y = logicalTables.item(i).getAttributes();
+					logicalColIDs.add(y.getNamedItem("parentId").getNodeValue());
+					
+					Node node = logicalTables.item(i);
 					Node copyNode = newMD.importNode(node, true);
 					repoTag.appendChild(copyNode);
 				}

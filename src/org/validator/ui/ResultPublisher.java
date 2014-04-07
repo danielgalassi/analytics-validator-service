@@ -22,23 +22,23 @@ import org.validator.utils.XMLUtils;
 public class ResultPublisher {
 
 	/**
-	 * Path to the stylesheets used to create HTML pages
+	 * Path to the stylesheets used to create HTML pages.
 	 */
 	String				viewCatalog;
 	/**
-	 * Path where results are stored
+	 * Path where results are stored.
 	 */
 	String				resultCatalog;
 	/**
-	 * Scope of the servlet session
+	 * Scope of the servlet session.
 	 */
 	ServletContext		context;
 	/**
-	 * File containing all result entries
+	 * File containing all result entries.
 	 */
 	File				index;
 	/**
-	 * Different HTML pages to generate (names of stylesheets and HTML pages are the same)
+	 * Different HTML pages to generate (names of stylesheets and HTML pages are the same).
 	 */
 	Vector<String>		pages = new Vector<String>();
 	/**
@@ -47,7 +47,7 @@ public class ResultPublisher {
 	Map<String, String>	params = new HashMap<String, String> ();
 
 	/**
-	 * Sets the directories where results and stylesheets are stored
+	 * Sets the directories where results and stylesheets are stored.
 	 * @param resultCatalog path to results
 	 * @param viewCatalog path to stylesheets
 	 */
@@ -58,7 +58,7 @@ public class ResultPublisher {
 	}
 
 	/**
-	 * Sets the scope of the servlet, it is used to load stylesheets
+	 * Sets the scope of the servlet, it is used to load stylesheets.
 	 * @param context scope of servlet session
 	 */
 	public void setContext(ServletContext context) {
@@ -66,7 +66,7 @@ public class ResultPublisher {
 	}
 
 	/**
-	 * Name, value pairs used to generate stylesheet parameters
+	 * Name, value pairs used to generate stylesheet parameters.
 	 * @param name argument referenced in stylesheets
 	 * @param value literal evaluated during the transformation
 	 */
@@ -75,7 +75,7 @@ public class ResultPublisher {
 	}
 
 	/**
-	 * Creates HTML pages (Summary, Compact and Details views)
+	 * Creates HTML pages.
 	 */
 	private void generatePages() {
 		pages.add("Summary");
@@ -90,20 +90,24 @@ public class ResultPublisher {
 	}
 
 	/**
-	 * Creates a compressed file with a summary and detail pages
+	 * Creates a compressed file with a summary and detail pages.
 	 */
 	private void generateZip() {
 		FileUtils.Zip(resultCatalog,  pages, "Results.zip");
 	}
 
 	/**
-	 * Creates all HTML pages used for browsing and downloading
+	 * Creates all HTML pages used for browsing and downloading.
 	 */
 	public void publishResults() {
 		generatePages();
 		generateZip();
 	}
 
+	/**
+	 * Publishes the location of the summary page.
+	 * @return the summary page location in the context of the servlet session
+	 */
 	public String getSummaryPage() {
 		return File.separator + params.get("SessionFolder") + File.separator + "results" + File.separator + "Summary.html";
 	}

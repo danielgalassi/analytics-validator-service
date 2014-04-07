@@ -30,7 +30,7 @@ public class FileHandler extends HttpServlet {
 
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
 	/**
-	 * Maximum file size. Default value: 200MB
+	 * Maximum file size. Default value: 200MB.
 	 */
 	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
 	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
@@ -55,10 +55,7 @@ public class FileHandler extends HttpServlet {
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
 		ServletFileUpload upload = new ServletFileUpload(factory);
-
-		//sets maximum size of upload file
 		upload.setFileSizeMax(MAX_FILE_SIZE);
-
 		//sets maximum size of request (include file + form data)
 		upload.setSizeMax(MAX_REQUEST_SIZE);
 

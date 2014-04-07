@@ -4,6 +4,7 @@
 package org.validator.metadata;
 
 import java.io.File;
+import java.util.Vector;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -67,44 +68,68 @@ public class Repository {
 
 		Document doc = XMLUtils.loadDocument(repository);
 
+		Document newMD = XMLUtils.createDOMDocument();
+		Element repoTag = newMD.createElement("Repository");
+		Element declTag = newMD.createElement("DECLARE");
+
 		XPathFactory xpathfactory = XPathFactory.newInstance();
 		XPath xpath = xpathfactory.newXPath();
 
 		try {
 			long start = System.currentTimeMillis();
+			//finding subject areas
 			XPathExpression expr = xpath.compile("//PresentationCatalog[@name='" + keepSubjectArea + "']");
 			Object result = expr.evaluate(doc, XPathConstants.NODESET);
 			NodeList presentationCatalog = (NodeList) result;
-			String myID = "";
-			for (int i = 0; i < presentationCatalog.item(0).getAttributes().getLength(); i++) {
-				NamedNodeMap y = presentationCatalog.item(0).getAttributes();
-				System.out.println(" -> id = " + y.getNamedItem("id"));
-				myID = y.getNamedItem("id").getNodeValue();
-				Node x = presentationCatalog.item(0).getAttributes().item(i);
-				System.out.println(x.getNodeName() + "\t" + x.getNodeValue());
+			Vector<String> subjectAreaIDs = new Vector<String>();
+			for (int i = 0; i < presentationCatalog.getLength(); i++) {
+				NamedNodeMap y = presentationCatalog.item(i).getAttributes();
+				subjectAreaIDs.add(y.getNamedItem("id").getNodeValue());
+
+				Node node = presentationCatalog.item(i);
+				Node copyNode = newMD.importNode(node, true);
+				repoTag.appendChild(copyNode);
 			}
-			expr = xpath.compile("//PresentationTable[@parentId='" + myID + "']");
-			result = expr.evaluate(doc, XPathConstants.NODESET);
-			NodeList presentationTable = (NodeList) result;
 
-			Document newMD = XMLUtils.createDOMDocument();
-	        Element repoTag = newMD.createElement("Repository");
+			//finding presentation tables
+			NodeList presentationTable = null;
+			Vector<String> presentationTableIDs = new Vector<String>();
+			for (int i = 0; i < subjectAreaIDs.size(); i++) {
+				expr = xpath.compile("//PresentationTable[@parentId='" + subjectAreaIDs.get(i) + "']");
+				result = expr.evaluate(doc, XPathConstants.NODESET);
+				presentationTable = (NodeList) result;
 
-	        newMD.appendChild(repoTag);
-	        for (int i = 0; i < presentationCatalog.getLength(); i++) {
-	            Node node = presentationCatalog.item(i);
-	            Node copyNode = newMD.importNode(node, true);
-	            repoTag.appendChild(copyNode);
-	        }
-	        for (int i = 0; i < presentationTable.getLength(); i++) {
-	        	Node node = presentationTable.item(i);
-	        	Node copyNode = newMD.importNode(node, true);
-	        	repoTag.appendChild(copyNode);
-	        }
-	        XMLUtils.saveDocument(newMD,  directory + File.separator + "metadata.xml");
-	        System.out.println((System.currentTimeMillis() - start) / 1000);
-//			repository.delete();
-//			repository = null;
+				NamedNodeMap y = presentationCatalog.item(i).getAttributes();
+				presentationTableIDs.add(y.getNamedItem("id").getNodeValue());
+
+				Node node = presentationTable.item(i);
+				Node copyNode = newMD.importNode(node, true);
+				repoTag.appendChild(copyNode);
+			}
+
+			//finding presentation columns
+			NodeList presentationColumn = null;
+			Vector<String> presentationColIDs = new Vector<String>();
+			for (int i = 0; i < presentationTableIDs.size(); i++) {
+				expr = xpath.compile("//PresentationColumn[@parentId='" + presentationTableIDs.get(i) + "']");
+				result = expr.evaluate(doc, XPathConstants.NODESET);
+				presentationColumn = (NodeList) result;
+
+				NamedNodeMap y = presentationTable.item(i).getAttributes();
+				presentationColIDs.add(y.getNamedItem("id").getNodeValue());
+
+				if (presentationColumn.getLength() > 0) {
+					Node node = presentationColumn.item(i);
+					Node copyNode = newMD.importNode(node, true);
+					repoTag.appendChild(copyNode);
+				}
+			}
+
+			newMD.appendChild(repoTag);
+			XMLUtils.saveDocument(newMD,  directory + File.separator + "metadata.xml");
+			System.out.println((System.currentTimeMillis() - start) / 1000);
+			//			repository.delete();
+			//			repository = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

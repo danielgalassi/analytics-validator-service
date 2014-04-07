@@ -6,7 +6,6 @@ package org.validator.metadata;
 import java.io.File;
 import java.util.Vector;
 
-import org.validator.utils.FileUtils;
 import org.validator.utils.SaxToDom;
 import org.validator.utils.XMLUtils;
 import org.w3c.dom.Document;
@@ -58,7 +57,7 @@ public class Repository {
 	 * @param keepSubjectArea the name of the subject area to evaluate 
 	 */
 	public void trim(String keepSubjectArea) {
-		XMLReader		reader = FileUtils.getXMLReader();
+		XMLReader		reader = XMLUtils.getXMLReader();
 		SaxToDom		xml = new SaxToDom(null, reader, repository);
 		Vector<String>	subjectAreas = new Vector<String>();
 

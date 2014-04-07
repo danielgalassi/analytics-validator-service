@@ -47,7 +47,7 @@ public class TagSelector
 	 */
 	private void getValuesFromMetadata() {
 		input = FileUtils.getStream(metadata);
-		reader = FileUtils.getXMLReader();
+		reader = XMLUtils.getXMLReader();
 
 		if (input != null) {
 			handlers = new SaxHandler(tag, attribute, listOfValues);

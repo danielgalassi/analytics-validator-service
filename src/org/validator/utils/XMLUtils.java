@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -17,6 +20,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /**
  * XML Utilities
@@ -202,5 +207,27 @@ public class XMLUtils {
 		} catch (TransformerException transfException) {
 			transfException.printStackTrace();
 		}
+	}
+
+	/**
+	 * XMLReader factory.
+	 * @return XMLReader object for future SAX parsing operations 
+	 */
+	public static XMLReader getXMLReader() {
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		//enabling the namespaces processing
+		if(!factory.isNamespaceAware()) {
+			factory.setNamespaceAware(true);
+		}
+
+		SAXParser parser = null;
+		XMLReader reader = null;
+		try {
+			parser = factory.newSAXParser();
+			reader = parser.getXMLReader();
+		} catch (ParserConfigurationException | SAXException e) {
+			e.printStackTrace();
+		}
+		return reader;
 	}
 }

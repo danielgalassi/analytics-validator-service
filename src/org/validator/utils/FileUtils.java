@@ -12,13 +12,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
 
 /***
  * Set of methods to handle IO file operations.
@@ -28,29 +22,7 @@ import org.xml.sax.XMLReader;
 public class FileUtils {
 
 	/**
-	 * XMLReader factory.
-	 * @return XMLReader object for future SAX parsing operations 
-	 */
-	public static XMLReader getXMLReader() {
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-		//enabling the namespaces processing
-		if(!factory.isNamespaceAware()) {
-			factory.setNamespaceAware(true);
-		}
-
-		SAXParser parser = null;
-		XMLReader reader = null;
-		try {
-			parser = factory.newSAXParser();
-			reader = parser.getXMLReader();
-		} catch (ParserConfigurationException | SAXException e) {
-			e.printStackTrace();
-		}
-		return reader;
-	}
-
-	/**
-	 * A SAX reference for a file.
+	 * A reference for a file.
 	 * @param file
 	 * @return InputSource
 	 */

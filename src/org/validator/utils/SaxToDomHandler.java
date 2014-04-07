@@ -19,11 +19,11 @@ import org.xml.sax.helpers.DefaultHandler;
 class SaxToDomHandler extends DefaultHandler
 {
 	private Document		doc;
-	private Node			currentNode;
+	private Node			node;
+	private String			tag;
 	private boolean			isInteresting = false;
 	private boolean			isReallyInteresting = false;
 	private String			processingNode;
-	private String			pickTag;
 	private Vector<String>	listOfValues;
 	private String			matchingAttrib;
 	private String			returningAttrib;
@@ -39,8 +39,8 @@ class SaxToDomHandler extends DefaultHandler
 			String			returningAttrib, 
 			boolean			appendToDoc) {
 		this.doc = doc;
-		currentNode = doc.getFirstChild().getFirstChild();
-		this.pickTag = pickTag;
+		node = doc.getFirstChild().getFirstChild();
+		this.tag = pickTag;
 		this.listOfValues = listOfValues;
 		foundTokenList = vLst;
 		this.matchingAttrib = matchingAttrib;
@@ -60,9 +60,9 @@ class SaxToDomHandler extends DefaultHandler
 
 	public void startElement(String uri, String name, String qName, Attributes attrs) {
 
-		if (qName.equals(pickTag)) {
+		if (qName.equals(tag)) {
 			isInteresting = true;
-			processingNode = pickTag;
+			processingNode = tag;
 		}
 
 		//processing top-level node and children
@@ -99,8 +99,8 @@ class SaxToDomHandler extends DefaultHandler
 			}
 			// Actually add it in the tree, and adjust the right place.
 			if (isReallyInteresting && appendToDoc) {
-				currentNode.appendChild(elem);
-				currentNode = elem;
+				node.appendChild(elem);
+				node = elem;
 			}
 		}
 	}
@@ -108,7 +108,7 @@ class SaxToDomHandler extends DefaultHandler
 	public void endElement(String uri, String name, String qName) {
 		if (isReallyInteresting) {
 			if (appendToDoc) {
-				currentNode = currentNode.getParentNode();
+				node = node.getParentNode();
 			}
 			if (qName.equals(processingNode)) {
 				isInteresting = false;
@@ -121,7 +121,7 @@ class SaxToDomHandler extends DefaultHandler
 		if (isReallyInteresting && appendToDoc) {
 			String	str  = new String(ch, start, length);
 			Text	text = doc.createTextNode(str);
-			currentNode.appendChild(text);
+			node.appendChild(text);
 		}
 	}
 
@@ -130,7 +130,7 @@ class SaxToDomHandler extends DefaultHandler
 		if (isReallyInteresting && appendToDoc) {
 			String	str  = new String(ch, start, length);
 			Text	text = doc.createTextNode(str);
-			currentNode.appendChild(text);
+			node.appendChild(text);
 		}
 	}
 
@@ -138,7 +138,7 @@ class SaxToDomHandler extends DefaultHandler
 	public void processingInstruction(String target, String data) {
 		if (isReallyInteresting && appendToDoc) {
 			ProcessingInstruction pi = doc.createProcessingInstruction(target, data);
-			currentNode.appendChild(pi);
+			node.appendChild(pi);
 		}
 	}
 }

@@ -6,7 +6,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
- * Handler for <code>TagSelector</code> 
+ * This handler processes all events for a selected tag and retrieves the value of a selected attribute.
  * @author danielgalassi@gmail.com
  *
  */
@@ -26,24 +26,19 @@ public class SaxHandler extends DefaultHandler {
 	private Vector<String>	listOfValues;
 
 	/**
-	 * Constructor for the handler
+	 * Constructor for the handler.
 	 * @param pickTag name of the tag to be evaluated
-	 * @param pickAttrib name of the atribute to be picked up
+	 * @param pickAttrib name of the attribute to be picked up
 	 * @param listOfValues set of results
 	 */
 	public SaxHandler(String pickTag, String pickAttrib, Vector<String> listOfValues) {
 		this.tag = pickTag;
 		this.attribute = pickAttrib;
-		if (listOfValues == null) {
-			this.listOfValues = new Vector<String> ();
-		}
-		else {
-			this.listOfValues = listOfValues;
-		}
+		this.listOfValues = listOfValues;
 	}
 
 	/**
-	 * This event finds the tag I need to evaluate
+	 * This event finds the tag I need to evaluate.
 	 */
 	public void startElement(String uri, String name, String qName, Attributes attrs) {
 		if (qName.equals(tag)) {

@@ -20,17 +20,18 @@ public class TagSelector
 	private XMLReader		reader;
 	private InputSource		input;
 	private SaxHandler		handlers;
-	private String			pickTag = null;
-	private String			pickAttribute = null;
+	private String			tag = "PresentationCatalog";
+	private String			attribute = "name";
 	private File			metadata;
 	private String			workDir;
+	private Vector<String>	listOfValues = new Vector<String> ();
 
-	public void setTag (String pickTag) {
-		this.pickTag = pickTag;
+	public void setTag (String tag) {
+		this.tag = tag;
 	}
 
-	public void setAttribute (String pickAttribute) {
-		this.pickAttribute = pickAttribute;
+	public void setAttribute (String attribute) {
+		this.attribute = attribute;
 	}
 
 	public void setWorkDir (String workDir) {
@@ -42,33 +43,31 @@ public class TagSelector
 	}
 
 	/**
-	 * Retrieves the requested attribute from all found nodes matching a tag name
-	 * @return a set of attribute values
+	 * Parses metadata file with <code>SaxHandler</code>
 	 */
-	public Vector<String> getListOfValues() {
-		boolean			metadataOK = (metadata != null && metadata.exists() && metadata.canRead());
-		boolean			tagSet = (pickTag != null && !pickTag.equals(""));
-		boolean			attributeSet = (pickAttribute != null || !pickAttribute.equals(""));
-		Vector<String>	listOfValues = new Vector<String> ();
+	private void getValuesFromMetadata() {
+		input = FileUtils.getStream(metadata);
+		reader = FileUtils.getXMLReader();
 
-		if (tagSet && attributeSet && metadataOK) {
-			input = FileUtils.getStream(metadata);
-			reader = FileUtils.getXMLReader();
+		if (input != null) {
+			handlers = new SaxHandler(tag, attribute, listOfValues);
+			reader.setContentHandler(handlers);
+			reader.setErrorHandler(handlers);
 
-			if (input != null) {
-				handlers = new SaxHandler(pickTag, pickAttribute, listOfValues);
-				reader.setContentHandler(handlers);
-				reader.setErrorHandler(handlers);
-
-				try {
-					reader.parse(input);
-				} catch (IOException | SAXException e) {
-					e.printStackTrace();
-				}
+			try {
+				reader.parse(input);
+			} catch (IOException | SAXException e) {
+				e.printStackTrace();
 			}
 		}
-		//default option if subject areas cannot be found
+	}
+
+	/**
+	 * Sorts and adds default values to list of attribute values.
+	 */
+	private void arrangeValues() {
 		if (listOfValues.size() == 0) {
+			//default option if subject areas cannot be found
 			listOfValues.add("No subject areas found");
 		}
 		else {
@@ -76,6 +75,22 @@ public class TagSelector
 			Collections.sort(listOfValues);
 			listOfValues.add(0, "Browse Subject Areas");
 		}
+	}
+
+	/**
+	 * Retrieves the requested attribute from all found nodes matching a tag name.
+	 * @return a set of attribute values
+	 */
+	public Vector<String> getListOfValues() {
+		boolean	isRepositoryOK = (metadata != null && metadata.exists() && metadata.canRead());
+		boolean	isTagSet = !tag.equals("");
+		boolean	isAttributeSet = !attribute.equals("");
+
+		if (isTagSet && isAttributeSet && isRepositoryOK) {
+			getValuesFromMetadata();
+		}
+		arrangeValues();
+
 		return listOfValues;
 	}
 }

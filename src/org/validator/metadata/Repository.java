@@ -29,10 +29,10 @@ public class Repository {
 	private File directory = null;
 
 	/**
-	 * Instantiates a metadata file
+	 * Instantiates a metadata file and trims the mammoth file keeping only XUDML tags related to the selected subject area.
 	 * @param directory path to the repository metadata file
 	 * @param repository name and extension of the metadata repository file
-	 * @param selectedSubjectArea 
+	 * @param selectedSubjectArea the name of the subject area selected from the combo box
 	 */
 	public Repository(String directory, String repository, String selectedSubjectArea) {
 		this.directory  = new File(directory);
@@ -54,6 +54,7 @@ public class Repository {
 
 	/**
 	 * Creates a smaller repository file discarding all objects not used for the selected Subject Area.
+	 * While the code in this method and classes this method calls can handle processing a number of subject areas, at the moment, the functionality of the application is limited to a single subject area.
 	 * @param keepSubjectArea the name of the subject area to evaluate 
 	 */
 	public void trim(String keepSubjectArea) {

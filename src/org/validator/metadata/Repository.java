@@ -82,8 +82,10 @@ public class Repository {
 			Object result = expr.evaluate(doc, XPathConstants.NODESET);
 			NodeList presentationCatalog = (NodeList) result;
 			Vector<String> subjectAreaIDs = new Vector<String>();
+			NamedNodeMap y = null;
+
 			for (int i = 0; i < presentationCatalog.getLength(); i++) {
-				NamedNodeMap y = presentationCatalog.item(i).getAttributes();
+				y = presentationCatalog.item(i).getAttributes();
 				subjectAreaIDs.add(y.getNamedItem("id").getNodeValue());
 
 				Node node = presentationCatalog.item(i);
@@ -94,12 +96,11 @@ public class Repository {
 			//finding presentation tables
 			NodeList presentationTable = null;
 			Vector<String> presentationTableIDs = new Vector<String>();
-			for (int i = 0; i < subjectAreaIDs.size(); i++) {
-				expr = xpath.compile("//PresentationTable[@parentId='" + subjectAreaIDs.get(i) + "']");
-				result = expr.evaluate(doc, XPathConstants.NODESET);
-				presentationTable = (NodeList) result;
-
-				NamedNodeMap y = presentationCatalog.item(i).getAttributes();
+			expr = xpath.compile("//PresentationTable[@parentId='" + subjectAreaIDs.get(0) + "']");
+			result = expr.evaluate(doc, XPathConstants.NODESET);
+			presentationTable = (NodeList) result;
+			for (int i = 0; i < presentationTable.getLength(); i++) {
+				y = presentationTable.item(i).getAttributes();
 				presentationTableIDs.add(y.getNamedItem("id").getNodeValue());
 
 				Node node = presentationTable.item(i);
@@ -108,18 +109,17 @@ public class Repository {
 			}
 
 			//finding presentation columns
-			NodeList presentationColumn = null;
-			Vector<String> presentationColIDs = new Vector<String>();
-			for (int i = 0; i < presentationTableIDs.size(); i++) {
-				expr = xpath.compile("//PresentationColumn[@parentId='" + presentationTableIDs.get(i) + "']");
+			NodeList presentationCol = null;
+			for (int j = 0; j < presentationTableIDs.size(); j++) {
+				Vector<String> presentationColIDs = new Vector<String>();
+				expr = xpath.compile("//PresentationColumn[@parentId='" + presentationTableIDs.get(j) + "']");
 				result = expr.evaluate(doc, XPathConstants.NODESET);
-				presentationColumn = (NodeList) result;
+				presentationCol = (NodeList) result;
+				for (int i = 0; i < presentationCol.getLength(); i++) {
+					y = presentationCol.item(i).getAttributes();
+					presentationColIDs.add(y.getNamedItem("id").getNodeValue());
 
-				NamedNodeMap y = presentationTable.item(i).getAttributes();
-				presentationColIDs.add(y.getNamedItem("id").getNodeValue());
-
-				if (presentationColumn.getLength() > 0) {
-					Node node = presentationColumn.item(i);
+					Node node = presentationCol.item(i);
 					Node copyNode = newMD.importNode(node, true);
 					repoTag.appendChild(copyNode);
 				}
@@ -128,8 +128,8 @@ public class Repository {
 			newMD.appendChild(repoTag);
 			XMLUtils.saveDocument(newMD,  directory + File.separator + "metadata.xml");
 			System.out.println((System.currentTimeMillis() - start) / 1000);
-			//			repository.delete();
-			//			repository = null;
+			//repository.delete();
+			//repository = null;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

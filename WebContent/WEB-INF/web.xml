@@ -11,7 +11,7 @@
 		<description></description>
 		<display-name>FileHandler</display-name>
 		<servlet-name>FileHandler</servlet-name>
-		<servlet-class>org.validator.services.FileHandler</servlet-class>
+		<servlet-class>org.validator.servlets.FileHandler</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FileHandler</servlet-name>
@@ -21,7 +21,7 @@
 		<description></description>
 		<display-name>Admin</display-name>
 		<servlet-name>Admin</servlet-name>
-		<servlet-class>org.validator.services.Admin</servlet-class>
+		<servlet-class>org.validator.servlets.Admin</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Admin</servlet-name>
@@ -39,7 +39,7 @@
 		<description></description>
 		<display-name>ValidatorService</display-name>
 		<servlet-name>ValidatorService</servlet-name>
-		<servlet-class>org.validator.services.ValidatorService</servlet-class>
+		<servlet-class>org.validator.servlets.ValidatorService</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ValidatorService</servlet-name>

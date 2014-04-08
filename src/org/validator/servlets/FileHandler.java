@@ -47,11 +47,11 @@ public class FileHandler extends HttpServlet {
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 
-		//configures upload settings
-		DiskFileItemFactory factory = new DiskFileItemFactory();
+		//configures upload settings,
 		//sets memory threshold - beyond which files are stored in disk
+		//and sets temporary location to store files
+		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setSizeThreshold(MEMORY_THRESHOLD);
-		//sets temporary location to store files
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
 		ServletFileUpload upload = new ServletFileUpload(factory);

@@ -12,6 +12,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.InputSource;
 
 /***
@@ -20,6 +22,8 @@ import org.xml.sax.InputSource;
  *
  */
 public class FileUtils {
+
+	private static final Logger logger = LogManager.getLogger(FileUtils.class.getName());
 
 	/**
 	 * A reference for a file.
@@ -88,6 +92,7 @@ public class FileUtils {
 	public static boolean setupWorkDirectory(String newFolder) {
 		File workDirectory = new File(newFolder); 
 		if (workDirectory.exists()) {
+			logger.warn("Cleaning up directory {}", newFolder);
 			deleteAll(workDirectory);
 		}
 		workDirectory.mkdir();

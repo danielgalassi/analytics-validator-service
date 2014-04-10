@@ -19,6 +19,8 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -29,6 +31,8 @@ import org.xml.sax.XMLReader;
  *
  */
 public class XMLUtils {
+
+	private static final Logger logger = LogManager.getLogger(XMLUtils.class.getName());
 
 	/**
 	 * Create an empty DOM document.
@@ -41,7 +45,7 @@ public class XMLUtils {
 			docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			xml = docBuilder.newDocument();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return xml;
 	}
@@ -159,13 +163,13 @@ public class XMLUtils {
 			transformer = factory.newTransformer(xslSource);
 			transformer.setParameter("ShowErrorsOnly", "false");
 		} catch (TransformerConfigurationException configException) {
-			configException.printStackTrace();
+			logger.error(configException.getMessage());
 		}
 
 		try {
 			transformer.transform(xmlSource, result);
 		} catch (TransformerException transfException) {
-			transfException.printStackTrace();
+			logger.error(transfException.getMessage());
 		}
 	}
 
@@ -194,18 +198,19 @@ public class XMLUtils {
 			if (params != null) {
 				if (!params.isEmpty()) {
 					for (Map.Entry<String, String> param : params.entrySet()) {
+						logger.info("Parameter set for XSL transformer: {}={}", param.getKey(), param.getValue());
 						transformer.setParameter(param.getKey(), param.getValue());
 					}
 				}
 			}
 		} catch (TransformerConfigurationException configException) {
-			configException.printStackTrace();
+			logger.error(configException.getMessage());
 		}
 
 		try {
 			transformer.transform(xmlSource, result);
 		} catch (TransformerException transfException) {
-			transfException.printStackTrace();
+			logger.error(transfException.getMessage());
 		}
 	}
 

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.validator.services.engine.ValidatorEngine;
 import org.validator.services.metadata.Repository;
 import org.validator.services.ui.ResultPublisher;
@@ -27,6 +29,9 @@ import org.validator.services.ui.ResultPublisher;
 public class ValidatorService extends HttpServlet {
 
 	private static final long	serialVersionUID = 1L;
+	
+	private static final Logger logger = LogManager.getLogger(ValidatorService.class.getName());
+
 	/**
 	 * Application directory where all test cases reside.
 	 */
@@ -56,6 +61,7 @@ public class ValidatorService extends HttpServlet {
 		Repository repository	= new Repository(workDirectory, metadata, subjectArea);
 
 		if (!repository.available()) {
+			logger.error("XUDML file not found!");
 			request.setAttribute("ErrorMessage", "Metadata file not found.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 			return;
@@ -70,6 +76,7 @@ public class ValidatorService extends HttpServlet {
 
 		//forwards to the error page if the test suite is empty 
 		if (engine.getTestSuiteSize() == 0) {
+			logger.fatal("Tests not found");
 			request.setAttribute("ErrorMessage", "Tests not found.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 			return;

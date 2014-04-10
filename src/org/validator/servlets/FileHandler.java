@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.validator.utils.FileUtils;
 
 
@@ -27,6 +29,8 @@ import org.validator.utils.FileUtils;
 @WebServlet(description = "This controller handles file-based requests", urlPatterns = { "/FileHandler" })
 public class FileHandler extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private static final Logger logger = LogManager.getLogger(FileHandler.class.getName());
 
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
 	/**
@@ -43,6 +47,7 @@ public class FileHandler extends HttpServlet {
 
 		//checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
+			logger.fatal("Not a multipart request");
 			request.setAttribute("ErrorMessage", "Something went horribly wrong.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 		}
@@ -61,8 +66,7 @@ public class FileHandler extends HttpServlet {
 
 		//sets up the working directory for this session
 		String sSessionId = request.getRequestedSessionId();
-		String uploadPath = getServletContext().getRealPath("")
-				+ File.separator + sSessionId + File.separator;
+		String uploadPath = getServletContext().getRealPath("") + File.separator + sSessionId + File.separator;
 		FileUtils.setupWorkDirectory(uploadPath);
 
 		try {
@@ -70,10 +74,13 @@ public class FileHandler extends HttpServlet {
 			List<FileItem> formItems = upload.parseRequest(request);
 
 			if (formItems != null && formItems.size() > 0) {
+
 				for (FileItem item : formItems) {
 					if (item.isFormField()) {
 						String name = item.getFieldName();
 						String value = item.getString();
+
+						logger.info("Form selection: {}={}", name, value);
 
 						if (name.equals("fileFormat")) {
 							isZipFormat = value.equals("zip");
@@ -88,6 +95,7 @@ public class FileHandler extends HttpServlet {
 						String fileName = new File(item.getName()).getName();
 
 						if (fileName.equals("")) {
+							logger.fatal("No metadata file selected.");
 							request.setAttribute("ErrorMessage", "Please select a file before submitting a request.");
 							getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 							return;
@@ -113,6 +121,7 @@ public class FileHandler extends HttpServlet {
 				}
 			}
 		} catch (Exception e) {
+			logger.error("Exception: {}", e.getMessage());
 			request.setAttribute("message", "There was an error: " + e.getMessage());
 		}
 		//redirects client to message page

@@ -10,6 +10,8 @@ import java.util.Vector;
 
 import javax.servlet.ServletContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.validator.services.metadata.Repository;
 import org.validator.services.metadata.Test;
 import org.validator.services.metadata.XSLTest;
@@ -29,6 +31,7 @@ import org.w3c.dom.Element;
  */
 public class ValidatorEngine {
 
+	private static final Logger logger = LogManager.getLogger(ValidatorEngine.class.getName());
 	/**
 	 * The target directory where validation results will be saved.
 	 */
@@ -81,6 +84,7 @@ public class ValidatorEngine {
 			testsFound = (context.getResourcePaths(testCatalog).size() > 0);
 		} catch (Exception e) {
 			//a NullPointerException is thrown if the directory is not found
+			logger.fatal("Test catalogue not found");
 			e.printStackTrace();
 		}
 

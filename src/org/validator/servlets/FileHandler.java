@@ -47,7 +47,7 @@ public class FileHandler extends HttpServlet {
 
 		//checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {
-			logger.fatal("Not a multipart request");
+			logger.error("Not a multipart request");
 			request.setAttribute("ErrorMessage", "Something went horribly wrong.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 		}
@@ -73,6 +73,7 @@ public class FileHandler extends HttpServlet {
 			//parses the request content to extract file data
 			List<FileItem> formItems = upload.parseRequest(request);
 
+			logger.info("Processing form fields");
 			if (formItems != null && formItems.size() > 0) {
 
 				for (FileItem item : formItems) {
@@ -92,10 +93,12 @@ public class FileHandler extends HttpServlet {
 					}
 
 					if (!item.isFormField()) {
+						
+						logger.info("Processing file...");
 						String fileName = new File(item.getName()).getName();
 
 						if (fileName.equals("")) {
-							logger.fatal("No metadata file selected.");
+							logger.error("No metadata file selected.");
 							request.setAttribute("ErrorMessage", "Please select a file before submitting a request.");
 							getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
 							return;

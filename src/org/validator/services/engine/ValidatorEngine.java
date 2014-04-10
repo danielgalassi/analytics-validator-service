@@ -78,6 +78,8 @@ public class ValidatorEngine {
 	 * @param testCatalog directory where all tests are stored
 	 */
 	public void setTestSuite(ServletContext context, String testCatalog) {
+		
+		logger.info("Creating Test Suite");
 
 		boolean testsFound = false;
 		try {
@@ -88,6 +90,7 @@ public class ValidatorEngine {
 		}
 
 		if (!testsFound) {
+			logger.error("Test suite cannot be set");
 			return;
 		}
 
@@ -130,11 +133,12 @@ public class ValidatorEngine {
 		long					startTimer;
 
 		if (!ready()) {
-			logger.info("Engine is not ready");
+			logger.error("Engine is not ready");
 			return;
 		}
 
 		//executes all scripts in test suite and times them
+		logger.info("Executing tests...");
 		for (Test test : testSuite) {
 			startTimer = System.currentTimeMillis();
 			String result = resultCatalogue + test.getName() + ".xml";

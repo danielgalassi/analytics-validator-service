@@ -85,6 +85,7 @@ public class ValidatorService extends HttpServlet {
 		engine.run();
 
 		//publishes HTML pages featuring results to the session folder
+		logger.info("Creating a publisher");
 		ResultPublisher publisher = new ResultPublisher();
 		publisher.setCatalogs(resultCatalogue, viewCatalogue);
 		publisher.setContext(getServletContext());

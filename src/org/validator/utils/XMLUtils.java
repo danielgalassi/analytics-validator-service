@@ -64,7 +64,7 @@ public class XMLUtils {
 			builder = factory.newDocumentBuilder();
 			xml = builder.parse(xmlFile);
 		} catch(Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return xml;
@@ -84,7 +84,7 @@ public class XMLUtils {
 			builder = factory.newDocumentBuilder();
 			xml = builder.parse(xmlStream);
 		} catch(Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return xml;
@@ -105,7 +105,7 @@ public class XMLUtils {
 			transformer.transform(source, result);
 		} catch (TransformerException
 				| TransformerFactoryConfigurationError e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 	}
 
@@ -231,7 +231,7 @@ public class XMLUtils {
 			parser = factory.newSAXParser();
 			reader = parser.getXMLReader();
 		} catch (ParserConfigurationException | SAXException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return reader;
 	}

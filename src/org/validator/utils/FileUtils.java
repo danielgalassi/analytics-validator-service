@@ -39,7 +39,7 @@ public class FileUtils {
 			source = new InputSource(new InputStreamReader(stream));
 			source.setEncoding("UTF-8");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			source = null;
 		}
 		return source;
@@ -59,7 +59,7 @@ public class FileUtils {
 			n = raf.readInt();
 			raf.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		return (n == 0x504B0304);
@@ -125,7 +125,7 @@ public class FileUtils {
 			//remember close it
 			zipOS.close();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 	}
 
@@ -169,7 +169,7 @@ public class FileUtils {
 			zis.close();
 
 		} catch(IOException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 
 		return newFile;
@@ -203,7 +203,7 @@ public class FileUtils {
 			//remember close it
 			zipOS.close();
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage());
 		}
 	}
 }

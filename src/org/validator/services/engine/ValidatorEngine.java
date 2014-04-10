@@ -85,7 +85,7 @@ public class ValidatorEngine {
 		} catch (Exception e) {
 			//a NullPointerException is thrown if the directory is not found
 			logger.fatal("Test catalogue not found");
-			e.printStackTrace();
+			logger.fatal(e.getMessage());
 		}
 
 		if (!testsFound) {

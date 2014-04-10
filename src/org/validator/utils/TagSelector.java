@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Vector;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -15,8 +17,10 @@ import org.xml.sax.XMLReader;
  * @author danielgalassi@gmail.com
  *
  */
-public class TagSelector
-{
+public class TagSelector {
+
+	private static final Logger logger = LogManager.getLogger(TagSelector.class.getName());
+
 	private XMLReader		reader;
 	private InputSource		input;
 	private SaxHandler		handlers;
@@ -57,7 +61,7 @@ public class TagSelector
 			try {
 				reader.parse(input);
 			} catch (IOException | SAXException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 		}
 	}

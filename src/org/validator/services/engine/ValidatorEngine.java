@@ -53,7 +53,7 @@ public class ValidatorEngine {
 	 * Validator Engine constructor. Repository, Test Suite and Session Directory are set using independent methods.
 	 */
 	public ValidatorEngine() {
-		System.out.println("Initialising Validator Engine");
+		logger.info("Initialising Validator Engine");
 	}
 
 	/**
@@ -84,7 +84,6 @@ public class ValidatorEngine {
 			testsFound = (context.getResourcePaths(testCatalog).size() > 0);
 		} catch (Exception e) {
 			//a NullPointerException is thrown if the directory is not found
-			logger.fatal("Test catalogue not found");
 			logger.fatal(e.getMessage());
 		}
 
@@ -131,6 +130,7 @@ public class ValidatorEngine {
 		long					startTimer;
 
 		if (!ready()) {
+			logger.info("Engine is not ready");
 			return;
 		}
 
@@ -154,6 +154,9 @@ public class ValidatorEngine {
 		boolean isRepositorySet = (repository != null);
 		boolean isResultDirSet	= (!resultCatalogue.equals(""));
 
+		logger.info("isTestSuiteSet = {}", isTestSuiteSet);
+		logger.info("isRepositorySet = {}", isRepositorySet);
+		logger.info("isResultDirSet = {}", isResultDirSet);
 		return (isRepositorySet && isTestSuiteSet && isResultDirSet && serviceStartTime != 0);
 	}
 
@@ -165,6 +168,7 @@ public class ValidatorEngine {
 		Document index = XMLUtils.createDOMDocument();
 		Element root = index.createElement("index");
 
+		logger.trace("Creating results index");
 		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {
 			Element node = index.createElement("results");
 			node.setTextContent(ref.getKey());

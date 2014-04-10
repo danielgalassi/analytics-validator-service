@@ -198,7 +198,7 @@ public class XMLUtils {
 			if (params != null) {
 				if (!params.isEmpty()) {
 					for (Map.Entry<String, String> param : params.entrySet()) {
-						logger.info("Parameter set for XSL transformer: {}={}", param.getKey(), param.getValue());
+						logger.trace("Parameter set for XSL transformer: {}={}", param.getKey(), param.getValue());
 						transformer.setParameter(param.getKey(), param.getValue());
 					}
 				}

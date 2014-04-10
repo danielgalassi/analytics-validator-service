@@ -11,6 +11,8 @@ import java.util.Vector;
 
 import javax.servlet.ServletContext;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.validator.utils.FileUtils;
 import org.validator.utils.XMLUtils;
 
@@ -21,6 +23,7 @@ import org.validator.utils.XMLUtils;
  */
 public class ResultPublisher {
 
+	private static final Logger logger = LogManager.getLogger(ResultPublisher.class.getName());
 	/**
 	 * Path to the stylesheets used to create HTML pages.
 	 */
@@ -93,13 +96,14 @@ public class ResultPublisher {
 	 * Creates a compressed file with a summary and detail pages.
 	 */
 	private void generateZip() {
-		FileUtils.Zip(resultCatalog,  pages, "Results.zip");
+		FileUtils.archive(resultCatalog,  pages, "Results.zip");
 	}
 
 	/**
 	 * Creates all HTML pages used for browsing and downloading.
 	 */
 	public void publishResults() {
+		logger.trace("Publishing results...");
 		generatePages();
 		generateZip();
 	}

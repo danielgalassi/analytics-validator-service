@@ -6,6 +6,8 @@ package org.validator.services.metadata;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.validator.utils.XMLUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -16,6 +18,7 @@ import org.w3c.dom.NodeList;
  */
 public class XSLTest implements Test{
 
+	private static final Logger logger = LogManager.getLogger(XSLTest.class.getName());
 	/**
 	 * Name of the test case.
 	 */
@@ -32,6 +35,7 @@ public class XSLTest implements Test{
 	public XSLTest(InputStream script) {
 		this.script = script;
 		setName();
+		logger.info("Loading test {}", name);
 	}
 
 	/**

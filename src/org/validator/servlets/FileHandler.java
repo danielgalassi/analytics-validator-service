@@ -80,7 +80,7 @@ public class FileHandler extends HttpServlet {
 						String name = item.getFieldName();
 						String value = item.getString();
 
-						logger.info("Form selection: {}={}", name, value);
+						logger.trace("Form selection: {}={}", name, value);
 
 						if (name.equals("fileFormat")) {
 							isZipFormat = value.equals("zip");
@@ -108,7 +108,7 @@ public class FileHandler extends HttpServlet {
 
 						//unzip if appropriate
 						if (isZipFormat && FileUtils.isZipFile(uploaded)) {
-							metadata = FileUtils.unZipIt(uploaded.getAbsolutePath(), uploadPath);
+							metadata = FileUtils.extract(uploaded.getAbsolutePath(), uploadPath);
 							uploaded.delete();
 						}
 						else {

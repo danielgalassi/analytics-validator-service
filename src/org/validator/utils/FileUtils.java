@@ -90,7 +90,7 @@ public class FileUtils {
 	 * @return true if the directory has been created
 	 */
 	public static boolean setupWorkDirectory(String newFolder) {
-		File workDirectory = new File(newFolder); 
+		File workDirectory = new File(newFolder);
 		if (workDirectory.exists()) {
 			logger.warn("Cleaning up directory {}", newFolder);
 			deleteAll(workDirectory);
@@ -100,56 +100,26 @@ public class FileUtils {
 	}
 
 	/**
-	 * Generates a Zip archive.
-	 * @param sSource
-	 * @param sTarget
-	 */
-	public static void Zip(String sSource, String sTarget) {
-		byte[] buffer = new byte[1024];
-
-		try {
-			FileOutputStream fos = new FileOutputStream(sTarget);
-			ZipOutputStream zipOS = new ZipOutputStream(fos);
-			ZipEntry zipEntry = new ZipEntry("results.html");
-			zipOS.putNextEntry(zipEntry);
-			FileInputStream in = new FileInputStream(sSource);
-
-			int len;
-			while ((len = in.read(buffer)) > 0) {
-				zipOS.write(buffer, 0, len);
-			}
-
-			in.close();
-			zipOS.closeEntry();
-
-			//remember close it
-			zipOS.close();
-		} catch (IOException ex) {
-			logger.error(ex.getMessage());
-		}
-	}
-
-	/**
 	 * Extracts a file from Zip archives to the folder specified in the argument.
 	 * @param zipFile
 	 * @param outputFolder
 	 * @return reference of the extracted file
 	 */
-	public static File unZipIt(String zipFile, String outputFolder) {
+	public static File extract(String zipFile, String outputFolder) {
 		byte[] buffer = new byte[1024];
 		File newFile = null;
 
 		try{
+			logger.trace("Extracting to {} to {}", zipFile, outputFolder);
 			//get the zip file content
-			ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
+			ZipInputStream zip = new ZipInputStream(new FileInputStream(zipFile));
 			//get the zipped file list entry
-			ZipEntry ze = zis.getNextEntry();
+			ZipEntry entry = zip.getNextEntry();
 
-			while (ze!=null) {
-				String fileName = ze.getName();
-				newFile = new File(outputFolder + fileName);
-
-				System.out.println("Unzipping: "+ newFile.getAbsolutePath());
+			while (entry!=null) {
+				String file = entry.getName();
+				newFile = new File(outputFolder + file);
+				logger.trace("Extracting {}", file);
 				//create all non exists folders
 				//else you will hit FileNotFoundException for compressed folder
 				new File(newFile.getParent()).mkdirs();
@@ -157,16 +127,16 @@ public class FileUtils {
 				FileOutputStream fos = new FileOutputStream(newFile);             
 
 				int len;
-				while ((len = zis.read(buffer)) > 0) {
+				while ((len = zip.read(buffer)) > 0) {
 					fos.write(buffer, 0, len);
 				}
 
 				fos.close();   
-				ze = zis.getNextEntry();
+				entry = zip.getNextEntry();
 			}
 
-			zis.closeEntry();
-			zis.close();
+			zip.closeEntry();
+			zip.close();
 
 		} catch(IOException ex) {
 			logger.error(ex.getMessage());
@@ -181,27 +151,29 @@ public class FileUtils {
 	 * @param pages entries to compress
 	 * @param zipFilename name of the Zip file
 	 */
-	public static void Zip(String resultCatalogLocation, Vector<String> pages, String zipFilename) {
+	public static void archive(String resultCatalogLocation, Vector<String> pages, String zipFilename) {
 		byte[] buffer = new byte[1024];
 
 		try {
+			logger.trace("Archiving to {}", zipFilename);
 			FileOutputStream fos = new FileOutputStream(resultCatalogLocation + zipFilename);
-			ZipOutputStream zipOS = new ZipOutputStream(fos);
+			ZipOutputStream zip = new ZipOutputStream(fos);
 			for (String page : pages) {
-				ZipEntry zipEntry = new ZipEntry(page + ".html");
-				zipOS.putNextEntry(zipEntry);
+				logger.trace("Adding {}", page);
+				ZipEntry entry = new ZipEntry(page + ".html");
+				zip.putNextEntry(entry);
 				FileInputStream in = new FileInputStream(resultCatalogLocation + page + ".html");
 
 				int len;
 				while ((len = in.read(buffer)) > 0) {
-					zipOS.write(buffer, 0, len);
+					zip.write(buffer, 0, len);
 				}
 
 				in.close();
-				zipOS.closeEntry();
+				zip.closeEntry();
 			}
 			//remember close it
-			zipOS.close();
+			zip.close();
 		} catch (IOException ex) {
 			logger.error(ex.getMessage());
 		}

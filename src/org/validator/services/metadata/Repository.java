@@ -6,6 +6,8 @@ package org.validator.services.metadata;
 import java.io.File;
 import java.util.Vector;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.validator.utils.SaxToDom;
 import org.validator.utils.XMLUtils;
 import org.w3c.dom.Document;
@@ -19,6 +21,7 @@ import org.xml.sax.XMLReader;
  */
 public class Repository {
 
+	private static final Logger logger = LogManager.getLogger(Repository.class.getName()); 
 	/**
 	 * The metadata file in XUDML (XML) format stored in the filesystem under the session directory. 
 	 */
@@ -37,6 +40,7 @@ public class Repository {
 	public Repository(String directory, String repository, String selectedSubjectArea) {
 		this.directory  = new File(directory);
 		this.repository = new File(directory + repository);
+		logger.info("Creating repository");
 		trim(selectedSubjectArea);
 	}
 
@@ -62,6 +66,7 @@ public class Repository {
 		SaxToDom		xml = new SaxToDom(null, reader, repository);
 		Vector<String>	subjectAreas = new Vector<String>();
 
+		logger.info("Trimming repository, chosen subject area is {}", keepSubjectArea);
 		subjectAreas.add(keepSubjectArea);
 
 		Document dom = xml.makeDom("PresentationCatalog",  subjectAreas);

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="20">
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %message%n"/>
+		</Console>
+		<!--RollingRandomAccessFile name="RollingRandomAccessFile" fileName="./logs/app.log" filePattern="./logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+			<PatternLayout>
+				<Pattern>%d %-5p [%t] %C{2} (%F:%L) - %message%n</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="2 MB"/>
+			</Policies>
+			<DefaultRolloverStrategy max="30"/>
+		</RollingRandomAccessFile-->
+	</Appenders>
+	<Loggers>
+		<Logger name="org.validator.*" level="warn" additivity="false">
+			<AppenderRef ref="STDOUT"/>
+			<!--AppenderRef ref="RollingRandomAccessFile"/-->
+		</Logger>
+		<Root level="debug">
+			<AppenderRef ref="STDOUT"/>
+			<!--AppenderRef ref="RollingRandomAccessFile"/-->
+		</Root>
+	</Loggers>
+</Configuration>

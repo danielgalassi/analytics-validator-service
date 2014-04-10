@@ -1,4 +1,3 @@
-org.validator.services
 org.validator.services.engine
 org.validator.services.metadata
 org.validator.services.ui

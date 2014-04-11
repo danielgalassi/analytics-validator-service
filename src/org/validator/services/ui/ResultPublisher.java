@@ -85,6 +85,7 @@ public class ResultPublisher {
 		pages.add("Compact");
 		pages.add("Details");
 		for (String page : pages) {
+			logger.info("Generating {} page", page);
 			String stylesheet = viewCatalog + page + ".xsl";
 			InputStream xsl2html = context.getResourceAsStream(stylesheet);
 			XMLUtils.applyStylesheet(index, xsl2html, resultCatalog + page + ".html", params);

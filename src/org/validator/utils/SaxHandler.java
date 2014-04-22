@@ -12,17 +12,11 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class SaxHandler extends DefaultHandler {
 
-	/**
-	 * Name of the XML tag to be evaluated, its value is then added to the result set.
-	 */
+	/** Name of the XML tag to be evaluated, its value is then added to the result set. */
 	private String			tag;
-	/**
-	 * Tag to be evaluated.
-	 */
+	/** Tag to be evaluated. */
 	private String			attribute;
-	/**
-	 * Set of results (attribute values).
-	 */
+	/** Set of results (attribute values). */
 	private Vector<String>	listOfValues;
 
 	/**

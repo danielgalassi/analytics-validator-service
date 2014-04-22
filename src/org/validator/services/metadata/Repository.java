@@ -22,13 +22,9 @@ import org.xml.sax.XMLReader;
 public class Repository {
 
 	private static final Logger logger = LogManager.getLogger(Repository.class.getName()); 
-	/**
-	 * The metadata file in XUDML (XML) format stored in the filesystem under the session directory. 
-	 */
+	/** The metadata file in XUDML (XML) format stored in the filesystem under the session directory. */
 	private File repository = null;
-	/**
-	 * The session directory where the XUDML file is stored.
-	 */
+	/** The session directory where the XUDML file is stored. */
 	private File directory = null;
 
 	/**

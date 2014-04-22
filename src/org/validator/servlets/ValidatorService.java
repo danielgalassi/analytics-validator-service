@@ -32,13 +32,9 @@ public class ValidatorService extends HttpServlet {
 	
 	private static final Logger logger = LogManager.getLogger(ValidatorService.class.getName());
 
-	/**
-	 * Application directory where all test cases reside.
-	 */
+	/** Application directory where all test cases reside. */
 	private static final String	testCatalogue = "/WEB-INF/Tests/";
-	/**
-	 * Application directory where UI-generating code for test results reside.
-	 */
+	/** Application directory where UI-generating code for test results reside. */
 	private static final String	viewCatalogue = "/WEB-INF/Views/";
 
 	/**

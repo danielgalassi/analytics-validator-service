@@ -15,9 +15,7 @@ import javax.servlet.ServletContext;
  */
 public class Folder {
 
-	/**
-	 * Application folder represented by objects of this class.
-	 */
+	/** Application folder represented by objects of this class. */
 	private File appFolder = null;
 
 	/**

@@ -33,9 +33,7 @@ public class FileHandler extends HttpServlet {
 	private static final Logger logger = LogManager.getLogger(FileHandler.class.getName());
 
 	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
-	/**
-	 * Maximum file size. Default value: 200MB.
-	 */
+	/** Maximum file size. Default value: 200MB. */
 	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
 	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
 

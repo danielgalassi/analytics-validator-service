@@ -24,29 +24,17 @@ import org.validator.utils.XMLUtils;
 public class ResultPublisher {
 
 	private static final Logger logger = LogManager.getLogger(ResultPublisher.class.getName());
-	/**
-	 * Path to the stylesheets used to create HTML pages.
-	 */
+	/** Path to the stylesheets used to create HTML pages. */
 	String				viewCatalog;
-	/**
-	 * Path where results are stored.
-	 */
+	/** Path where results are stored. */
 	String				resultCatalog;
-	/**
-	 * Scope of the servlet session.
-	 */
+	/** Scope of the servlet session. */
 	ServletContext		context;
-	/**
-	 * File containing all result entries.
-	 */
+	/** File containing all result entries. */
 	File				index;
-	/**
-	 * Different HTML pages to generate (names of stylesheets and HTML pages are the same).
-	 */
+	/** Different HTML pages to generate (names of stylesheets and HTML pages are the same). */
 	Vector<String>		pages = new Vector<String>();
-	/**
-	 * Parameters passed to stylesheets. This makes the process of generating HTML pages more flexible.
-	 */
+	/** Parameters passed to stylesheets. This makes the process of generating HTML pages more flexible. */
 	Map<String, String>	params = new HashMap<String, String> ();
 
 	/**

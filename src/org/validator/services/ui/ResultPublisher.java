@@ -25,17 +25,24 @@ public class ResultPublisher {
 
 	private static final Logger logger = LogManager.getLogger(ResultPublisher.class.getName());
 	/** Path to the stylesheets used to create HTML pages. */
-	String				viewCatalog;
+	String				viewCatalog = "";
 	/** Path where results are stored. */
-	String				resultCatalog;
+	String				resultCatalog = "";
 	/** Scope of the servlet session. */
-	ServletContext		context;
+	ServletContext		context = null;
 	/** File containing all result entries. */
 	File				index;
 	/** Different HTML pages to generate (names of stylesheets and HTML pages are the same). */
 	Vector<String>		pages = new Vector<String>();
 	/** Parameters passed to stylesheets. This makes the process of generating HTML pages more flexible. */
 	Map<String, String>	params = new HashMap<String, String> ();
+
+	/**
+	 * Publisher constructor. Catalogues, context and publishing parameters will be setup following a builder-type approach. 
+	 */
+	public ResultPublisher () {
+		logger.info("Creating a publisher");
+	}
 
 	/**
 	 * Sets the directories where results and stylesheets are stored.
@@ -91,10 +98,26 @@ public class ResultPublisher {
 	/**
 	 * Creates all HTML pages used for browsing and downloading.
 	 */
-	public void publishResults() {
+	public void run() {
+		if (!ready()) {
+			logger.error("Publisher is not ready");
+			return;
+		}
 		logger.trace("Publishing results...");
 		generatePages();
 		generateZip();
+	}
+
+	/**
+	 * Verifies that the Publisher has been properly setup
+	 * @return true if catalogues, context and parameters are valid
+	 */
+	private boolean ready() {
+		boolean isResultCatalogSet = !resultCatalog.equals("");
+		boolean isViewCatalogSet = !viewCatalog.equals("");
+		boolean isContextSet = !(context == null);
+		boolean isParamMapSet = !params.isEmpty();
+		return (isResultCatalogSet && isViewCatalogSet && isContextSet && isParamMapSet);
 	}
 
 	/**

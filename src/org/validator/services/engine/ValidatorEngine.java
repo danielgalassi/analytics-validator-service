@@ -75,7 +75,7 @@ public class ValidatorEngine {
 
 		boolean testsFound = false;
 		try {
-			testsFound = (context.getResourcePaths(testCatalog).size() > 0);
+			testsFound = !(context.getResourcePaths(testCatalog).isEmpty());
 		} catch (Exception e) {
 			//a NullPointerException is thrown if the directory is not found
 			logger.fatal(e.getMessage());
@@ -104,8 +104,8 @@ public class ValidatorEngine {
 	 * Getter method to make public the number of tests in the suite.
 	 * @return the number of tests loaded
 	 */
-	public int getTestSuiteSize() {
-		return testSuite.size();
+	public boolean isTestSuiteEmpty() {
+		return testSuite.isEmpty();
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class ValidatorEngine {
 	 * @return true if all dependencies are met
 	 */
 	private boolean ready() {
-		boolean isTestSuiteSet	= (testSuite.size() > 0);
+		boolean isTestSuiteSet	= !testSuite.isEmpty();
 		boolean isRepositorySet = (repository != null);
 		boolean isResultDirSet	= (!resultCatalogue.equals(""));
 

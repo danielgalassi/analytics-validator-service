@@ -71,7 +71,7 @@ public class ValidatorService extends HttpServlet {
 		engine.setTestSuite(getServletContext(), testCatalogue);
 
 		//forwards to the error page if the test suite is empty 
-		if (engine.getTestSuiteSize() == 0) {
+		if (!engine.isTestSuiteEmpty()) {
 			logger.fatal("Tests not found");
 			request.setAttribute("ErrorMessage", "Tests not found.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);
@@ -81,7 +81,6 @@ public class ValidatorService extends HttpServlet {
 		engine.run();
 
 		//publishes HTML pages featuring results to the session folder
-		logger.info("Creating a publisher");
 		ResultPublisher publisher = new ResultPublisher();
 		publisher.setCatalogs(resultCatalogue, viewCatalogue);
 		publisher.setContext(getServletContext());
@@ -89,7 +88,7 @@ public class ValidatorService extends HttpServlet {
 		publisher.setParameters("SessionFolder", sessionId);
 		publisher.setParameters("ShowErrorsOnly", errorsOnly + "");
 
-		publisher.publishResults();
+		publisher.run();
 
 		//redirects to summary view
 		String summary = publisher.getSummaryPage();

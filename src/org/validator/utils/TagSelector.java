@@ -70,7 +70,7 @@ public class TagSelector {
 	 * Sorts and adds default values to list of attribute values.
 	 */
 	private void arrangeValues() {
-		if (listOfValues.size() == 0) {
+		if (listOfValues.isEmpty()) {
 			//default option if subject areas cannot be found
 			listOfValues.add("No subject areas found");
 		}

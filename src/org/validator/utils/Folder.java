@@ -58,12 +58,11 @@ public class Folder {
 
 		folderContents = appFolder.listFiles(filter);
 
-		for (int i=0; i<folderContents.length; i++) {
-			File content = folderContents[i];
+		for (File content : folderContents) {
 			file = new SimpleFile (content.getName(), date.format(content.lastModified()));
 			contents.add(file);
 		}
-
+		
 		return contents;
 	}
 }

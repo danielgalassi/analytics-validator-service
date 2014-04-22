@@ -71,7 +71,7 @@ public class ValidatorService extends HttpServlet {
 		engine.setTestSuite(getServletContext(), testCatalogue);
 
 		//forwards to the error page if the test suite is empty 
-		if (!engine.isTestSuiteEmpty()) {
+		if (engine.isTestSuiteEmpty()) {
 			logger.fatal("Tests not found");
 			request.setAttribute("ErrorMessage", "Tests not found.");
 			getServletContext().getRequestDispatcher("/error.jsp").forward(request, response);

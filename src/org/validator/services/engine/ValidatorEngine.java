@@ -101,8 +101,8 @@ public class ValidatorEngine {
 	}
 
 	/**
-	 * Getter method to make public the number of tests in the suite.
-	 * @return the number of tests loaded
+	 * Method to verify tests have been loaded.
+	 * @return true when no tests are available for this engine
 	 */
 	public boolean isTestSuiteEmpty() {
 		return testSuite.isEmpty();

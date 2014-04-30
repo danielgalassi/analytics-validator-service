@@ -10,9 +10,9 @@ package org.validator.utils;
 public class SimpleFile {
 
 	/** Name of the file in the filesystem. */
-	private String name;
+	private String 				 name;
 	/** Date and time when the file was last modified. */
-	private String lastModified;
+	private String		 lastModified;
 
 	/**
 	 * Instantiates a lightweight file object with a name and the last modified date.

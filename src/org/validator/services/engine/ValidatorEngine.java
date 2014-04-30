@@ -33,11 +33,11 @@ public class ValidatorEngine {
 
 	private static final Logger logger = LogManager.getLogger(ValidatorEngine.class.getName());
 	/** The target directory where validation results will be saved. */
-	private String			resultCatalogue = "";
+	private String			 resultCatalogue = "";
 	/** An OBIEE metadata repository object. */
-	private Repository		repository = null;
+	private Repository		      repository = null;
 	/** The test suite consists of one or more <code>Test</code> implementations. */
-	private Vector<Test>	testSuite = new Vector<Test>();
+	private Vector<Test>	       testSuite = new Vector<Test>();
 	/** The time in milliseconds when the <code>ValidatorService</code> was triggered. */
 	private long			serviceStartTime = 0;
 

@@ -13,9 +13,9 @@ import org.xml.sax.helpers.DefaultHandler;
 public class SaxHandler extends DefaultHandler {
 
 	/** Name of the XML tag to be evaluated, its value is then added to the result set. */
-	private String			tag;
+	private String					 tag;
 	/** Tag to be evaluated. */
-	private String			attribute;
+	private String			   attribute;
 	/** Set of results (attribute values). */
 	private Vector<String>	listOfValues;
 

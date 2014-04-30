@@ -25,17 +25,17 @@ public class ResultPublisher {
 
 	private static final Logger logger = LogManager.getLogger(ResultPublisher.class.getName());
 	/** Path to the stylesheets used to create HTML pages. */
-	String				viewCatalog = "";
+	String				   viewCatalog = "";
 	/** Path where results are stored. */
-	String				resultCatalog = "";
+	String				 resultCatalog = "";
 	/** Scope of the servlet session. */
-	ServletContext		context = null;
+	ServletContext			   context = null;
 	/** File containing all result entries. */
-	File				index;
+	File						 index;
 	/** Different HTML pages to generate (names of stylesheets and HTML pages are the same). */
-	Vector<String>		pages = new Vector<String>();
+	Vector<String>				 pages = new Vector<String>();
 	/** Parameters passed to stylesheets. This makes the process of generating HTML pages more flexible. */
-	Map<String, String>	params = new HashMap<String, String> ();
+	Map<String, String>			params = new HashMap<String, String> ();
 
 	/**
 	 * Publisher constructor. Catalogues, context and publishing parameters will be setup following a builder-type approach. 

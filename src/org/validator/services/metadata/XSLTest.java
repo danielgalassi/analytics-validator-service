@@ -20,7 +20,7 @@ public class XSLTest implements Test{
 
 	private static final Logger logger = LogManager.getLogger(XSLTest.class.getName());
 	/** Name of the test case. */
-	private String		name = "";
+	private String		  name = "";
 	/** Another representation (<code>InputStream</code>) of the Stylesheet (XSL). */
 	private InputStream	script = null;
 

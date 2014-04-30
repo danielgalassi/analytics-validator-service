@@ -18,17 +18,17 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 class SaxToDomHandler extends DefaultHandler
 {
-	private Document		doc;
-	private Node			node;
-	private String			tag;
-	private boolean			isInteresting = false;
+	private Document						doc;
+	private Node						   node;
+	private String							tag;
+	private String				 processingNode;
+	private Vector<String>		   listOfValues;
+	private String				 matchingAttrib;
+	private String				returningAttrib;
+	private Vector<String>		 foundTokenList;
+	private boolean					appendToDoc;
+	private boolean				  isInteresting = false;
 	private boolean			isReallyInteresting = false;
-	private String			processingNode;
-	private Vector<String>	listOfValues;
-	private String			matchingAttrib;
-	private String			returningAttrib;
-	private Vector<String>	foundTokenList;
-	private boolean			appendToDoc;
 
 	public SaxToDomHandler(
 			Document		doc, 

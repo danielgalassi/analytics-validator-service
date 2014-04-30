@@ -18,10 +18,10 @@ import org.xml.sax.XMLReader;
  */
 public class SaxToDom
 {
-	private XMLReader		reader;
-	private SaxToDomHandler	handlers;
-	private Document		doc;
-	private File			metadata;
+	private XMLReader			  reader;
+	private SaxToDomHandler		handlers;
+	private Document				 doc;
+	private File				metadata;
 
 	public SaxToDom(Document doc, XMLReader reader, File metadata) {
 		this.reader		= reader;

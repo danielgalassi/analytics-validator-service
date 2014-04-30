@@ -21,13 +21,13 @@ public class TagSelector {
 
 	private static final Logger logger = LogManager.getLogger(TagSelector.class.getName());
 
-	private XMLReader		reader;
-	private InputSource		input;
-	private SaxHandler		handlers;
-	private String			tag = "PresentationCatalog";
-	private String			attribute = "name";
-	private File			metadata;
-	private String			workDir;
+	private XMLReader			  reader;
+	private InputSource			   input;
+	private SaxHandler			handlers;
+	private File				metadata;
+	private String				 workDir;
+	private String			   attribute = "name";
+	private String					 tag = "PresentationCatalog";
 	private Vector<String>	listOfValues = new Vector<String> ();
 
 	public void setTag (String tag) {

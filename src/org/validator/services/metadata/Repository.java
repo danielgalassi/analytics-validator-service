@@ -23,9 +23,9 @@ public class Repository {
 
 	private static final Logger logger = LogManager.getLogger(Repository.class.getName()); 
 	/** The metadata file in XUDML (XML) format stored in the filesystem under the session directory. */
-	private File repository = null;
+	private File	 repository = null;
 	/** The session directory where the XUDML file is stored. */
-	private File directory = null;
+	private File	  directory = null;
 
 	/**
 	 * Instantiates a metadata file and trims the mammoth file keeping only XUDML tags related to the selected subject area.

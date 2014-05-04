@@ -121,8 +121,8 @@ public class ValidatorEngine {
 	 * Upon completion, an index document (catalogue) is created. Each entry in this catalogue points to a result file.
 	 */
 	public void run() {
-		Map <String, Double>	resultRef = new HashMap<String, Double>();
-		long					startTimer;
+		Map <String, Double>    resultRef = new HashMap<String, Double>();
+		long                   startTimer;
 
 		if (!ready()) {
 			logger.error("Engine is not ready");
@@ -148,7 +148,7 @@ public class ValidatorEngine {
 	private boolean ready() {
 		boolean isTestSuiteSet	= !testSuite.isEmpty();
 		boolean isRepositorySet = (repository != null);
-		boolean isResultDirSet	= (!resultCatalogue.equals(""));
+		boolean isResultDirSet	= !resultCatalogue.equals("");
 
 		logger.info("isTestSuiteSet = {}", isTestSuiteSet);
 		logger.info("isRepositorySet = {}", isRepositorySet);
@@ -162,7 +162,7 @@ public class ValidatorEngine {
 	 */
 	private void createIndexDocument (Map <String, Double> resultRefs) {
 		Document index = XMLUtils.createDOMDocument();
-		Element root = index.createElement("index");
+		Element   root = index.createElement("index");
 
 		logger.trace("Creating results index");
 		for (Map.Entry <String, Double> ref : resultRefs.entrySet()) {

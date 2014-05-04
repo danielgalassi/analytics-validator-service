@@ -26,7 +26,7 @@ public class FileUtils {
 	private static final Logger logger = LogManager.getLogger(FileUtils.class.getName());
 
 	/**
-	 * A reference for a file.
+	 * Creates a stream reference of a file
 	 * @param file
 	 * @return InputSource
 	 */
@@ -66,7 +66,7 @@ public class FileUtils {
 	}
 
 	/**
-	 * Deletes a file (or folder, recursively).
+	 * Deletes a file (or folder --including its children, recursively).
 	 * @param file a file or directory in the filesystem
 	 * @return true if the file or directory was deleted
 	 */
@@ -86,7 +86,7 @@ public class FileUtils {
 	/**
 	 * Creates a directory with the name of the argument.
 	 * If it already exists, it will be deleted and re-created.
-	 * @param newFolder
+	 * @param newFolder name of the folder
 	 * @return true if the directory has been created
 	 */
 	public static boolean setupWorkDirectory(String newFolder) {
@@ -101,8 +101,8 @@ public class FileUtils {
 
 	/**
 	 * Extracts a file from Zip archives to the folder specified in the argument.
-	 * @param zipFile
-	 * @param outputFolder
+	 * @param zipFile compressed file
+	 * @param outputFolder folder where contents of the Zip file will be saved to
 	 * @return reference of the extracted file
 	 */
 	public static File extract(String zipFile, String outputFolder) {
@@ -138,8 +138,8 @@ public class FileUtils {
 			zip.closeEntry();
 			zip.close();
 
-		} catch(IOException ex) {
-			logger.error(ex.getMessage());
+		} catch(IOException exception) {
+			logger.error(exception.getMessage());
 		}
 
 		return newFile;
@@ -174,8 +174,8 @@ public class FileUtils {
 			}
 			//remember close it
 			zip.close();
-		} catch (IOException ex) {
-			logger.error(ex.getMessage());
+		} catch (IOException exception) {
+			logger.error(exception.getMessage());
 		}
 	}
 }

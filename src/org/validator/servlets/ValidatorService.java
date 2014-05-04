@@ -42,19 +42,19 @@ public class ValidatorService extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		long startTime			= System.currentTimeMillis();
+		long           startTime = System.currentTimeMillis();
 
-		String subjectArea		= request.getParameter("SubjectArea");
-		String sessionId		= request.getRequestedSessionId();
-		HttpSession session		= request.getSession();
+		String       subjectArea = request.getParameter("SubjectArea");
+		String         sessionId = request.getRequestedSessionId();
+		HttpSession      session = request.getSession();
 
-		String workDirectory	= (String) session.getAttribute("workDir");
-		String metadata			= (String) session.getAttribute("metadataFile");
-		boolean errorsOnly		= ((String) session.getAttribute("resultsFormat")).equals("ShowErrorsOnly");
-		String resultCatalogue	= workDirectory + "results" + File.separator;
+		String     workDirectory = (String) session.getAttribute("workDir");
+		String          metadata = (String) session.getAttribute("metadataFile");
+		boolean       errorsOnly = ((String) session.getAttribute("resultsFormat")).equals("ShowErrorsOnly");
+		String   resultCatalogue = workDirectory + "results" + File.separator;
 
 		//setting the repository (tags are discarded if not related to the selected subject area)
-		Repository repository	= new Repository(workDirectory, metadata, subjectArea);
+		Repository    repository = new Repository(workDirectory, metadata, subjectArea);
 
 		if (!repository.available()) {
 			logger.error("XUDML file not found!");

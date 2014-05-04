@@ -182,9 +182,9 @@ public class XMLUtils {
 	 * @param params stylesheet parameters
 	 */
 	public static void applyStylesheet(File xml, InputStream stylesheet, String resultLocation, Map<String, String> params) {
-		File				results = new File(resultLocation);
-		Transformer			transformer = null;
-		TransformerFactory	transformerFactory = null;
+		File                           results = new File(resultLocation);
+		Transformer                transformer = null;
+		TransformerFactory  transformerFactory = null;
 
 		Source	xmlSource = new javax.xml.transform.stream.StreamSource(xml);
 		Source	xslSource = new javax.xml.transform.stream.StreamSource(stylesheet);

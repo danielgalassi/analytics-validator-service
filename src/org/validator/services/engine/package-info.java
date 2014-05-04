@@ -1,5 +1,5 @@
 /**
- * Validation process (test runner) orchestration.
+ * Classes in this package orchestrate the validation process.
  * @author danielgalassi@gmail.com
  *
  */

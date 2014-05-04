@@ -114,9 +114,9 @@ public class ResultPublisher {
 	 */
 	private boolean ready() {
 		boolean isResultCatalogSet = !resultCatalog.equals("");
-		boolean isViewCatalogSet = !viewCatalog.equals("");
-		boolean isContextSet = !(context == null);
-		boolean isParamMapSet = !params.isEmpty();
+		boolean   isViewCatalogSet = !viewCatalog.equals("");
+		boolean       isContextSet = !(context == null);
+		boolean      isParamMapSet = !params.isEmpty();
 		return (isResultCatalogSet && isViewCatalogSet && isContextSet && isParamMapSet);
 	}
 

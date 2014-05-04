@@ -32,16 +32,16 @@ public class FileHandler extends HttpServlet {
 
 	private static final Logger logger = LogManager.getLogger(FileHandler.class.getName());
 
-	private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 10;  // 10MB
+	private static final int   MEMORY_THRESHOLD = 1024 * 1024 * 10;  // 10MB
 	/** Maximum file size. Default value: 200MB. */
-	private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
-	private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 200; // 200MB
+	private static final int      MAX_FILE_SIZE = 1024 * 1024 * 200; // 200MB
+	private static final int   MAX_REQUEST_SIZE = 1024 * 1024 * 200; // 200MB
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		boolean isZipFormat = false;
-		File metadata = null;
-		HttpSession session = request.getSession(true);
+		boolean     isZipFormat = false;
+		File           metadata = null;
+		HttpSession     session = request.getSession(true);
 
 		//checks if the request actually contains upload file
 		if (!ServletFileUpload.isMultipartContent(request)) {

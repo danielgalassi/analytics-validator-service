@@ -58,9 +58,9 @@ public class Repository {
 	 * @param keepSubjectArea the name of the subject area to evaluate 
 	 */
 	public void trim(String keepSubjectArea) {
-		XMLReader		reader = XMLUtils.getXMLReader();
-		SaxToDom		xml = new SaxToDom(null, reader, repository);
-		Vector<String>	subjectAreas = new Vector<String>();
+		XMLReader            reader = XMLUtils.getXMLReader();
+		SaxToDom                xml = new SaxToDom(null, reader, repository);
+		Vector<String> subjectAreas = new Vector<String>();
 
 		logger.info("Trimming repository, chosen subject area is {}", keepSubjectArea);
 		subjectAreas.add(keepSubjectArea);

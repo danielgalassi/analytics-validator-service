@@ -50,9 +50,7 @@ public class Folder {
 		FileFilter filter = new FileFilter() {
 			@Override
 			public boolean accept(File file) {
-				return (!file.getName().equals("WEB-INF") && 
-						!file.getName().equals("META-INF") && 
-						file.isDirectory());
+				return (!file.getName().equals("WEB-INF") && !file.getName().equals("META-INF") && file.isDirectory());
 			}
 		};
 

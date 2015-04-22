@@ -36,7 +36,7 @@ As mentioned in the introduction, tests are implemented using [stylesheets](http
 
 # Package and Code Organisation #
 
-![http://analytics-validator-service.googlecode.com/svn/trunk/CodeOrganisation.png](http://analytics-validator-service.googlecode.com/svn/trunk/CodeOrganisation.png)
+![http://analytics-validator-service.googlecode.com/svn/trunk/CodeOrganisation.png](https://github.com/danielgalassi/analytics-validator-service/blob/master/CodeOrganisation.png)
 
 
 ### Packages: ###

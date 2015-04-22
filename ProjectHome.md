@@ -10,7 +10,7 @@ Running out of excuses now. Just upload the metadata repository (RPD) and get an
 
 Interested in new features or tests... [email me](mailto:danielgalassi@gmail.com?subject=Analytics%20Metadata%20Validator&body=Hey%20Daniel,%20I%20got%20an%20idea.).
 
-![http://analytics-validator-service.googlecode.com/svn/trunk/Step1.png](http://analytics-validator-service.googlecode.com/svn/trunk/Step1.png) [More screenshots](Screenshots.md)
+![http://analytics-validator-service.googlecode.com/svn/trunk/Step1.png](https://github.com/danielgalassi/analytics-validator-service/blob/master/Step1.png) [More screenshots](Screenshots.md)
 
 
 This tool **does not** gather statistics, send reports back to the developer or share information with third parties.

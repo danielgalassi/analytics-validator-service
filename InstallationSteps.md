@@ -16,7 +16,7 @@ The installation takes less than 5 minutes. Just follow the instructions of the 
 
 ## Deploy Analytics Validator Service ##
 
-  1. Download the latest version of the validator service ('war' file) from the [Project Home](http://code.google.com/p/analytics-validator-service/).
+  1. Download the latest version of the validator service ('war' file) from [BinTray](https://bintray.com/danielgalassi/oracle-bi-utilities/analytics-validator-service/view).
   1. Start Tomcat and go to http://localhost:8080/manager/http
   1. Scroll down to the **WAR file to deploy** section
   1. Select the WAR file and hit **Deploy**.
